@@ -1,0 +1,104 @@
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1a1a1a;
+}
+
+body {
+  margin: 0;
+  background: #faf9f7;
+}
+
+.menu-page-header {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-page-note {
+  font-size: 0.8rem;
+  color: #666;
+  max-width: 32rem;
+  margin: 0.5rem auto 0;
+}
+
+.menu-root {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.menu-category h2 {
+  margin-top: 2rem;
+  border-bottom: 2px solid #e0b84b;
+  padding-bottom: 0.25rem;
+}
+
+.menu-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-item-image {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+
+.menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.menu-item-header h3 {
+  margin: 0;
+}
+
+.menu-item-price {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.menu-item-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.35rem 0;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #eee;
+}
+
+.badge-meat {
+  background: #f0e4d0;
+}
+
+.badge-warning {
+  background: #fbe2e2;
+  color: #a12626;
+}
+
+.menu-item-calories,
+.menu-item-ingredients,
+.menu-item-allergens {
+  font-size: 0.8rem;
+  color: #444;
+  margin: 0.15rem 0;
+}
+
+.menu-loading,
+.menu-empty,
+.menu-error {
+  text-align: center;
+  color: #888;
+}

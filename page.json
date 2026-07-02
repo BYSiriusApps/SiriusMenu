@@ -1,0 +1,20 @@
+{
+  "name": "qr-menu",
+  "displayName": "QR Menü",
+  "description": "QR kod tabanlı menü gösterimi için sayfa yapılandırması.",
+  "type": "web-app",
+  "entry": "src/index.html",
+  "route": "/",
+  "pages": [
+    {
+      "id": "menu",
+      "title": "Menü",
+      "route": "/",
+      "component": "MenuPage"
+    }
+  ],
+  "settings": {
+    "theme": "light",
+    "locale": "tr-TR"
+  }
+}
