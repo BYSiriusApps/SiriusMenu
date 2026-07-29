@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f4ef;
+  --paper: #ffffff;
+  --ink: #1c1a17;
+  --muted: #736e64;
+  --accent: #e0891b;      /* amber */
+  --accent-soft: #fbeed6;
+  --line: #e6e0d5;
+}
+* { -webkit-font-smoothing: antialiased; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+.font-display { font-family: var(--font-display), system-ui, sans-serif; letter-spacing: -0.02em; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--ink); color: #fff; border-radius: 11px;
+  padding: 12px 22px; font-weight: 600; transition: transform .12s, filter .15s;
+  border: none; cursor: pointer; font-size: 15px;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-accent { background: var(--accent); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+.btn:disabled { opacity: .45; cursor: default; transform: none; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+}
+input, select, textarea { font-family: inherit; }
+.field {
+  width: 100%; background: var(--paper); border: 1.5px solid var(--line); border-radius: 9px;
+  padding: 10px 12px; font-size: 14.5px; color: var(--ink); outline: none; transition: border-color .15s;
+}
+.field:focus { border-color: var(--accent); }
+label > span { font-size: 12px; font-weight: 600; color: var(--muted); }
