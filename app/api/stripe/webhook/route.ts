@@ -1,8 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "../../../lib/stripe";
 import { createServiceClient } from "../../../lib/supabase/server";
 import { PRICING } from "../../../lib/menu";
+import { processImageQueue } from "../../../lib/image-queue";
+
+export const maxDuration = 60;
 
 const QUOTA_BY_INTERVAL: Record<string, number> = {
   month: PRICING.monthly.imageQuota,
@@ -84,6 +87,8 @@ export async function POST(req: Request) {
         if (product === "bulk50" || product === "bulk100") {
           await supabase.from("menu_images").update({ status: "processing" })
             .eq("restaurant_id", rid).eq("kind", "bulk").eq("status", "uploaded");
+          // Günlük cron yalnızca yedek; ödeme sonrası kuyruğu hemen boşaltmayı dene.
+          after(() => processImageQueue());
         }
       }
       break;

@@ -13,8 +13,9 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Giriş yapmalısın" }, { status: 401 });
 
-  const { itemKey, originalPath } = await req.json().catch(() => ({}));
+  const { itemKey, originalPath, quality } = await req.json().catch(() => ({}));
   if (!itemKey || !originalPath) return NextResponse.json({ error: "Eksik parametre" }, { status: 400 });
+  const q = quality === "hd" ? "hd" : "standard";
 
   const { data: restaurant } = await supabase
     .from("restaurants")
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
 
   let enhanced;
   try {
-    enhanced = await enhanceFoodPhoto(buf.toString("base64"), mime);
+    enhanced = await enhanceFoodPhoto(buf.toString("base64"), mime, q);
   } catch (e) {
     if (row.data) await svc.from("menu_images").update({ status: "failed", error: String(e) }).eq("id", row.data.id);
     return NextResponse.json({ error: "İyileştirme başarısız oldu, tekrar dene." }, { status: 502 });

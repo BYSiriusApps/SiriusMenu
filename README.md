@@ -34,6 +34,7 @@ Uygulama **anahtarsız tam çalışır.** "✨ Açıklama" butonu ürün açıkl
 - **Zamanlı işler:** `vercel.json` cron → `/api/cron/process-images` (toplu kuyruk), `/api/cron/reset-quota`.
 - **Migration:** `supabase/migrations/0002_images_whatsapp_pricing.sql` (`supabase db reset` ile uygulanır, seed dahil).
 - **İş akışı planı (sunum):** `docs/is-akisi-plani.md`.
+- **Yasal uyumluluk (KVKK, ticari elektronik ileti, ticari kullanım denetimi):** `docs/yasal-uyumluluk.md`. Kayıt formu (`app/kayit`) Kullanım Şartları + KVKK Aydınlatma Metni için zorunlu, ticari elektronik ileti için ayrı/opsiyonel onay kutucukları içerir; onaylar `supabase/migrations/0005_consents.sql` ile `restaurants` tablosunda saklanır.
 
 ## Notlar
 - Yeni tema `THEMES`, etiketler `TAGS`, para birimleri `CURRENCIES` (menu.tsx) içinde.

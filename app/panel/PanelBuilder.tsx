@@ -301,6 +301,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <div style={{ marginTop: 8, height: 6, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${quota ? Math.min(100, (quotaUsed / quota) * 100) : 0}%`, background: "var(--accent)" }} />
             </div>
+            <a href="/panel/studio" style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, color: "var(--accent)" }}>
+              Kendi fotoğraflarınla toplu çalışmak için Stüdyo&apos;yu aç →
+            </a>
           </div>
 
           {/* WhatsApp yetkili numaralar (whitelist) */}

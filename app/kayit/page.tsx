@@ -9,6 +9,9 @@ export default function Kayit() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [kvkkOnay, setKvkkOnay] = useState(false);
+  const [sartlarOnay, setSartlarOnay] = useState(false);
+  const [pazarlamaIzni, setPazarlamaIzni] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
@@ -16,13 +19,17 @@ export default function Kayit() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSupabaseConfigured()) return setError("Panel henüz kurulmadı (Supabase bağlantısı eksik).");
+    if (!sartlarOnay || !kvkkOnay) return setError("Devam etmek için Kullanım Şartları ve KVKK Aydınlatma Metni kutucuklarını işaretlemelisin.");
     setLoading(true);
     setError(null);
     const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        data: { pazarlama_izni: pazarlamaIzni },
+      },
     });
     setLoading(false);
     if (error) return setError(error.message);
@@ -54,13 +61,24 @@ export default function Kayit() {
         <label><span>Şifre</span>
           <input className="field" style={{ marginTop: 5 }} type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12.5, color: "var(--muted)", lineHeight: 1.5 }}>
+          <input type="checkbox" required checked={sartlarOnay} onChange={(e) => setSartlarOnay(e.target.checked)} style={{ marginTop: 2 }} />
+          <span>
+            <Link href="/kullanim-sartlari" target="_blank" style={{ color: "var(--accent)", fontWeight: 600 }}>Kullanım Şartları</Link>&apos;nı okudum ve kabul ediyorum.
+          </span>
+        </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12.5, color: "var(--muted)", lineHeight: 1.5 }}>
+          <input type="checkbox" required checked={kvkkOnay} onChange={(e) => setKvkkOnay(e.target.checked)} style={{ marginTop: 2 }} />
+          <span>
+            <Link href="/kvkk-aydinlatma-metni" target="_blank" style={{ color: "var(--accent)", fontWeight: 600 }}>KVKK Aydınlatma Metni</Link>&apos;ni okudum.
+          </span>
+        </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12.5, color: "var(--muted)", lineHeight: 1.5 }}>
+          <input type="checkbox" checked={pazarlamaIzni} onChange={(e) => setPazarlamaIzni(e.target.checked)} style={{ marginTop: 2 }} />
+          <span>Kampanya, indirim ve duyurulardan e-posta yoluyla haberdar olmak istiyorum (opsiyonel).</span>
+        </label>
         {error && <p style={{ color: "#b3261e", fontSize: 13.5 }}>{error}</p>}
-        <button className="btn btn-accent" disabled={loading} type="submit">{loading ? "..." : "Hesap oluştur"}</button>
-        <p style={{ fontSize: 12, color: "var(--muted)", textAlign: "center", lineHeight: 1.5 }}>
-          Hesap oluşturarak{" "}
-          <Link href="/kullanim-sartlari" style={{ color: "var(--accent)", fontWeight: 600 }}>Kullanım Şartları</Link>&apos;nı ve{" "}
-          <Link href="/kvkk-aydinlatma-metni" style={{ color: "var(--accent)", fontWeight: 600 }}>KVKK Aydınlatma Metni</Link>&apos;ni kabul etmiş olursun.
-        </p>
+        <button className="btn btn-accent" disabled={loading || !kvkkOnay || !sartlarOnay} type="submit">{loading ? "..." : "Hesap oluştur"}</button>
         <p style={{ fontSize: 13.5, color: "var(--muted)", textAlign: "center" }}>
           Zaten hesabın var mı? <Link href="/giris" style={{ color: "var(--accent)", fontWeight: 600 }}>Giriş yap</Link>
         </p>

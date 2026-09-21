@@ -95,9 +95,19 @@ const ENHANCE_PROMPT =
   "increase sharpness, remove clutter and reflections, keep the dish and plating exactly the same. " +
   "Return a clean, appetizing square (1:1) image.";
 
-export async function enhanceFoodPhoto(base64: string, mimeType: string): Promise<{ data: string; mimeType: string }> {
+// "hd": standart iyileştirmeye ek olarak azami detay/keskinlik isteyen daha güçlü prompt.
+// Not: Gemini görsel modeli gerçek 4K çözünürlük garanti etmez (native çıktı ~1-2K civarı);
+// bu mod modelin izin verdiği en yüksek detay/netlikte üretim ister, gerçek upscale değildir.
+const ENHANCE_PROMPT_HD =
+  ENHANCE_PROMPT +
+  " Render at the highest possible detail and sharpness the model supports: crisp textures, fine detail on the food surface, " +
+  "no blur or softness, vivid but natural color depth, studio-quality food photography look.";
+
+export type EnhanceQuality = "standard" | "hd";
+
+export async function enhanceFoodPhoto(base64: string, mimeType: string, quality: EnhanceQuality = "standard"): Promise<{ data: string; mimeType: string }> {
   const { images } = await generateContent(IMAGE_MODEL, [
-    { text: ENHANCE_PROMPT },
+    { text: quality === "hd" ? ENHANCE_PROMPT_HD : ENHANCE_PROMPT },
     { inlineData: { mimeType, data: base64 } },
   ]);
   if (!images[0]) throw new Error("Gemini görsel döndürmedi");

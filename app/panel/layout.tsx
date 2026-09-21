@@ -13,6 +13,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       <header style={{ borderBottom: "1px solid var(--line)", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--paper)" }}>
         <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <Link href="/panel" style={{ fontSize: 13.5, color: "var(--muted)" }}>Panel</Link>
+          <Link href="/panel/studio" style={{ fontSize: 13.5, color: "var(--muted)" }}>Stüdyo</Link>
           <span style={{ fontSize: 13.5, color: "var(--muted)" }}>{user.email}</span>
           <SignOutButton />
         </div>
