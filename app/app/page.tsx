@@ -13,9 +13,9 @@ export default function Builder() {
   const [copied, setCopied] = useState(false);
   const [aiId, setAiId] = useState<number | null>(null);
 
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/m` : "https://karemenu.app/m";
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/m` : "https://siriusmenu.com/m";
   useEffect(() => { QRCode.toDataURL(shareUrl, { margin: 1, width: 320, color: { dark: "#1c1a17", light: "#ffffff" } }).then(setQr).catch(() => {}); }, [shareUrl]);
-  useEffect(() => { try { localStorage.setItem("karemenu", JSON.stringify(menu)); } catch {} }, [menu]);
+  useEffect(() => { try { localStorage.setItem("siriusmenu", JSON.stringify(menu)); } catch {} }, [menu]);
 
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
   const nextId = () => Math.floor(Math.random() * 1e9);
@@ -47,7 +47,7 @@ export default function Builder() {
   return (
     <main style={{ minHeight: "100vh" }}>
       <header style={{ borderBottom: "1px solid var(--line)", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--paper)" }}>
-        <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>Karemenü</Link>
+        <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
         <Link href="/" style={{ fontSize: 14, color: "var(--muted)" }}>← Ana sayfa</Link>
       </header>
 

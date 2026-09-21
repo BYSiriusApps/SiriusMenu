@@ -9,7 +9,7 @@ const fraunces = Fraunces({ subsets: ["latin-ext"], weight: ["500", "600"], vari
 const spaceg = Space_Grotesk({ subsets: ["latin-ext"], weight: ["500", "600", "700"], variable: "--m-space" });
 
 export const metadata: Metadata = {
-  title: "Karemenü — QR ile dijital menü",
+  title: "SiriusMenu — QR ile dijital menü",
   description:
     "Kafe ve restoranlar için QR menü. Ürünleri gir, temayı seç, QR kodu masaya koy. Fiyat güncellemesi anında, baskı maliyeti yok.",
 };

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MenuView, Phone } from "./lib/MenuView";
-import { DEFAULT_MENU, THEMES } from "./lib/menu";
+import { DEFAULT_MENU, THEMES, PRICING } from "./lib/menu";
+import { DEMOS } from "./lib/demos";
 
 const ring =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]";
@@ -13,12 +14,12 @@ const THEME_DESC: Record<string, string> = {
 };
 
 const FEATURES = [
-  { t: "Baskı maliyeti sıfır", d: "Menü her değiştiğinde matbaaya gitme. Bir kez QR bas, içeriği hep ekrandan güncelle." },
+  { t: "WhatsApp'tan güncelle", d: "Tanımlı numaraya \"Latte 120 olsun\" yaz, menü anında değişsin. Panele girmeye gerek yok." },
+  { t: "AI fotoğraf iyileştirme", d: "Telefonla çektiğin yemek fotoğrafını yükle; yapay zeka ışığı, rengi ve arka planı menülük hale getirsin." },
   { t: "Anlık güncelleme", d: "Tükenen ürünü saniyede kaldır, yeni fiyatı yaz. Müşteri her zaman güncel menüyü görür." },
   { t: "AI açıklama yardımcısı", d: "Ürün adını yaz, yapay zeka iştah açan bir açıklama önersin. Boş açıklama kutusu kalmasın." },
   { t: "Dört hazır tema", d: "Kafe, klasik, modern ve gece. Mekanının tarzına uyan görünümü tek tıkla seç." },
-  { t: "Ürün etiketleri", d: "Vegan, acı, glutensiz, şefin önerisi ve yeni. Müşteri aradığını menüde hızlı bulsun." },
-  { t: "Çoklu para birimi", d: "₺, $ ve € desteği. Turistik bölgeler ve yabancı misafirler için tek menü yeter." },
+  { t: "Baskı maliyeti sıfır", d: "Menü her değiştiğinde matbaaya gitme. Bir kez QR bas, içeriği hep ekrandan güncelle." },
 ];
 
 const USES = [
@@ -56,8 +57,8 @@ export default function Landing() {
       <nav className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--bg)]/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <span className="flex items-center gap-2 font-display text-2xl font-extrabold">
-            <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-sm font-extrabold text-white">K</span>
-            Karemenü
+            <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-sm font-extrabold text-white">S</span>
+            SiriusMenu
           </span>
           <div className="hidden items-center gap-7 text-sm text-[var(--muted)] md:flex">
             <a href="#ornek" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>Örnek</a>
@@ -65,7 +66,10 @@ export default function Landing() {
             <a href="#nasil" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>Nasıl çalışır</a>
             <a href="#fiyat" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>Fiyat</a>
           </div>
-          <Link href="/app" className={`btn btn-accent !px-5 !py-2.5 text-sm ${ring}`}>Menünü oluştur</Link>
+          <div className="flex items-center gap-4">
+            <Link href="/giris" className={`hidden text-sm text-[var(--muted)] transition hover:text-[var(--ink)] md:inline ${ring}`}>Giriş yap</Link>
+            <Link href="/app" className={`btn btn-accent !px-5 !py-2.5 text-sm ${ring}`}>Menünü oluştur</Link>
+          </div>
         </div>
       </nav>
 
@@ -108,28 +112,28 @@ export default function Landing() {
 
       {/* ÖRNEK / SHOWCASE */}
       <section id="ornek" className="mx-auto max-w-6xl px-6 py-20">
-        <div className="grid items-center gap-12 md:grid-cols-[1fr_340px]">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Örnek</p>
-            <h2 className="mt-3 font-display text-4xl font-extrabold leading-tight tracking-[-0.02em] text-balance md:text-5xl">
-              Aynı menü, tek QR ile telefonda.
-            </h2>
-            <p className="mt-5 text-lg leading-relaxed text-[var(--muted)]">
-              Karemenü bir PDF değil, yaşayan bir menü. Müşteri masadaki kodu okutur; kategoriler, fiyatlar ve
-              etiketler telefonunda tertemiz açılır. Sen bir ürünü değiştirdiğinde herkes anında yeni halini görür.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {["Kategori, fiyat ve açıklama tek ekranda", "Vegan, acı, glutensiz gibi etiketler", "Fiyat değişince baskı yok, anında güncel"].map((x) => (
-                <li key={x} className="flex items-start gap-3 text-[var(--ink)]">
-                  <span aria-hidden="true" className="mt-0.5 grid h-5 w-5 place-items-center rounded-full bg-[var(--accent)] text-[11px] font-bold text-white">✓</span>
-                  {x}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex justify-center">
-            <Phone><MenuView menu={DEFAULT_MENU} /></Phone>
-          </div>
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Örnek</p>
+          <h2 className="mt-3 font-display text-4xl font-extrabold leading-tight tracking-[-0.02em] text-balance md:text-5xl">
+            Fotoğraflı, canlı, tek QR ile telefonda.
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-[var(--muted)]">
+            SiriusMenu bir PDF değil, yaşayan bir menü. Ürün fotoğrafları, kategoriler, fiyatlar ve etiketler
+            telefonda tertemiz açılır. Bir ürünü değiştirdiğinde herkes anında yeni halini görür.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {DEMOS.map((d) => (
+            <div key={d.slug} className="flex flex-col items-center">
+              <Phone><MenuView menu={d.menu} /></Phone>
+              <p className="mt-4 font-display text-lg font-bold">{d.menu.name}</p>
+              <p className="text-sm text-[var(--muted)]">{d.tag} · {d.menu.theme} teması</p>
+              <Link href={`/m/${d.slug}`} className={`btn btn-ghost mt-3 !px-4 !py-2 text-sm ${ring}`}>Canlı menü →</Link>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/ornek" className={`btn btn-accent ${ring}`}>Tüm örnekleri incele</Link>
         </div>
       </section>
 
@@ -192,6 +196,37 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* WHATSAPP AI */}
+      <section className="bg-[#151310] py-20 text-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-[1fr_420px]">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">WhatsApp AI</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">Panelsiz güncelleme. Sadece yaz.</h2>
+            <p className="mt-5 text-lg leading-relaxed text-[#bfae94]">
+              Tanımlı, yetkili numaradan &quot;Latte 120 olsun&quot; yaz, menü anında değişsin. Tanımsız
+              numaralardan gelen mesajlar otomatik reddedilir; her değişiklik kayıt altında, &quot;geri&quot;
+              ile geri alınır.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {["Numara bazlı yetkilendirme (Patron / Müdür)", "Fiyat, açıklama, stok durumu, yeni ürün", "Fotoğraf gönder, AI menülük hale getirsin"].map((x) => (
+                <li key={x} className="flex items-start gap-3">
+                  <span aria-hidden="true" className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-[var(--accent)] text-[11px] font-bold text-white">✓</span>
+                  {x}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-3xl border border-white/10 bg-[#1b1712] p-6">
+            <div className="flex flex-col gap-3">
+              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1f8a52] px-4 py-3 text-sm">Latte fiyatını 120 yap</div>
+              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#2a241b] px-4 py-3 text-sm text-[#e8dfd0]">✅ Latte fiyatı 120 olarak güncellendi. Menü anında yayında.</div>
+              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1f8a52] px-4 py-3 text-sm">San Sebastian tükendi</div>
+              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#2a241b] px-4 py-3 text-sm text-[#e8dfd0]">✅ San Sebastian &quot;tükendi&quot; olarak işaretlendi.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* NASIL ÇALIŞIR */}
       <section id="nasil" className="border-y border-[var(--line)] bg-white/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
@@ -236,7 +271,7 @@ export default function Landing() {
         <div className="mx-auto max-w-4xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Karşılaştırma</p>
-            <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">Basılı menü yerine Karemenü</h2>
+            <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">Basılı menü yerine SiriusMenu</h2>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="card p-7">
@@ -251,7 +286,7 @@ export default function Landing() {
               </ul>
             </div>
             <div className="card border-2 border-[var(--accent)] p-7">
-              <h3 className="font-semibold text-[var(--accent)]">Karemenü</h3>
+              <h3 className="font-semibold text-[var(--accent)]">SiriusMenu</h3>
               <ul className="mt-4 space-y-3 text-[var(--ink)]">
                 {NEW.map((x) => (
                   <li key={x} className="flex items-start gap-3">
@@ -271,37 +306,51 @@ export default function Landing() {
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Fiyat</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">Basit ve net</h2>
         </div>
-        <div className="mx-auto mt-10 grid max-w-3xl gap-6 md:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-3">
           <div className="card p-8">
             <h3 className="font-semibold">Deneme</h3>
             <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>Ücretsiz</p>
             <p className="mt-2 text-sm text-[var(--muted)]">Menünü oluştur, önizle, QR'ını indir.</p>
             <ul className="mt-5 space-y-2.5 text-[var(--muted)]">
-              <li>✓ Menü oluşturucu</li>
-              <li>✓ Dört temanın tümü</li>
+              <li>✓ Menü oluşturucu + 4 tema</li>
               <li>✓ QR kodu indirme</li>
-              <li className="opacity-60">✗ Sınırsız ürün ve logo</li>
+              <li className="opacity-60">✗ Fotoğraf, WhatsApp, yayın</li>
             </ul>
             <Link href="/app" className={`btn btn-ghost mt-6 w-full ${ring}`}>Başla</Link>
           </div>
           <div className="card relative border-2 border-[var(--accent)] p-8 shadow-[0_24px_60px_-40px_rgba(224,137,27,.6)]">
             <span className="absolute -top-3 right-6 rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-bold text-white">İŞLETME</span>
-            <h3 className="font-semibold">Pro</h3>
+            <h3 className="font-semibold">Aylık</h3>
             <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
-              149<span className="text-base font-normal text-[var(--muted)]"> TL/ay</span>
+              {PRICING.monthly.amount}<span className="text-base font-normal text-[var(--muted)]"> TL/ay</span>
             </p>
-            <p className="mt-2 text-sm text-[var(--muted)]">Sınırsız ürün, tüm temalar, logo ve anlık güncelleme.</p>
+            <p className="mt-2 text-sm text-[var(--muted)]">+ tek seferlik {PRICING.setup.amount} TL kurulum</p>
             <ul className="mt-5 space-y-2.5 text-[var(--ink)]">
-              <li>✓ Sınırsız ürün ve kategori</li>
-              <li>✓ Tüm temalar + logo ekleme</li>
+              <li>✓ Geniş menülere uygun (200+ ürün), tüm temalar, logo</li>
+              <li>✓ WhatsApp AI ile menü güncelleme</li>
+              <li>✓ Ayda {PRICING.monthly.imageQuota} AI fotoğraf iyileştirme</li>
               <li>✓ Anlık güncelleme, QR sabit</li>
-              <li>✓ İstediğin an iptal</li>
             </ul>
-            <Link href="/app" className={`btn btn-accent mt-6 w-full ${ring}`}>Menünü yayınla</Link>
+            <Link href="/kayit" className={`btn btn-accent mt-6 w-full ${ring}`}>Menünü yayınla</Link>
+          </div>
+          <div className="card p-8">
+            <h3 className="font-semibold">Yıllık</h3>
+            <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {PRICING.yearly.amount}<span className="text-base font-normal text-[var(--muted)]"> TL/yıl</span>
+            </p>
+            <p className="mt-2 text-sm text-[var(--muted)]">~2 ay bedava · + {PRICING.setup.amount} TL kurulum</p>
+            <ul className="mt-5 space-y-2.5 text-[var(--ink)]">
+              <li>✓ Aylık planın tüm özellikleri</li>
+              <li>✓ Ayda {PRICING.yearly.imageQuota} AI fotoğraf iyileştirme</li>
+              <li>✓ Öncelikli destek</li>
+            </ul>
+            <Link href="/kayit" className={`btn btn-ghost mt-6 w-full ${ring}`}>Yıllık başla</Link>
           </div>
         </div>
         <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-[var(--muted)]">
-          Zincir işletmeler ve birden çok şube için özel plan mevcut.
+          Kota aşımı {PRICING.overagePerImage} TL/görsel ya da {PRICING.imagePack.credits}&apos;li paket {PRICING.imagePack.amount} TL.
+          Toplu fotoğraf iyileştirme (50/100 foto {PRICING.bulk50.amount}/{PRICING.bulk100.amount} TL) kotadan bağımsızdır.
+          Zincir işletmeler için özel plan mevcut.
         </p>
       </section>
 
@@ -340,11 +389,22 @@ export default function Landing() {
       <footer className="border-t border-[var(--line)] py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 text-sm text-[var(--muted)] md:flex-row">
           <span className="flex items-center gap-2 font-display text-lg font-extrabold text-[var(--ink)]">
-            <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-md bg-[var(--accent)] text-xs font-extrabold text-white">K</span>
-            Karemenü
+            <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-md bg-[var(--accent)] text-xs font-extrabold text-white">S</span>
+            SiriusMenu
           </span>
           <span>QR ile dijital menü · Baskı yok, anlık güncelleme</span>
         </div>
+        <div className="mx-auto mt-6 flex max-w-6xl flex-wrap justify-center gap-x-5 gap-y-2 px-6 text-xs text-[var(--muted)] md:justify-start">
+          <Link href="/gizlilik-politikasi" className="transition hover:text-[var(--ink)]">Gizlilik Politikası</Link>
+          <Link href="/kvkk-aydinlatma-metni" className="transition hover:text-[var(--ink)]">KVKK Aydınlatma Metni</Link>
+          <Link href="/cerez-politikasi" className="transition hover:text-[var(--ink)]">Çerez Politikası</Link>
+          <Link href="/kullanim-sartlari" className="transition hover:text-[var(--ink)]">Kullanım Şartları</Link>
+          <Link href="/mesafeli-satis-sozlesmesi" className="transition hover:text-[var(--ink)]">Mesafeli Satış Sözleşmesi</Link>
+          <Link href="/iade-iptal-politikasi" className="transition hover:text-[var(--ink)]">İade &amp; İptal Politikası</Link>
+        </div>
+        <p className="mx-auto mt-6 max-w-6xl px-6 text-center text-xs text-[var(--muted)] md:text-left">
+          SiriusMenu, BY Sirius Group AI and Technology Co. Ltd. (Companies House No: 17142392) tarafından işletilmektedir.
+        </p>
       </footer>
     </main>
   );

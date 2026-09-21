@@ -38,3 +38,24 @@ input, select, textarea { font-family: inherit; }
 }
 .field:focus { border-color: var(--accent); }
 label > span { font-size: 12px; font-weight: 600; color: var(--muted); }
+
+.legal-prose h2 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em;
+  margin-top: 2.25rem; margin-bottom: 0.75rem;
+}
+.legal-prose h2:first-child { margin-top: 0; }
+.legal-prose h3 {
+  font-weight: 700; font-size: 1.02rem; margin-top: 1.5rem; margin-bottom: 0.5rem;
+}
+.legal-prose p { color: var(--muted); line-height: 1.75; margin-bottom: 0.9rem; }
+.legal-prose ul, .legal-prose ol { color: var(--muted); line-height: 1.75; margin: 0.5rem 0 1rem 1.25rem; }
+.legal-prose ul { list-style: disc; }
+.legal-prose ol { list-style: decimal; }
+.legal-prose li { margin-bottom: 0.4rem; }
+.legal-prose li::marker { color: var(--accent); }
+.legal-prose strong { color: var(--ink); font-weight: 700; }
+.legal-prose a { color: var(--accent); text-decoration: underline; }
+.legal-prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+.legal-prose th, .legal-prose td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; color: var(--muted); }
+.legal-prose th { color: var(--ink); font-weight: 700; background: var(--accent-soft); }

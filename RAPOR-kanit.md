@@ -1,4 +1,4 @@
-# Karemenü (QR Dijital Menü) — Ad Library Kanıt Raporu (2026-07-21)
+# SiriusMenu (QR Dijital Menü) — Ad Library Kanıt Raporu (2026-07-21)
 
 ## Kategori: Restoran/kafe için QR ile dijital menü
 
