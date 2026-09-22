@@ -113,14 +113,13 @@ Kodda tespit edilemeyen, **hesap/plan seviyesinde manuel doğrulanması gereken*
 
 | Servis | Kullanım amacı | Ticari kullanım notu |
 |---|---|---|
-| **Google Gemini API** (`GEMINI_API_KEY`) | Görsel iyileştirme, WhatsApp komut ayrıştırma, fotoğraftan menü OCR | Google AI Studio'nun **ücretsiz katmanı**, girdi/çıktıları model iyileştirme amacıyla kullanabileceğini belirtir ve genelde üretim/ticari uygulamalar için önerilmez. Prod'da **ücretli (pay-as-you-go) Gemini API** planına geçilmiş olmalı; aksi halde hem veri gizliliği hem de kota/SLA riski var. `.env` içindeki anahtarın hangi plana bağlı olduğu Google AI Studio / Google Cloud konsolundan doğrulanmalı. |
+| **Google Gemini API** (`GEMINI_API_KEY`) | Görsel iyileştirme, WhatsApp komut ayrıştırma, fotoğraftan menü OCR, "AI açıklama" ürün açıklaması üretimi | Google AI Studio'nun **ücretsiz katmanı**, girdi/çıktıları model iyileştirme amacıyla kullanabileceğini belirtir ve genelde üretim/ticari uygulamalar için önerilmez. Prod'da **ücretli (pay-as-you-go) Gemini API** planına geçilmiş olmalı; aksi halde hem veri gizliliği hem de kota/SLA riski var. `.env` içindeki anahtarın hangi plana bağlı olduğu Google AI Studio / Google Cloud konsolundan doğrulanmalı. |
 | **Evolution API + WhatsApp** (`docs/evolution-api-kurulum.md`) | WhatsApp üzerinden AI menü düzenleme | Evolution API, WhatsApp'ın **resmi olmayan (unofficial) Web protokolü**nü kullanan açık kaynak bir gateway'dir. Bu, Meta'nın WhatsApp Kullanım Şartları'nı ihlal edebilir ve **numaranın askıya alınması riski** taşır. Ticari/ölçekli kullanım için Meta'nın **resmi WhatsApp Business Platform (Cloud API)**'a geçiş değerlendirilmeli; en azından bu risk kullanıcıya (işletme sahibine) açıkça bildirilmeli (`docs/evolution-api-kurulum.md` içinde bir uyarı satırı önerilir). |
 | **Supabase** | Veritabanı, auth, storage | Ücretsiz (Free) plan; ticari/prod trafik ve KVKK'nın öngördüğü SLA/DPA garantileri için **Pro plan** (veya üzeri) ve Supabase'in Data Processing Addendum'unun imzalanmış olması önerilir. |
 | **Stripe** | Ödeme/abonelik | Stripe hesabının **ticari (business) hesap** olarak doğrulanmış (KYB tamamlanmış) olması, canlı anahtarların (`sk_live_`) yalnızca doğrulama sonrası aktifleşeceği unutulmamalı. |
 | **Vercel** | Barındırma | Hobby plan ticari proje için **Terms of Service gereği uygun değildir** — Vercel Hobby planı yalnızca kişisel/ticari olmayan projeler içindir. Prod'a çıkan bir SaaS için **Pro plan** zorunlu. |
 | **Next.js / React / diğer npm paketleri** (`package.json`) | Uygulama çatısı | MIT lisanslı, ticari kullanıma serbest — ek aksiyon gerekmez. |
 | **Google Fonts** (varsa) | Tipografi | Ücretsiz, ticari kullanıma açık (OFL/Apache lisansları) — ek aksiyon gerekmez. |
-| **Anthropic API** (`ANTHROPIC_API_KEY`, "AI açıklama") | Ürün açıklaması üretimi | Anthropic API zaten ücretli/ticari kullanım içindir, ek aksiyon gerekmez; sadece aydınlatma metninde alıcı olarak zaten listeli. |
 
 **Aksiyon:** Yukarıdaki tablodaki "Free/Hobby plan" ve "resmi olmayan API" satırları
 (Gemini ücretsiz katman, Vercel Hobby, Evolution API/WhatsApp riski) prod'a çıkmadan önce

@@ -11,7 +11,10 @@ const BUCKET = "menu-photos";
 
 function authed(req: Request): boolean {
   const secret = process.env.WHATSAPP_WEBHOOK_SECRET;
-  if (!secret) return true;
+  // Prod'da secret tanımsızsa reddet: aksi halde bu uç nokta, restoran menülerini
+  // güncelleyebilen sahte WhatsApp webhook olaylarına (kimlik sahteciliği) tamamen açık kalır.
+  // Yerel geliştirmede (NODE_ENV !== "production") secret'sız test için izin verilir.
+  if (!secret) return process.env.NODE_ENV !== "production";
   const url = new URL(req.url);
   return url.searchParams.get("secret") === secret || req.headers.get("x-webhook-secret") === secret;
 }

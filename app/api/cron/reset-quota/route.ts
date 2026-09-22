@@ -3,7 +3,8 @@ import { createServiceClient } from "../../../lib/supabase/server";
 
 function authed(req: Request): boolean {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return true;
+  // Prod'da secret tanımsızsa reddet: aksi halde bu uç nokta herkese açık kalır.
+  if (!secret) return process.env.NODE_ENV !== "production";
   return req.headers.get("authorization") === `Bearer ${secret}` || new URL(req.url).searchParams.get("secret") === secret;
 }
 

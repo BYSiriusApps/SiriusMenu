@@ -19,7 +19,7 @@ Kod bilmene gerek yok. Manuel kurulum istersen aşağıdaki adımlar da geçerli
 2. `npm run dev`
 3. Tarayıcıda `http://localhost:3000`
 
-Uygulama **anahtarsız tam çalışır.** "✨ Açıklama" butonu ürün açıklaması yazmana yardım eder; `.env.local` dosyasına `ANTHROPIC_API_KEY=...` eklersen Claude gerçek öneri üretir, eklemezsen hazır demo metni gösterir.
+Uygulama **anahtarsız tam çalışır.** "✨ Açıklama" butonu ürün açıklaması yazmana yardım eder; `.env.local` dosyasına `GEMINI_API_KEY=...` eklersen Gemini gerçek öneri üretir, eklemezsen hazır demo metni gösterir.
 
 ## Nasıl çalışır (teknik)
 - Menü verisi ve temalar `app/lib/menu.tsx`; müşteri görünümü `app/lib/MenuView.tsx` (telefon çerçevesi dahil). Tamamı client-side.

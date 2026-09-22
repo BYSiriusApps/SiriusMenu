@@ -22,12 +22,10 @@ export default async function PublicMenu({ params, searchParams }: { params: Pro
 
   const supabase = await createClient();
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("name, subtitle, theme, currency, menu, published, qr_token")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+  // Yalnızca genel menü için gereken sütunları döndüren RPC (bkz. migration 0006):
+  // qr_token asla döndürülmez, sadece eşleşme durumu (qr_valid) hesaplanır.
+  const { data: rows } = await supabase.rpc("get_public_menu", { p_slug: slug, p_qr_token: k ?? null });
+  const restaurant = rows?.[0];
 
   if (!restaurant) {
     return (
@@ -42,7 +40,7 @@ export default async function PublicMenu({ params, searchParams }: { params: Pro
 
   // QR görseline gömülen anahtar (k) varsa ve güncel token'la eşleşmiyorsa: bu, yenilenmiş/geçersiz kılınmış
   // eski bir basılı QR'dır. Düz /m/{slug} linki (k olmadan) her zaman çalışmaya devam eder.
-  if (k && restaurant.qr_token && k !== restaurant.qr_token) {
+  if (k && !restaurant.qr_valid) {
     return (
       <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24, textAlign: "center" }}>
         <div>

@@ -5,7 +5,9 @@ export const maxDuration = 60;
 
 function authed(req: Request): boolean {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return true;
+  // Prod'da secret tanımsızsa reddet: aksi halde bu uç nokta herkese açık kalır ve
+  // Gemini API bütçesini tüketen kuyruk işlemeyi dışarıdan tetikleyebilir.
+  if (!secret) return process.env.NODE_ENV !== "production";
   return req.headers.get("authorization") === `Bearer ${secret}` || new URL(req.url).searchParams.get("secret") === secret;
 }
 

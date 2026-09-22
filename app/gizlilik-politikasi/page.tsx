@@ -23,7 +23,7 @@ export default function GizlilikPolitikasi() {
         <li><strong>İşletme/menü bilgileri:</strong> restoran/kafe adı, alt başlık, logo görseli, menü kategorileri, ürün adı-fiyat-açıklama-etiket verileri.</li>
         <li><strong>Abonelik ve ödeme durumu:</strong> plan durumu (deneme/aktif), Stripe üzerinden oluşturulan müşteri ve abonelik kimlikleri. Kart numarası gibi ödeme bilgileri bizim sunucularımızda tutulmaz; doğrudan Stripe tarafından işlenir.</li>
         <li><strong>Teknik veriler:</strong> oturum çerezi, IP adresi, tarayıcı bilgisi (temel işlevsellik ve güvenlik için).</li>
-        <li><strong>Opsiyonel AI açıklama isteği:</strong> &quot;AI açıklama&quot; özelliğini kullanırsan girdiğin ürün adı, açıklama üretimi için üçüncü taraf yapay zeka sağlayıcısına iletilir.</li>
+        <li><strong>Opsiyonel AI açıklama isteği:</strong> &quot;AI açıklama&quot; özelliğini kullanırsan girdiğin ürün adı, açıklama üretimi için Google (Gemini API) sağlayıcısına iletilir.</li>
         <li><strong>Ürün fotoğrafları:</strong> görsel iyileştirme veya fotoğraftan menü aktarma özelliklerini kullanırsan yüklediğin fotoğraflar işlenmek üzere Google (Gemini API) sağlayıcısına iletilir.</li>
         <li><strong>WhatsApp mesajları (opsiyonel):</strong> WhatsApp üzerinden AI ile menü düzenleme özelliğini bağlarsan, ilgili telefon numarası ve gönderdiğin mesaj içeriği, mesajları işleyen Evolution API (WhatsApp ağ geçidi) altyapısı ve komutu yorumlayan Google (Gemini API) ile paylaşılır.</li>
       </ul>
@@ -45,8 +45,7 @@ export default function GizlilikPolitikasi() {
         <li><strong>Supabase</strong> — veritabanı, kimlik doğrulama ve dosya depolama altyapısı,</li>
         <li><strong>Stripe</strong> — abonelik ve ödeme işlemleri,</li>
         <li><strong>Vercel</strong> — uygulama barındırma altyapısı,</li>
-        <li><strong>Anthropic</strong> — yalnızca &quot;AI açıklama&quot; özelliğini kullanırsan, ürün adı bazında,</li>
-        <li><strong>Google (Gemini API)</strong> — ürün fotoğrafı iyileştirme, fotoğraftan menü aktarma ve WhatsApp komut yorumlama özelliklerini kullanırsan,</li>
+        <li><strong>Google (Gemini API)</strong> — &quot;AI açıklama&quot;, ürün fotoğrafı iyileştirme, fotoğraftan menü aktarma ve WhatsApp komut yorumlama özelliklerini kullanırsan,</li>
         <li><strong>Evolution API</strong> — WhatsApp üzerinden AI menü düzenleme özelliğini bağlarsan, WhatsApp mesajlarının iletilmesi için.</li>
       </ul>
       <p>Bu sağlayıcılar verilerini yalnızca bizim adımıza, belirtilen amaçlarla işler; kendi pazarlama amaçları için kullanamaz.</p>
