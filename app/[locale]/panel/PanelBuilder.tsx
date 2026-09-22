@@ -5,6 +5,7 @@ import {
   THEMES, TAGS, CURRENCIES, PRICING, backfillCodes, nextCategoryCode, nextItemCode,
   type MenuData, type Category, type Item, type Tag,
 } from "@/app/lib/menu";
+import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { createClient } from "@/app/lib/supabase/client";
 
@@ -46,6 +47,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [waInput, setWaInput] = useState("");
   const [waRole, setWaRole] = useState("Patron");
   const [waPendingCode, setWaPendingCode] = useState<{ phone: string; code: string } | null>(null);
+  const [previewDemo, setPreviewDemo] = useState<Demo | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const canPublish = ACTIVE_STATUSES.has(subscription.status);
@@ -383,6 +385,34 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             </div>
           )}
 
+          {/* Örnek menüler ve temalar */}
+          <div className="card" style={{ padding: 16, marginBottom: 16 }}>
+            <div className="tag">Örnek menüler</div>
+            <p style={{ marginTop: 6, fontSize: 12.5, color: "var(--muted)" }}>
+              Kendi ürünlerini yüklemeden önce hazır örnekleri sağdaki telefonda önizle; beğendiğin temayı tek tıkla kendi menüne uygula.
+            </p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              {DEMOS.map((d) => (
+                <div key={d.slug} style={{
+                  display: "flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "3px 3px 3px 14px",
+                  border: previewDemo?.slug === d.slug ? "1.5px solid var(--accent)" : "1.5px solid var(--line)",
+                  background: previewDemo?.slug === d.slug ? "var(--accent-soft)" : "var(--paper)",
+                }}>
+                  <button onClick={() => setPreviewDemo(d)} style={{
+                    background: "none", border: "none", cursor: "pointer", fontSize: 13,
+                    fontWeight: previewDemo?.slug === d.slug ? 600 : 400, color: "inherit",
+                  }}>{d.tag} · {THEMES.find((t) => t.key === d.menu.theme)?.label ?? d.menu.theme}</button>
+                  <button
+                    onClick={() => { setField("theme", d.menu.theme); setPreviewDemo(null); }}
+                    title="Bu temayı kendi menüne uygula"
+                    className="btn-ghost btn"
+                    style={{ padding: "6px 10px", fontSize: 11.5 }}
+                  >Temayı kullan</button>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="card" style={{ padding: 20 }}>
             <div className="tag">İşletme</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
@@ -393,7 +423,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <div className="tag" style={{ marginTop: 18 }}>Tema</div>
             <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
               {THEMES.map((t) => (
-                <button key={t.key} onClick={() => setField("theme", t.key)} style={{
+                <button key={t.key} onClick={() => { setField("theme", t.key); setPreviewDemo(null); }} style={{
                   padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: menu.theme === t.key ? 600 : 400,
                   border: menu.theme === t.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.theme === t.key ? "var(--accent-soft)" : "var(--paper)",
                 }}>{t.label}</button>
@@ -471,7 +501,15 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
         {/* Önizleme + QR + Yayın */}
         <div style={{ position: "sticky", top: 16, alignSelf: "start", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <Phone><MenuView menu={menu} /></Phone>
+          {previewDemo && (
+            <div className="card" style={{ padding: "10px 14px", width: "100%", textAlign: "center", fontSize: 12.5 }}>
+              Örnek önizleme: <b>{previewDemo.menu.name}</b>
+              <button onClick={() => setPreviewDemo(null)} style={{ marginLeft: 10, background: "none", border: "none", color: "var(--accent)", cursor: "pointer", textDecoration: "underline", fontSize: 12.5 }}>
+                Kendi menüme dön
+              </button>
+            </div>
+          )}
+          <Phone><MenuView menu={previewDemo ? previewDemo.menu : menu} /></Phone>
 
           <div className="card" style={{ padding: 16, width: "100%", textAlign: "center" }}>
             <div className="tag" style={{ justifyContent: "center" }}>Yayın durumu</div>
