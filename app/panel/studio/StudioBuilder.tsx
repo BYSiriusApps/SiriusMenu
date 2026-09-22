@@ -14,6 +14,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [quotaUsed, setQuotaUsed] = useState(imageQuotaUsed);
   const [billingLoading, setBillingLoading] = useState(false);
+  const [prompts, setPrompts] = useState<Record<string, string>>({});
 
   const items = categories.flatMap((c) => c.items.map((it) => ({ cat: c, item: it })));
 
@@ -50,7 +51,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
       const originalPath = url.pathname.slice(url.pathname.indexOf(marker) + marker.length);
       const r = await fetch("/api/images/enhance", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemKey: key, originalPath, quality: "hd" }),
+        body: JSON.stringify({ itemKey: key, originalPath, quality: "hd", prompt: prompts[key] || undefined }),
       });
       const d = await r.json();
       if (r.ok && d.url) {
@@ -82,8 +83,9 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
         <h1 className="font-display" style={{ fontSize: 24, marginTop: 6 }}>Kendi fotoğraflarınla çalış</h1>
         <p style={{ fontSize: 13.5, color: "var(--muted)", marginTop: 6, maxWidth: 640 }}>
           Şablon görsel yerine kendi ürün fotoğraflarını yükle; dilersen yapay zeka ile ışık, arka plan ve
-          netliği en yüksek detayda yeniden oluştursun. Bu, panelde ürün satırındaki hızlı İyileştir&apos;in
-          daha güçlü sürümüdür ve aynı görsel kotasını kullanır.
+          netliği en yüksek detayda yeniden oluştursun. İstersen ek bir talimat da yaz (ör. &quot;ahşap masada&quot;) —
+          ürünün kendisi ve sunumu her zaman sabit tutulur, sadece istediğin detay eklenir. Bu, panelde ürün
+          satırındaki hızlı İyileştir&apos;in daha güçlü sürümüdür ve aynı görsel kotasını kullanır.
         </p>
         <Link href="/panel" style={{ fontSize: 12.5, color: "var(--accent)", display: "inline-block", marginTop: 8 }}>← Panele dön</Link>
       </div>
@@ -115,6 +117,19 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
               )}
               <div style={{ marginTop: 8, fontSize: 13.5, fontWeight: 600 }}>{item.name || "İsimsiz ürün"}</div>
               <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{cat.name}</div>
+
+              {item.image && (
+                <textarea
+                  className="field"
+                  placeholder="İsteğe bağlı talimat (ör. ahşap masada, gün batımı ışığıyla)"
+                  value={prompts[key] || ""}
+                  onChange={(e) => setPrompts((p) => ({ ...p, [key]: e.target.value }))}
+                  maxLength={240}
+                  rows={2}
+                  style={{ marginTop: 10, fontSize: 12, resize: "vertical" }}
+                />
+              )}
+
               <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
                 <label className="btn-ghost btn" style={{ padding: "7px 10px", fontSize: 12, cursor: "pointer" }}>
                   {busy ? "..." : "Fotoğraf yükle"}

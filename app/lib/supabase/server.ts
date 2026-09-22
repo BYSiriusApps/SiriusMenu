@@ -25,6 +25,21 @@ export async function createClient() {
   );
 }
 
+// Web (çerez oturumu) ve gelecekteki mobil app (Authorization: Bearer <access_token>)
+// aynı route'ları kullanabilsin diye ortak kullanıcı çözümleyici.
+export async function getRequestUser(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  req: Request,
+) {
+  const authHeader = req.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    const { data: { user } } = await supabase.auth.getUser(authHeader.slice(7));
+    return user;
+  }
+  const { data: { user } } = await supabase.auth.getUser();
+  return user;
+}
+
 export function createServiceClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

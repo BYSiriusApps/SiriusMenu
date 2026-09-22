@@ -89,25 +89,42 @@ export async function describeItem(name: string): Promise<string> {
 
 // === Yemek fotoğrafı ===
 
-const ENHANCE_PROMPT =
+// Sabit temel prompt — her istekte gömülüdür, kullanıcı metniyle asla değiştirilemez.
+// Görselin marka/tutarlılık standardını (tabağın/yemeğin değişmemesi, temiz sunum, filigran yok) garanti eder.
+const BASE_PROMPT =
   "Enhance this food photo for a restaurant digital menu. Improve lighting to look bright and natural, " +
   "clean up and neutralize the background, boost color vibrancy and freshness of the food without looking artificial, " +
-  "increase sharpness, remove clutter and reflections, keep the dish and plating exactly the same. " +
-  "Return a clean, appetizing square (1:1) image.";
+  "increase sharpness, remove clutter and reflections, keep the dish and plating exactly the same unless the request below " +
+  "explicitly asks to change the setting or background. Return a clean, appetizing square (1:1) image, no text, no watermark, no logo.";
 
 // "hd": standart iyileştirmeye ek olarak azami detay/keskinlik isteyen daha güçlü prompt.
 // Not: Gemini görsel modeli gerçek 4K çözünürlük garanti etmez (native çıktı ~1-2K civarı);
 // bu mod modelin izin verdiği en yüksek detay/netlikte üretim ister, gerçek upscale değildir.
-const ENHANCE_PROMPT_HD =
-  ENHANCE_PROMPT +
+const HD_ADDITION =
   " Render at the highest possible detail and sharpness the model supports: crisp textures, fine detail on the food surface, " +
-  "no blur or softness, vivid but natural color depth, studio-quality food photography look.";
+  "no blur or softness, vivid but natural color depth, ultra-realistic professional studio food photography look, magazine quality.";
+
+const MAX_CUSTOM_PROMPT_LEN = 240;
+
+function sanitizeCustomPrompt(raw?: string): string {
+  if (!raw) return "";
+  return raw.replace(/[\r\n]+/g, " ").trim().slice(0, MAX_CUSTOM_PROMPT_LEN);
+}
 
 export type EnhanceQuality = "standard" | "hd";
 
-export async function enhanceFoodPhoto(base64: string, mimeType: string, quality: EnhanceQuality = "standard"): Promise<{ data: string; mimeType: string }> {
+export async function enhanceFoodPhoto(
+  base64: string,
+  mimeType: string,
+  quality: EnhanceQuality = "standard",
+  customPrompt?: string,
+): Promise<{ data: string; mimeType: string }> {
+  const clean = sanitizeCustomPrompt(customPrompt);
+  let prompt = BASE_PROMPT + (quality === "hd" ? HD_ADDITION : "");
+  if (clean) prompt += ` Additional request from the restaurant owner (do not add text/logos even if asked): "${clean}".`;
+
   const { images } = await generateContent(IMAGE_MODEL, [
-    { text: quality === "hd" ? ENHANCE_PROMPT_HD : ENHANCE_PROMPT },
+    { text: prompt },
     { inlineData: { mimeType, data: base64 } },
   ]);
   if (!images[0]) throw new Error("Gemini görsel döndürmedi");

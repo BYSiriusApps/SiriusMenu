@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient, createServiceClient } from "../../../lib/supabase/server";
+import { createClient, createServiceClient, getRequestUser } from "../../../lib/supabase/server";
 import { enhanceFoodPhoto, isGeminiConfigured } from "../../../lib/gemini";
 
 export const maxDuration = 60;
@@ -10,12 +10,13 @@ export async function POST(req: Request) {
   if (!isGeminiConfigured()) return NextResponse.json({ error: "Görsel iyileştirme şu an kapalı." }, { status: 503 });
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getRequestUser(supabase, req);
   if (!user) return NextResponse.json({ error: "Giriş yapmalısın" }, { status: 401 });
 
-  const { itemKey, originalPath, quality } = await req.json().catch(() => ({}));
+  const { itemKey, originalPath, quality, prompt } = await req.json().catch(() => ({}));
   if (!itemKey || !originalPath) return NextResponse.json({ error: "Eksik parametre" }, { status: 400 });
   const q = quality === "hd" ? "hd" : "standard";
+  const customPrompt = typeof prompt === "string" ? prompt : undefined;
 
   const { data: restaurant } = await supabase
     .from("restaurants")
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
 
   let enhanced;
   try {
-    enhanced = await enhanceFoodPhoto(buf.toString("base64"), mime, q);
+    enhanced = await enhanceFoodPhoto(buf.toString("base64"), mime, q, customPrompt);
   } catch (e) {
     if (row.data) await svc.from("menu_images").update({ status: "failed", error: String(e) }).eq("id", row.data.id);
     return NextResponse.json({ error: "İyileştirme başarısız oldu, tekrar dene." }, { status: 502 });
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
   if (up.error) return NextResponse.json({ error: "Kaydedilemedi" }, { status: 500 });
 
   await svc.from("restaurants").update({ image_quota_used: restaurant.image_quota_used + 1 }).eq("id", restaurant.id);
-  if (row.data) await svc.from("menu_images").update({ status: "enhanced", enhanced_path: enhancedPath, gemini_meta: { mime: enhanced.mimeType } }).eq("id", row.data.id);
+  if (row.data) await svc.from("menu_images").update({ status: "enhanced", enhanced_path: enhancedPath, gemini_meta: { mime: enhanced.mimeType, quality: q, prompt: customPrompt ?? null } }).eq("id", row.data.id);
 
   const { data: pub } = svc.storage.from(BUCKET).getPublicUrl(enhancedPath);
   return NextResponse.json({
