@@ -101,6 +101,7 @@ export const THEMES: Theme[] = [
   { key: "modern", label: "Modern", font: "var(--m-space)", bg: "#f2f3f5", card: "#ffffff", ink: "#171922", sub: "#727787", accent: "#e0891b" },
   { key: "gece", label: "Gece", font: "var(--m-fraunces)", bg: "#17140f", card: "#211c15", ink: "#f3ecdf", sub: "#a89a84", accent: "#e3b25a", dark: true },
   { key: "bahce", label: "Bahçe", font: "var(--m-fraunces)", bg: "#eef2e6", card: "#f8faf3", ink: "#20261c", sub: "#7c8a70", accent: "#5b7f4b" },
+  { key: "deniz", label: "Deniz", font: "var(--m-space)", bg: "#eef4f6", card: "#ffffff", ink: "#152b33", sub: "#6b8892", accent: "#1f7a8c" },
 ];
 
 export function money(p: string, cur = "₺"): string {

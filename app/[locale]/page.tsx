@@ -12,6 +12,7 @@ const THEME_DESC: Record<string, string> = {
   modern: "Nötr gri, geometrik başlıklar. Fast food, brunch ve şık mekanlar için.",
   gece: "Koyu zemin, sıcak altın vurgu. Bar, meyhane ve akşam servisi için.",
   bahce: "Yumuşak yeşil tonlar, botanik serif başlıklar. Vegan, sağlıklı beslenme ve bahçe konseptli mekanlar için.",
+  deniz: "Ferah mavi-yeşil tonlar, temiz modern başlıklar. Balık restoranları ve deniz mahsulleri mekanları için.",
 };
 
 const FEATURES = [
@@ -19,7 +20,7 @@ const FEATURES = [
   { t: "AI fotoğraf iyileştirme", d: "Telefonla çektiğin yemek fotoğrafını yükle; yapay zeka ışığı, rengi ve arka planı menülük hale getirsin." },
   { t: "Anlık güncelleme", d: "Tükenen ürünü saniyede kaldır, yeni fiyatı yaz. Müşteri her zaman güncel menüyü görür." },
   { t: "AI açıklama yardımcısı", d: "Ürün adını yaz, yapay zeka iştah açan bir açıklama önersin. Boş açıklama kutusu kalmasın." },
-  { t: "Beş hazır tema", d: "Kafe, klasik, modern, gece ve bahçe. Mekanının tarzına uyan görünümü tek tıkla seç." },
+  { t: "Altı hazır tema", d: "Kafe, klasik, modern, gece, bahçe ve deniz. Mekanının tarzına uyan görünümü tek tıkla seç." },
   { t: "Baskı maliyeti sıfır", d: "Menü her değiştiğinde matbaaya gitme. Bir kez QR bas, içeriği hep ekrandan güncelle." },
 ];
 
@@ -48,7 +49,7 @@ const FAQ = [
   { q: "Fiyatı değiştirince QR'ı yeniden mi basmalıyım?", a: "Gerekmez. QR hep aynı bağlantıya gider; sen içeriği güncelleyince müşteri okuttuğunda otomatik olarak güncel menüyü görür." },
   { q: "İnternet olmadan çalışır mı?", a: "Menüyü açmak için müşterinin telefonunda internet olması gerekir; mobil veri bu iş için fazlasıyla yeter. Zayıf sinyalli mekanlarda masaya kısa bir Wi-Fi notu koymanı öneririz." },
   { q: "Kaç ürün ekleyebilirim?", a: "Deneme planında menünü kurup önizleyebilir ve QR'ını indirebilirsin. Pro planda ürün ve kategori sayısında sınır yoktur." },
-  { q: "Kendi logomu ve renklerimi koyabilir miyim?", a: "Pro planda logonu ekleyebilir, beş hazır temadan mekanının tarzına en uygun görünümü seçebilirsin." },
+  { q: "Kendi logomu ve renklerimi koyabilir miyim?", a: "Pro planda logonu ekleyebilir, altı hazır temadan mekanının tarzına en uygun görünümü seçebilirsin." },
 ];
 
 export default function Landing() {
@@ -144,7 +145,7 @@ export default function Landing() {
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Temalar</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">İşletmene uyan görünüm</h2>
-            <p className="mt-4 text-lg text-[var(--muted)]">Beş hazır tema. Mekanının tarzına en yakın olanı seç, menü o görünüme bürünsün.</p>
+            <p className="mt-4 text-lg text-[var(--muted)]">Altı hazır tema. Mekanının tarzına en yakın olanı seç, menü o görünüme bürünsün.</p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {THEMES.map((th) => (
@@ -313,7 +314,7 @@ export default function Landing() {
             <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>Ücretsiz</p>
             <p className="mt-2 text-sm text-[var(--muted)]">Menünü oluştur, önizle, QR'ını indir.</p>
             <ul className="mt-5 space-y-2.5 text-[var(--muted)]">
-              <li>✓ Menü oluşturucu + 5 tema</li>
+              <li>✓ Menü oluşturucu + 6 tema</li>
               <li>✓ QR kodu indirme</li>
               <li className="opacity-60">✗ Fotoğraf, WhatsApp, yayın</li>
             </ul>

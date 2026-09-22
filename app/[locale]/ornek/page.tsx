@@ -13,7 +13,7 @@ export default function OrnekPage() {
       <Link href="/" className="text-sm text-[var(--muted)] transition hover:text-[var(--ink)]">← SiriusMenu</Link>
       <h1 className="mt-4 font-display text-4xl font-extrabold tracking-[-0.02em] md:text-5xl">Örnek menüler</h1>
       <p className="mt-4 max-w-2xl text-lg text-[var(--muted)]">
-        Üç farklı mekan, üç tema. Her biri gerçek bir SiriusMenu menüsü: fotoğraflı ürünler, kategoriler,
+        Altı farklı mekan, altı tema. Her biri gerçek bir SiriusMenu menüsü: fotoğraflı ürünler, kategoriler,
         etiketler ve anlık güncellenen fiyatlar. Telefonda nasıl göründüğünü aşağıda incele.
       </p>
 

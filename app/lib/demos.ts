@@ -73,4 +73,71 @@ export const DEMOS: Demo[] = [
       ],
     },
   },
+  {
+    slug: "demo-brunch",
+    tag: "Brunch",
+    menu: {
+      name: "Brunch Sokak", subtitle: "Modern kahvaltı, özel burgerler ve taze sıkım", theme: "modern", currency: "₺",
+      categories: [
+        { id: 1, name: "Kahvaltı Tabakları", items: [
+          { id: 11, name: "Serpme Kahvaltı", desc: "Peynir çeşitleri, zeytin, reçel, tereyağı, sınırsız çay", price: "280", tags: ["sef"] },
+          { id: 12, name: "Avokadolu Yumurta", desc: "Ekşi maya ekmek, poşe yumurta, acı yağ", price: "165", tags: ["yeni"] },
+          { id: 13, name: "Simit Waffle", desc: "Susamlı waffle, labne, bal", price: "145", tags: [] },
+        ] },
+        { id: 2, name: "Burgerler", items: [
+          { id: 21, name: "Smash Burger", desc: "Double patty, cheddar, özel sos", price: "210", tags: ["sef"] },
+          { id: 22, name: "Tavuklu Burger", desc: "Çıtır tavuk, turşu, acı mayonez", price: "190", tags: ["aci"] },
+          { id: 23, name: "Vegan Burger", desc: "Nohut köftesi, avokado, marul", price: "175", tags: ["vegan"] },
+        ] },
+        { id: 3, name: "İçecekler", items: [
+          { id: 31, name: "Taze Sıkım Portakal", desc: "Günlük sıkım", price: "90", tags: [] },
+          { id: 32, name: "Cold Brew", desc: "18 saat demlenmiş", price: "95", tags: [] },
+        ] },
+      ],
+    },
+  },
+  {
+    slug: "demo-vegan",
+    tag: "Vegan",
+    menu: {
+      name: "Kök", subtitle: "Bitki bazlı, mevsimlik ve doğal", theme: "bahce", currency: "₺",
+      categories: [
+        { id: 1, name: "Buddha Bowl'lar", items: [
+          { id: 11, name: "Falafel Bowl", desc: "Nohut falafeli, humus, tahin sos, kinoa", price: "175", tags: ["vegan"] },
+          { id: 12, name: "Tempeh Bowl", desc: "Marine tempeh, kavrulmuş sebze, esmer pirinç", price: "185", tags: ["vegan", "glutensiz"] },
+        ] },
+        { id: 2, name: "Ana Yemekler", items: [
+          { id: 21, name: "Mantar Risotto", desc: "Kremalı arborio pirinç, kekik", price: "210", tags: ["sef", "glutensiz"] },
+          { id: 22, name: "Sebzeli Curry", desc: "Nohut, ıspanak, hindistan cevizi sütü", price: "190", tags: ["aci", "vegan"] },
+        ] },
+        { id: 3, name: "Smoothie & İçecek", items: [
+          { id: 31, name: "Yeşil Detoks", desc: "Ispanak, elma, zencefil, limon", price: "110", tags: ["vegan"] },
+          { id: 32, name: "Kırmızı Meyve Smoothie", desc: "Yaban mersini, çilek, badem sütü", price: "115", tags: ["vegan", "yeni"] },
+        ] },
+      ],
+    },
+  },
+  {
+    slug: "demo-balik",
+    tag: "Balık",
+    menu: {
+      name: "Liman", subtitle: "Günlük av, ızgara ve meze", theme: "deniz", currency: "₺",
+      categories: [
+        { id: 1, name: "Meze", items: [
+          { id: 11, name: "Deniz Börülcesi", desc: "Zeytinyağlı, sarımsaklı", price: "130", tags: ["vegan"] },
+          { id: 12, name: "Kalamar Tava", desc: "Çıtır kalamar, tartar sos", price: "220", tags: ["sef"] },
+          { id: 13, name: "Midye Dolma", desc: "20 adet, limonlu", price: "180", tags: [] },
+        ] },
+        { id: 2, name: "Balıklar", items: [
+          { id: 21, name: "Levrek Izgara", desc: "Günlük av, roka salatası ile", price: "380", tags: ["sef"] },
+          { id: 22, name: "Çupra Buğulama", desc: "Sebzeli, zeytinyağlı", price: "360", tags: ["glutensiz"] },
+          { id: 23, name: "Karides Güveç", desc: "Tereyağlı domates sos, kaşar", price: "340", tags: ["yeni"] },
+        ] },
+        { id: 3, name: "İçecek", items: [
+          { id: 31, name: "Rakı (35cl)", desc: "Yeşil şişe", price: "450", tags: [] },
+          { id: 32, name: "Beyaz Şarap Kadeh", desc: "Sarıgevrek, taze", price: "240", tags: [] },
+        ] },
+      ],
+    },
+  },
 ];
