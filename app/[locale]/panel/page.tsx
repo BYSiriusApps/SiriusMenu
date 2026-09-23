@@ -39,6 +39,7 @@ export default async function PanelPage() {
         image_quota: restaurant.image_quota ?? 0,
         image_quota_used: restaurant.image_quota_used ?? 0,
         qr_token: restaurant.qr_token ?? "",
+        hasCustomMenu: restaurant.menu != null,
         logo_url: restaurant.logo_url ?? "",
         social: (restaurant.social as SocialLinks | null) ?? {},
         social_position: restaurant.social_position ?? "top",

@@ -229,6 +229,7 @@
   },
   "Panel": {
     "nav": {
+      "home": "Home",
       "panel": "Panel",
       "studio": "Studio"
     },
@@ -257,6 +258,8 @@
       "errMismatch": "Passwords don't match.",
       "errUpdateFailed": "Couldn't update the password, try again.",
       "okUpdated": "Password updated.",
+      "language": "Language",
+      "languageDesc": "Change the panel interface language.",
       "support": "Support",
       "supportText": "For issues or questions, email us:"
     },
@@ -351,6 +354,11 @@
       "errQrFailed": "Couldn't refresh the QR.",
       "errPhotoUnreadable": "Couldn't read the photo.",
       "errPhotoNoItems": "No readable menu was found in the photo.",
+      "importFile": "Import menu from file",
+      "importFileDesc": "If you already have a menu file (PDF, Word, Excel or CSV), upload it; AI reads the product names, descriptions and prices and lists them, which you can edit before adding. Max 5MB.",
+      "chooseFile": "Choose file (PDF, Word, Excel, CSV)",
+      "errFileUnreadable": "Couldn't read the file, try again.",
+      "errFileNoItems": "No readable menu was found in the file.",
       "errCheckoutFailed": "Couldn't open the checkout page.",
       "errPortalFailed": "Couldn't open the subscription management page.",
       "errAddNumberFailed": "Couldn't add it."

@@ -6,8 +6,17 @@ import {
   DEFAULT_MENU, THEMES, TAGS, CURRENCIES, type MenuData, type Category, type Item, type Tag,
 } from "@/app/lib/menu";
 import { MenuView, Phone } from "@/app/lib/MenuView";
+import { useRouter } from "@/i18n/routing";
+
+const PENDING_MENU_KEY = "siriusmenu_pending_menu";
+const IMPORT_INTENT_KEY = "siriusmenu_import_intent";
+const CONTACT_EMAIL = "info@bysirius.com";
+const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Menümü SiriusMenu için siz hazırlayın")}&body=${encodeURIComponent("Merhaba,\n\nMenümü kendim oluşturmak yerine sizin hazırlamanızı istiyorum. Ürün/fiyat listemi (dosya, fotoğraf ya da yazılı olarak) bu e-postaya ekliyorum.\n\nİşletme adı: ")}`;
+
+const hasContent = (m: MenuData) => m.categories.some((c) => c.items.some((it) => it.name.trim()));
 
 export default function Builder() {
+  const router = useRouter();
   const [menu, setMenu] = useState<MenuData>(DEFAULT_MENU);
   const [qr, setQr] = useState("");
   const [copied, setCopied] = useState(false);
@@ -44,12 +53,56 @@ export default function Builder() {
   const copy = () => { navigator.clipboard?.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 1400); };
   const dlQr = () => { const a = document.createElement("a"); a.href = qr; a.download = `${(menu.name || "menu").replace(/\s+/g, "-").toLowerCase()}-qr.png`; a.click(); };
 
+  // Kayıt olmadan burada denenen menüyü kaybetmemek için: hesap oluşturulunca panelde otomatik
+  // uygulanmak üzere tarayıcıya bırak, "içe aktar" niyetiyle geldiyse ilgili yükleme kartını da
+  // paneldeyken vurgulayıp göster (bkz. panel/PanelBuilder.tsx).
+  const goToSignup = (intent: "file" | "photo" | null) => {
+    try {
+      if (hasContent(menu)) localStorage.setItem(PENDING_MENU_KEY, JSON.stringify(menu));
+      else localStorage.removeItem(PENDING_MENU_KEY);
+      if (intent) localStorage.setItem(IMPORT_INTENT_KEY, intent);
+      else localStorage.removeItem(IMPORT_INTENT_KEY);
+    } catch {}
+    router.push("/kayit");
+  };
+
   return (
     <main style={{ minHeight: "100vh" }}>
       <header style={{ borderBottom: "1px solid var(--line)", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--paper)" }}>
         <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
         <Link href="/" style={{ fontSize: 14, color: "var(--muted)" }}>← Ana sayfa</Link>
       </header>
+
+      {/* Toplu oluşturma seçenekleri — elle tek tek girmenin tek yol olmadığını en başta göster */}
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "22px 22px 0" }}>
+        <div className="card" style={{ padding: 20 }}>
+          <div className="tag">Hızlı başla</div>
+          <h2 className="font-display" style={{ fontSize: 19, fontWeight: 800, marginTop: 8 }}>Menünü nasıl oluşturmak istersin?</h2>
+          <p style={{ fontSize: 13.5, color: "var(--muted)", marginTop: 4 }}>
+            Ürünlerini aşağıda tek tek yazabilirsin, ama elindeki menüyü toplu aktarmak ya da hiç uğraşmamak da mümkün.
+          </p>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+            <div style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 22 }}>📄</div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginTop: 6 }}>Excel / PDF / Word&apos;den aktar</div>
+              <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 4 }}>Elindeki menü dosyasını yükle, tüm ürünler saniyeler içinde hazır olsun.</p>
+              <button className="btn btn-accent" style={{ marginTop: 10, width: "100%" }} onClick={() => goToSignup("file")}>Hesap oluştur ve dosyamı yükle</button>
+            </div>
+            <div style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 22 }}>📷</div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginTop: 6 }}>Fotoğraf yükleyerek oluştur</div>
+              <p style={{ fontSize: 12.5, color: "var(--muted)" }}>Kağıt menünün fotoğrafını çek, yapay zeka ürünleri okuyup listelesin.</p>
+              <button className="btn btn-accent" style={{ marginTop: 10, width: "100%" }} onClick={() => goToSignup("photo")}>Hesap oluştur ve fotoğraf yükle</button>
+            </div>
+            <div style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 22 }}>💬</div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginTop: 6 }}>Kendim hazırlamak istemiyorum</div>
+              <p style={{ fontSize: 12.5, color: "var(--muted)" }}>Giriş yapmadan bize ulaş, menünü senin için biz oluşturalım.</p>
+              <a className="btn btn-ghost" style={{ marginTop: 10, width: "100%", display: "block", textAlign: "center" }} href={CONTACT_MAILTO}>Bize ulaş</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "22px 22px 80px", display: "grid", gridTemplateColumns: "1fr 360px", gap: 30 }} className="build-grid">
         {/* Editör */}
@@ -110,6 +163,13 @@ export default function Builder() {
         {/* Önizleme + QR */}
         <div style={{ position: "sticky", top: 16, alignSelf: "start", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
           <Phone><MenuView menu={menu} /></Phone>
+          <div className="card" style={{ padding: 16, width: "100%", textAlign: "center" }}>
+            <div className="tag" style={{ justifyContent: "center" }}>Kalıcı hale getir</div>
+            <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 8 }}>
+              Bu deneme tarayıcında saklanır, kalıcı değildir. Kaydedip yayınlarsan gerçek bir bağlantı ve QR kod alırsın.
+            </p>
+            <button className="btn btn-accent" style={{ marginTop: 10, width: "100%" }} onClick={() => goToSignup(null)}>Bu menüyü kaydet ve yayınla</button>
+          </div>
           <div className="card" style={{ padding: 16, width: "100%", textAlign: "center" }}>
             <div className="tag" style={{ justifyContent: "center" }}>Masa QR kodu</div>
             {qr && <img src={qr} alt="QR" style={{ width: 150, height: 150, margin: "12px auto 4px", display: "block" }} />}

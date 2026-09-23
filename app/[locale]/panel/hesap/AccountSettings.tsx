@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/app/lib/supabase/client";
+import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
 
 const SUPPORT_EMAIL = "info@bysirius.com";
 
@@ -72,6 +73,12 @@ export function AccountSettings({ email, restaurantName, subscriptionStatus, pla
           {busy ? t("updating") : t("updatePassword")}
         </button>
       </form>
+
+      <div className="card" style={{ padding: 20, marginBottom: 16 }}>
+        <div className="tag">{t("language")}</div>
+        <p style={{ marginTop: 8, marginBottom: 12, fontSize: 13.5, color: "var(--muted)" }}>{t("languageDesc")}</p>
+        <LanguageSwitcher />
+      </div>
 
       <div className="card" style={{ padding: 20 }}>
         <div className="tag">{t("support")}</div>

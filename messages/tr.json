@@ -229,6 +229,7 @@
   },
   "Panel": {
     "nav": {
+      "home": "Ana sayfa",
       "panel": "Panel",
       "studio": "Stüdyo"
     },
@@ -257,6 +258,8 @@
       "errMismatch": "Şifreler eşleşmiyor.",
       "errUpdateFailed": "Şifre güncellenemedi, tekrar dene.",
       "okUpdated": "Şifre güncellendi.",
+      "language": "Dil",
+      "languageDesc": "Panel arayüz dilini değiştir.",
       "support": "Destek",
       "supportText": "Sorun veya sorularınız için bize yazın:"
     },
@@ -351,6 +354,11 @@
       "errQrFailed": "QR yenilenemedi.",
       "errPhotoUnreadable": "Fotoğraf okunamadı.",
       "errPhotoNoItems": "Fotoğrafta okunabilir bir menü bulunamadı.",
+      "importFile": "Dosyadan menü yükle",
+      "importFileDesc": "Elinizde hazır bir menü dosyası varsa (PDF, Word, Excel ya da CSV) yükleyin; yapay zeka ürün adı, açıklama ve fiyatları okuyup listeler, eklemeden önce düzenleyebilirsiniz. En fazla 5MB.",
+      "chooseFile": "Dosya seç (PDF, Word, Excel, CSV)",
+      "errFileUnreadable": "Dosya okunamadı, tekrar dene.",
+      "errFileNoItems": "Dosyada okunabilir bir menü bulunamadı.",
       "errCheckoutFailed": "Ödeme sayfası açılamadı.",
       "errPortalFailed": "Abonelik yönetim sayfası açılamadı.",
       "errAddNumberFailed": "Eklenemedi."

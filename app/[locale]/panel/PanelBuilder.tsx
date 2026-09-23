@@ -13,9 +13,12 @@ import { createClient } from "@/app/lib/supabase/client";
 type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
-  plan: string; image_quota: number; image_quota_used: number; qr_token: string;
+  plan: string; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
   logo_url: string; social: SocialLinks; social_position: string; font: string;
 };
+type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[] };
+const PENDING_MENU_KEY = "siriusmenu_pending_menu";
+const IMPORT_INTENT_KEY = "siriusmenu_import_intent";
 type ParsedCategory = { name: string; items: { name: string; desc?: string; price?: string }[] };
 type ImportRow = { include: boolean; catName: string; name: string; desc: string; price: string };
 type WaNumber = { id: string; phone: string; role: string; verified: boolean };
@@ -62,7 +65,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [waRole, setWaRole] = useState("Patron");
   const [waPendingCode, setWaPendingCode] = useState<{ phone: string; code: string } | null>(null);
   const [previewDemo, setPreviewDemo] = useState<Demo | null>(null);
+  const [highlightImportId, setHighlightImportId] = useState<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const appliedPendingRef = useRef(false);
 
   const canPublish = ACTIVE_STATUSES.has(subscription.status);
   const isPro = subscription.status === "active";
@@ -90,6 +95,50 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu]);
+
+  // Girişsiz "menü oluştur" (/app) sayfasından "kaydet ve yayınla" ya da "içe aktar" ile buraya
+  // yönlendirilen taze hesaplar için: tarayıcıda bırakılan taslağı/aktarma niyetini bir kereliğine uygula.
+  // Kullanıcının halihazırda özelleştirdiği bir menüyü (hasCustomMenu) asla üzerine yazmaz.
+  useEffect(() => {
+    if (appliedPendingRef.current) return;
+    appliedPendingRef.current = true;
+
+    let draft: PendingDraft | null = null;
+    try {
+      const raw = localStorage.getItem(PENDING_MENU_KEY);
+      if (raw) draft = JSON.parse(raw) as PendingDraft;
+    } catch {}
+    let intent: string | null = null;
+    try { intent = localStorage.getItem(IMPORT_INTENT_KEY); } catch {}
+    try {
+      localStorage.removeItem(PENDING_MENU_KEY);
+      localStorage.removeItem(IMPORT_INTENT_KEY);
+    } catch {}
+
+    if (draft && !restaurant.hasCustomMenu && Array.isArray(draft.categories) && draft.categories.length) {
+      const categories = backfillCodes(
+        draft.categories.map((c) => ({ ...c, id: nextId(), items: c.items.map((it) => ({ ...it, id: nextId() })) })),
+      );
+      setMenu((p) => ({
+        ...p,
+        name: draft!.name?.trim() || p.name,
+        subtitle: draft!.subtitle ?? p.subtitle,
+        theme: draft!.theme || p.theme,
+        currency: draft!.currency || p.currency,
+        categories,
+      }));
+    }
+
+    if (intent === "photo" || intent === "file") {
+      const targetId = intent === "photo" ? "import-photo-card" : "import-file-card";
+      setTimeout(() => {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "center" });
+        setHighlightImportId(targetId);
+        setTimeout(() => setHighlightImportId((cur) => (cur === targetId ? null : cur)), 2600);
+      }, 300);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
   const setSocial = (key: keyof SocialLinks, v: string) => setMenu((p) => ({ ...p, social: { ...p.social, [key]: v } }));
@@ -215,6 +264,11 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     reader.readAsDataURL(file);
   });
 
+  const applyParsedCategories = (cats: ParsedCategory[]): ImportRow[] =>
+    cats.flatMap((c) =>
+      c.items.map((it) => ({ include: true, catName: c.name || "Genel", name: it.name || "", desc: it.desc || "", price: (it.price || "").replace(",", ".") })),
+    );
+
   const importPhoto = async (file: File) => {
     setImportBusy(true);
     try {
@@ -225,14 +279,28 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
       });
       const d = await r.json();
       if (!r.ok) { alert(d.error || t("errPhotoUnreadable")); setImportBusy(false); return; }
-      const cats = (d.categories || []) as ParsedCategory[];
-      const rows: ImportRow[] = cats.flatMap((c) =>
-        c.items.map((it) => ({ include: true, catName: c.name || "Genel", name: it.name || "", desc: it.desc || "", price: (it.price || "").replace(",", ".") })),
-      );
+      const rows = applyParsedCategories((d.categories || []) as ParsedCategory[]);
       if (rows.length === 0) alert(t("errPhotoNoItems"));
       else setImportRows(rows);
     } catch {
       alert(t("errPhotoUnreadable"));
+    }
+    setImportBusy(false);
+  };
+
+  const importFile = async (file: File) => {
+    setImportBusy(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const r = await fetch("/api/menu/import-file", { method: "POST", body });
+      const d = await r.json();
+      if (!r.ok) { alert(d.error || t("errFileUnreadable")); setImportBusy(false); return; }
+      const rows = applyParsedCategories((d.categories || []) as ParsedCategory[]);
+      if (rows.length === 0) alert(t("errFileNoItems"));
+      else setImportRows(rows);
+    } catch {
+      alert(t("errFileUnreadable"));
     }
     setImportBusy(false);
   };
@@ -403,7 +471,14 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
           </div>
 
           {/* Fotoğraftan menü içe aktarma */}
-          <div className="card" style={{ padding: 16, marginBottom: 16 }}>
+          <div
+            id="import-photo-card"
+            className="card"
+            style={{
+              padding: 16, marginBottom: 16, transition: "box-shadow .3s",
+              boxShadow: highlightImportId === "import-photo-card" ? "0 0 0 3px var(--accent)" : undefined,
+            }}
+          >
             <div className="tag">{t("importPhoto")}</div>
             <p style={{ marginTop: 6, fontSize: 12.5, color: "var(--muted)" }}>
               {t("importPhotoDesc")}
@@ -411,6 +486,31 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <label className="btn btn-accent" style={{ marginTop: 12, display: "inline-flex", padding: "8px 14px", fontSize: 13.5, cursor: "pointer" }}>
               {importBusy ? t("reading") : t("choosePhoto")}
               <input type="file" accept="image/*" hidden disabled={importBusy} onChange={(e) => { const f = e.target.files?.[0]; if (f) importPhoto(f); e.target.value = ""; }} />
+            </label>
+          </div>
+
+          {/* Dosyadan (PDF/Excel/CSV/Word) menü içe aktarma */}
+          <div
+            id="import-file-card"
+            className="card"
+            style={{
+              padding: 16, marginBottom: 16, transition: "box-shadow .3s",
+              boxShadow: highlightImportId === "import-file-card" ? "0 0 0 3px var(--accent)" : undefined,
+            }}
+          >
+            <div className="tag">{t("importFile")}</div>
+            <p style={{ marginTop: 6, fontSize: 12.5, color: "var(--muted)" }}>
+              {t("importFileDesc")}
+            </p>
+            <label className="btn-ghost btn" style={{ marginTop: 12, display: "inline-flex", padding: "8px 14px", fontSize: 13.5, cursor: "pointer" }}>
+              {importBusy ? t("reading") : t("chooseFile")}
+              <input
+                type="file"
+                accept=".pdf,.docx,.xlsx,.csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+                hidden
+                disabled={importBusy}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) importFile(f); e.target.value = ""; }}
+              />
             </label>
           </div>
 
