@@ -1,5 +1,5 @@
 import React from "react";
-import { SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
+import { FONTS, SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
 
 const SOCIAL_ICON_PATHS: Record<keyof SocialLinks, React.ReactNode> = {
   instagram: (
@@ -40,34 +40,40 @@ function SocialIcon({ platform }: { platform: keyof SocialLinks }) {
 /** Müşteri-görünümü dijital menü (temaya göre). */
 export function MenuView({ menu }: { menu: MenuData }) {
   const th = THEMES.find((t) => t.key === menu.theme) ?? THEMES[0];
+  const headingFont = FONTS.find((f) => f.key === menu.font)?.cssVar ?? th.font;
   const socialEntries = SOCIAL_PLATFORMS.filter((p) => menu.social?.[p.key]);
+  const socialPos = menu.socialPosition ?? "top";
+  const floating = socialPos === "bottom-left" || socialPos === "bottom-right";
+
+  const socialRow = socialEntries.length > 0 && (
+    <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+      {socialEntries.map((p) => (
+        <a key={p.key} href={socialHref(p.key, menu.social![p.key]!)} target="_blank" rel="noopener noreferrer" aria-label={p.label} style={{ color: th.accent, opacity: 0.85, display: "flex" }}>
+          <SocialIcon platform={p.key} />
+        </a>
+      ))}
+    </div>
+  );
+
   return (
-    <div style={{ background: th.bg, color: th.ink, fontFamily: "var(--font-body)", minHeight: "100%" }}>
+    <div style={{ background: th.bg, color: th.ink, fontFamily: "var(--font-body)", minHeight: "100%", position: "relative" }}>
       {/* Başlık */}
       <div style={{ textAlign: "center", padding: "34px 22px 22px", borderBottom: `1px solid ${th.accent}33` }}>
         {menu.logo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={menu.logo} alt="" style={{ width: 56, height: 56, borderRadius: 14, objectFit: "cover", margin: "0 auto 12px", display: "block" }} />
         )}
-        <div style={{ fontFamily: th.font, fontSize: 30, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.05 }}>{menu.name || "Menü"}</div>
+        <div style={{ fontFamily: headingFont, fontSize: 30, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.05 }}>{menu.name || "Menü"}</div>
         {menu.subtitle && <div style={{ color: th.sub, fontSize: 13.5, marginTop: 8, maxWidth: 300, marginInline: "auto" }}>{menu.subtitle}</div>}
-        {socialEntries.length > 0 && (
-          <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 14 }}>
-            {socialEntries.map((p) => (
-              <a key={p.key} href={socialHref(p.key, menu.social![p.key]!)} target="_blank" rel="noopener noreferrer" aria-label={p.label} style={{ color: th.accent, opacity: 0.85, display: "flex" }}>
-                <SocialIcon platform={p.key} />
-              </a>
-            ))}
-          </div>
-        )}
+        {socialPos === "top" && socialRow && <div style={{ marginTop: 14 }}>{socialRow}</div>}
       </div>
 
       {/* Kategoriler */}
-      <div style={{ padding: "18px 20px 40px" }}>
+      <div style={{ padding: floating ? "18px 20px 92px" : "18px 20px 40px" }}>
         {menu.categories.map((cat) => (
           <div key={cat.id} style={{ marginTop: 22 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <span style={{ fontFamily: th.font, fontSize: 19, fontWeight: 600, color: th.accent }}>{cat.name}</span>
+              <span style={{ fontFamily: headingFont, fontSize: 19, fontWeight: 600, color: th.accent }}>{cat.name}</span>
               <span style={{ flex: 1, height: 1, background: `${th.accent}30` }} />
             </div>
             {cat.items.map((it) => {
@@ -85,7 +91,7 @@ export function MenuView({ menu }: { menu: MenuData }) {
                         {it.name}
                         {sold && <span style={{ fontSize: 10, fontWeight: 700, color: th.sub, background: `${th.sub}22`, padding: "1px 6px", borderRadius: 999, marginLeft: 6, verticalAlign: "middle" }}>Tükendi</span>}
                       </span>
-                      <span style={{ fontFamily: th.font, fontWeight: 600, fontSize: 15.5, color: th.accent, whiteSpace: "nowrap" }}>{money(it.price, menu.currency)}</span>
+                      <span style={{ fontFamily: headingFont, fontWeight: 600, fontSize: 15.5, color: th.accent, whiteSpace: "nowrap" }}>{money(it.price, menu.currency)}</span>
                     </div>
                     {it.desc && <div style={{ color: th.sub, fontSize: 12.5, marginTop: 3, lineHeight: 1.45 }}>{it.desc}</div>}
                     {it.tags.length > 0 && (
@@ -108,8 +114,33 @@ export function MenuView({ menu }: { menu: MenuData }) {
             })}
           </div>
         ))}
+        {socialPos === "bottom" && socialRow && (
+          <div style={{ marginTop: 28, paddingTop: 20, borderTop: `1px solid ${th.accent}33` }}>{socialRow}</div>
+        )}
         <div style={{ textAlign: "center", color: th.sub, fontSize: 10.5, marginTop: 28, opacity: .8 }}>SiriusMenu ile hazırlandı</div>
       </div>
+
+      {floating && socialEntries.length > 0 && (
+        <div
+          style={{
+            position: "fixed", bottom: 18, [socialPos === "bottom-left" ? "left" : "right"]: 14,
+            display: "flex", flexDirection: "column", gap: 10, zIndex: 20,
+          }}
+        >
+          {socialEntries.map((p) => (
+            <a
+              key={p.key} href={socialHref(p.key, menu.social![p.key]!)} target="_blank" rel="noopener noreferrer" aria-label={p.label}
+              style={{
+                width: 40, height: 40, borderRadius: "50%", background: th.card, color: th.accent,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 4px 14px rgba(0,0,0,.22)", border: `1px solid ${th.accent}33`,
+              }}
+            >
+              <SocialIcon platform={p.key} />
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -118,7 +149,7 @@ export function MenuView({ menu }: { menu: MenuData }) {
 export function Phone({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ width: 300, borderRadius: 34, background: "#111", padding: 9, boxShadow: "0 24px 60px -28px rgba(20,15,5,.5)" }}>
-      <div style={{ borderRadius: 26, overflow: "hidden", height: 600, overflowY: "auto", background: "#fff", position: "relative" }}>
+      <div style={{ borderRadius: 26, overflow: "hidden", height: 600, overflowY: "auto", background: "#fff", position: "relative", transform: "translateZ(0)" }}>
         <div style={{ position: "sticky", top: 0, height: 26, background: "transparent", display: "flex", justifyContent: "center", zIndex: 2, pointerEvents: "none" }}>
           <div style={{ width: 110, height: 20, background: "#111", borderRadius: "0 0 14px 14px" }} />
         </div>

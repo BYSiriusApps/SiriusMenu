@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, backfillCodes, nextCategoryCode, nextItemCode,
-  type MenuData, type Category, type Item, type Tag, type SocialLinks,
+  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, backfillCodes, nextCategoryCode, nextItemCode,
+  type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
@@ -14,7 +14,7 @@ type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
   plan: string; image_quota: number; image_quota_used: number; qr_token: string;
-  logo_url: string; social: SocialLinks;
+  logo_url: string; social: SocialLinks; social_position: string; font: string;
 };
 type ParsedCategory = { name: string; items: { name: string; desc?: string; price?: string }[] };
 type ImportRow = { include: boolean; catName: string; name: string; desc: string; price: string };
@@ -30,11 +30,15 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const t = useTranslations("Panel.builder");
   const tAccount = useTranslations("Panel.account");
   const tThemes = useTranslations("Themes");
+  const tFonts = useTranslations("Fonts");
+  const tSocialPositions = useTranslations("SocialPositions");
   const supabase = useRef(createClient()).current;
   const [menu, setMenu] = useState<MenuData>({
     name: restaurant.name, subtitle: restaurant.subtitle, theme: restaurant.theme,
     currency: restaurant.currency, categories: backfillCodes(restaurant.categories),
     logo: restaurant.logo_url || undefined, social: restaurant.social || {},
+    socialPosition: (restaurant.social_position as SocialPosition) || "top",
+    font: restaurant.font || undefined,
   });
   const [socialOpen, setSocialOpen] = useState<Set<keyof SocialLinks>>(
     new Set((Object.keys(restaurant.social || {}) as (keyof SocialLinks)[]).filter((k) => restaurant.social?.[k])),
@@ -79,6 +83,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
       await supabase.from("restaurants").update({
         name: menu.name, subtitle: menu.subtitle, theme: menu.theme, currency: menu.currency, menu: menu.categories,
         logo_url: menu.logo || null, social: menu.social || {},
+        social_position: menu.socialPosition || "top", font: menu.font || null,
       }).eq("id", restaurant.id);
       setSaving("saved");
     }, 700);
@@ -88,6 +93,8 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
   const setSocial = (key: keyof SocialLinks, v: string) => setMenu((p) => ({ ...p, social: { ...p.social, [key]: v } }));
+  const setSocialPosition = (pos: SocialPosition) => setMenu((p) => ({ ...p, socialPosition: pos }));
+  const setFont = (key: string) => setMenu((p) => ({ ...p, font: key || undefined }));
   const toggleSocial = (key: keyof SocialLinks) => {
     setSocialOpen((prev) => {
       const next = new Set(prev);
@@ -473,6 +480,22 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
               ))}
             </div>
 
+            <div className="tag" style={{ marginTop: 18 }}>{t("font")}</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>{t("fontDesc")}</p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              <button onClick={() => setFont("")} style={{
+                padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: !menu.font ? 600 : 400,
+                border: !menu.font ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: !menu.font ? "var(--accent-soft)" : "var(--paper)",
+              }}>{t("fontThemeDefault")}</button>
+              {FONTS.map((f) => (
+                <button key={f.key} onClick={() => setFont(f.key)} style={{
+                  padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: menu.font === f.key ? 600 : 400,
+                  border: menu.font === f.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.font === f.key ? "var(--accent-soft)" : "var(--paper)",
+                  fontFamily: f.cssVar,
+                }}>{tFonts(f.key)}</button>
+              ))}
+            </div>
+
             <div className="tag" style={{ marginTop: 18 }}>{t("logo")}</div>
             <div style={{ display: "flex", gap: 10, marginTop: 10, alignItems: "center" }}>
               {menu.logo ? (
@@ -506,6 +529,17 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                     />
                   )}
                 </div>
+              ))}
+            </div>
+
+            <div className="tag" style={{ marginTop: 18 }}>{t("socialPosition")}</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>{t("socialPositionDesc")}</p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              {SOCIAL_POSITIONS.map((sp) => (
+                <button key={sp.key} onClick={() => setSocialPosition(sp.key)} style={{
+                  padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: (menu.socialPosition || "top") === sp.key ? 600 : 400,
+                  border: (menu.socialPosition || "top") === sp.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: (menu.socialPosition || "top") === sp.key ? "var(--accent-soft)" : "var(--paper)",
+                }}>{tSocialPositions(sp.key)}</button>
               ))}
             </div>
           </div>

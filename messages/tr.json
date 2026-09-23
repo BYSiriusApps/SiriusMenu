@@ -186,6 +186,18 @@
     "bahce": "Bahçe",
     "deniz": "Deniz"
   },
+  "Fonts": {
+    "fraunces": "Fraunces (klasik serif)",
+    "space": "Space Grotesk (modern)",
+    "playfair": "Playfair (şık serif)",
+    "poppins": "Poppins (yuvarlak)"
+  },
+  "SocialPositions": {
+    "top": "Üstte (başlıkta)",
+    "bottom": "Altta (menü sonunda)",
+    "bottom-left": "Sol alt köşe (sabit)",
+    "bottom-right": "Sağ alt köşe (sabit)"
+  },
   "Auth": {
     "login": {
       "title": "Giriş yap",
@@ -294,11 +306,16 @@
       "currency": "Para birimi",
       "subtitle": "Alt başlık",
       "theme": "Tema",
+      "font": "Yazı tipi",
+      "fontDesc": "Başlık, kategori ve fiyat yazı tipini seç (isteğe bağlı, boş bırakırsan temanın kendi fontu kullanılır).",
+      "fontThemeDefault": "Tema varsayılanı",
       "logo": "Logo (isteğe bağlı)",
       "change": "Değiştir",
       "uploadLogo": "Logo yükle",
       "social": "Sosyal medya ve web sitesi (isteğe bağlı)",
       "socialDesc": "Göstermek istediğin hesapları seç, altına bağlantıyı veya kullanıcı adını yaz.",
+      "socialPosition": "Sosyal medya konumu",
+      "socialPositionDesc": "İkonların menüde nerede görüneceğini seç.",
       "categoryCodeTitle": "Kategori kodu",
       "deleteCategoryTitle": "Kategoriyi sil",
       "itemCodeTitle": "Ürün kodu",

@@ -19,6 +19,12 @@ export const SOCIAL_PLATFORMS: { key: keyof SocialLinks; label: string; placehol
   { key: "website", label: "Web sitesi", placeholder: "https://siteniz.com" },
 ];
 
+/** Sosyal medya ikonlarının menüde gösterileceği konum (etiketler panelde i18n "SocialPositions" ile çevrilir). */
+export type SocialPosition = "top" | "bottom" | "bottom-left" | "bottom-right";
+export const SOCIAL_POSITIONS: { key: SocialPosition }[] = [
+  { key: "top" }, { key: "bottom" }, { key: "bottom-left" }, { key: "bottom-right" },
+];
+
 /** Girilen kullanıcı adı/handle/URL'i tıklanabilir bir bağlantıya çevirir. */
 export function socialHref(key: keyof SocialLinks, value: string): string {
   const v = value.trim();
@@ -31,12 +37,28 @@ export function socialHref(key: keyof SocialLinks, value: string): string {
   return `https://${handle}`;
 }
 
+/**
+ * Menü başlığı/kategori/fiyat yazı tipi. Her tema bir varsayılan fontla gelir (bkz. THEMES),
+ * kullanıcı isterse burada listelenenlerden birini seçip temanın fontunu geçersiz kılabilir.
+ */
+export type FontOption = { key: string; cssVar: string };
+export const FONTS: FontOption[] = [
+  { key: "fraunces", cssVar: "var(--m-fraunces)" },
+  { key: "space", cssVar: "var(--m-space)" },
+  { key: "playfair", cssVar: "var(--m-playfair)" },
+  { key: "poppins", cssVar: "var(--m-poppins)" },
+];
+
 export type MenuData = {
   name: string; subtitle: string; theme: string; currency: string; categories: Category[];
   /** İşletmenin kendi logosu (SiriusMenu marka yazısından ayrı, isteğe bağlı). */
   logo?: string;
   /** İsteğe bağlı: seçilip doldurulan sosyal medya / web sitesi bilgileri. */
   social?: SocialLinks;
+  /** İsteğe bağlı: sosyal medya ikonlarının konumu (bkz. SOCIAL_POSITIONS). Boşsa "top". */
+  socialPosition?: SocialPosition;
+  /** İsteğe bağlı: FONTS içindeki bir anahtar. Boşsa temanın varsayılan fontu kullanılır. */
+  font?: string;
 };
 
 /**

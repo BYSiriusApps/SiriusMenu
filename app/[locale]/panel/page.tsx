@@ -10,7 +10,7 @@ export default async function PanelPage() {
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, social, published, plan, image_quota, image_quota_used, qr_token")
+    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, social, social_position, font, published, plan, image_quota, image_quota_used, qr_token")
     .eq("user_id", user.id)
     .single();
 
@@ -41,6 +41,8 @@ export default async function PanelPage() {
         qr_token: restaurant.qr_token ?? "",
         logo_url: restaurant.logo_url ?? "",
         social: (restaurant.social as SocialLinks | null) ?? {},
+        social_position: restaurant.social_position ?? "top",
+        font: restaurant.font ?? "",
       }}
       subscription={{
         status: subscription?.status ?? "trialing",

@@ -186,6 +186,18 @@
     "bahce": "Garden",
     "deniz": "Sea"
   },
+  "Fonts": {
+    "fraunces": "Fraunces (classic serif)",
+    "space": "Space Grotesk (modern)",
+    "playfair": "Playfair (elegant serif)",
+    "poppins": "Poppins (rounded)"
+  },
+  "SocialPositions": {
+    "top": "Top (header)",
+    "bottom": "Bottom (end of menu)",
+    "bottom-left": "Bottom-left corner (fixed)",
+    "bottom-right": "Bottom-right corner (fixed)"
+  },
   "Auth": {
     "login": {
       "title": "Log in",
@@ -294,11 +306,16 @@
       "currency": "Currency",
       "subtitle": "Subtitle",
       "theme": "Theme",
+      "font": "Font",
+      "fontDesc": "Choose the font for the title, categories and prices (optional; leave empty to use the theme's own font).",
+      "fontThemeDefault": "Theme default",
       "logo": "Logo (optional)",
       "change": "Change",
       "uploadLogo": "Upload logo",
       "social": "Social media and website (optional)",
       "socialDesc": "Pick the accounts you want to show, then write the link or username below.",
+      "socialPosition": "Social media position",
+      "socialPositionDesc": "Choose where the icons appear on the menu.",
       "categoryCodeTitle": "Category code",
       "deleteCategoryTitle": "Delete category",
       "itemCodeTitle": "Product code",
