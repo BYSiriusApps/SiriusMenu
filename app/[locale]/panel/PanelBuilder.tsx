@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
@@ -57,6 +57,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [aiId, setAiId] = useState<number | null>(null);
   const [imgBusy, setImgBusy] = useState<string | null>(null);
   const [saving, setSaving] = useState<"idle" | "saving" | "saved">("idle");
+  const [draftJustSaved, setDraftJustSaved] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
   const [quotaUsed, setQuotaUsed] = useState(restaurant.image_quota_used);
@@ -81,20 +82,31 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   useEffect(() => { QRCode.toDataURL(qrUrl, { margin: 1, width: 320, color: { dark: "#1c1a17", light: "#ffffff" } }).then(setQr).catch(() => {}); }, [qrUrl]);
 
+  const persistMenu = useCallback(async (m: MenuData) => {
+    setSaving("saving");
+    await supabase.from("restaurants").update({
+      name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, menu: m.categories,
+      logo_url: m.logo || null, social: m.social || {},
+      social_position: m.socialPosition || "top", font: m.font || null,
+    }).eq("id", restaurant.id);
+    setSaving("saved");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restaurant.id]);
+
   useEffect(() => {
     setSaving("saving");
     if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(async () => {
-      await supabase.from("restaurants").update({
-        name: menu.name, subtitle: menu.subtitle, theme: menu.theme, currency: menu.currency, menu: menu.categories,
-        logo_url: menu.logo || null, social: menu.social || {},
-        social_position: menu.socialPosition || "top", font: menu.font || null,
-      }).eq("id", restaurant.id);
-      setSaving("saved");
-    }, 700);
+    saveTimer.current = setTimeout(() => { persistMenu(menu); }, 700);
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu]);
+
+  const saveDraftNow = async () => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    await persistMenu(menu);
+    setDraftJustSaved(true);
+    setTimeout(() => setDraftJustSaved(false), 2500);
+  };
 
   // Girişsiz "menü oluştur" (/app) sayfasından "kaydet ve yayınla" ya da "içe aktar" ile buraya
   // yönlendirilen taze hesaplar için: tarayıcıda bırakılan taslağı/aktarma niyetini bir kereliğine uygula.
@@ -727,8 +739,11 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
           <div className="card" style={{ padding: 16, width: "100%", textAlign: "center" }}>
             <div className="tag" style={{ justifyContent: "center" }}>{t("publishStatus")}</div>
             <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 8 }}>
-              {saving === "saving" ? t("saving") : t("autoSaved")}
+              {saving === "saving" ? t("saving") : draftJustSaved ? t("draftSaved") : t("autoSaved")}
             </p>
+            <button className="btn-ghost btn" style={{ marginTop: 10, width: "100%" }} onClick={saveDraftNow}>
+              {t("saveDraft")}
+            </button>
             <button
               className={published ? "btn btn-accent" : "btn btn-ghost"}
               style={{ marginTop: 10, width: "100%" }}

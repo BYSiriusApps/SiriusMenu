@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -24,6 +25,18 @@ export async function createClient() {
     },
   );
 }
+
+// Panel layout + page (ve olası paralel segmentler) aynı navigasyonda ayrı ayrı
+// auth.getUser() çağırırsa, ikisi de aynı anda süresi dolan token'ı yenilemeye
+// çalışıp Supabase'in refresh token rotasyonunda birbirini geçersiz kılabilir
+// (arka arkaya "oturum kapandı" hatası). React cache() ile bu istek başına
+// tekilleştirilir: aynı request içinde kaç yerden çağrılırsa çağrılsın tek
+// getUser() gider.
+export const getAuthUser = cache(async () => {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return user;
+});
 
 // Web (çerez oturumu) ve gelecekteki mobil app (Authorization: Bearer <access_token>)
 // aynı route'ları kullanabilsin diye ortak kullanıcı çözümleyici.

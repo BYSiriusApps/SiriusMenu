@@ -32,6 +32,7 @@ function GirisForm() {
     <form onSubmit={submit} className="card" style={{ padding: 28, width: 380, display: "grid", gap: 14 }}>
       <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
       <h1 className="font-display" style={{ fontSize: 22, fontWeight: 700 }}>{t("title")}</h1>
+      {params.get("expired") && <p style={{ fontSize: 13.5, color: "var(--muted)" }}>{t("expired")}</p>}
       <label><span>{t("email")}</span>
         <input className="field" style={{ marginTop: 5 }} type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>

@@ -218,7 +218,8 @@
       "noAccount": "Don't have an account?",
       "createAccount": "Create account",
       "errNotConfigured": "The panel isn't set up yet (missing Supabase connection).",
-      "errInvalid": "Incorrect email or password."
+      "errInvalid": "Incorrect email or password.",
+      "expired": "Your session ended due to inactivity. Your work was saved — you can log back in."
     },
     "register": {
       "title": "Create account",
@@ -246,6 +247,11 @@
     "accountMenu": {
       "settings": "Account settings",
       "signOut": "Sign out"
+    },
+    "inactivity": {
+      "title": "Still there?",
+      "body": "Your session will end in {seconds} seconds due to inactivity. Your work has been saved automatically.",
+      "stay": "Stay signed in"
     },
     "account": {
       "backToPanel": "← Back to panel",
@@ -346,6 +352,8 @@
       "publishStatus": "Publish status",
       "saving": "Saving…",
       "autoSaved": "All changes are saved automatically.",
+      "saveDraft": "Save draft",
+      "draftSaved": "Draft saved ✓",
       "published": "Published ✓",
       "publish": "Publish menu",
       "upgradeToPublish": "Upgrade to a plan to publish",

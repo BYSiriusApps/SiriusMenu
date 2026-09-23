@@ -218,7 +218,8 @@
       "noAccount": "Hesabın yok mu?",
       "createAccount": "Hesap oluştur",
       "errNotConfigured": "Panel henüz kurulmadı (Supabase bağlantısı eksik).",
-      "errInvalid": "E-posta veya şifre hatalı."
+      "errInvalid": "E-posta veya şifre hatalı.",
+      "expired": "Uzun süre işlem yapılmadığı için oturumun kapandı. Çalışmaların kaydedildi, tekrar giriş yapabilirsin."
     },
     "register": {
       "title": "Hesap oluştur",
@@ -246,6 +247,11 @@
     "accountMenu": {
       "settings": "Hesap ayarları",
       "signOut": "Çıkış yap"
+    },
+    "inactivity": {
+      "title": "Hâlâ orada mısın?",
+      "body": "Uzun süre işlem yapılmadığı için {seconds} saniye içinde oturum kapanacak. Çalışmaların otomatik kaydedildi.",
+      "stay": "Oturumu açık tut"
     },
     "account": {
       "backToPanel": "← Panele dön",
@@ -346,6 +352,8 @@
       "publishStatus": "Yayın durumu",
       "saving": "Kaydediliyor…",
       "autoSaved": "Tüm değişiklikler otomatik kaydedilir.",
+      "saveDraft": "Taslak kaydet",
+      "draftSaved": "Taslak kaydedildi ✓",
       "published": "Yayında ✓",
       "publish": "Menüyü yayına al",
       "upgradeToPublish": "Yayınlamak için plana geç",

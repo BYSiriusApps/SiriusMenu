@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/app/lib/supabase/server";
+import { createClient, getAuthUser } from "@/app/lib/supabase/server";
 import { DEFAULT_MENU, type Category, type SocialLinks } from "@/app/lib/menu";
 import { PanelBuilder } from "./PanelBuilder";
 
 export default async function PanelPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) redirect("/giris?next=/panel");
+  const supabase = await createClient();
 
   const { data: restaurant } = await supabase
     .from("restaurants")

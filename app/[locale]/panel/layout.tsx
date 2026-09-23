@@ -1,12 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@/app/lib/supabase/server";
+import { getAuthUser } from "@/app/lib/supabase/server";
 import { Link } from "@/i18n/routing";
 import { AccountMenu } from "./AccountMenu";
+import { InactivityGuard } from "./InactivityGuard";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) redirect("/giris?next=/panel");
   const t = await getTranslations("Panel.nav");
 
@@ -22,6 +22,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         </div>
       </header>
       {children}
+      <InactivityGuard />
     </div>
   );
 }

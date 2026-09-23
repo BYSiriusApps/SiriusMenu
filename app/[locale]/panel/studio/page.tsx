@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/app/lib/supabase/server";
+import { createClient, getAuthUser } from "@/app/lib/supabase/server";
 import { DEFAULT_MENU, backfillCodes, type Category } from "@/app/lib/menu";
 import { StudioBuilder } from "./StudioBuilder";
 
 export default async function StudioPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) redirect("/giris?next=/panel/studio");
+  const supabase = await createClient();
 
   const { data: restaurant } = await supabase
     .from("restaurants")
