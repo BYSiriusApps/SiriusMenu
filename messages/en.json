@@ -175,7 +175,17 @@
         "distanceSales": "Distance Sales Agreement",
         "refund": "Refund & Cancellation Policy"
       },
+      "contact": {
+        "title": "Contact",
+        "whatsapp": "Message us on WhatsApp",
+        "email": "info@bysirius.com",
+        "phone": "+90 535 503 26 34"
+      },
       "companyLine": "SiriusMenu is operated by BY Sirius Group AI and Technology Co. Ltd. (Companies House No: 17142392)."
+    },
+    "whatsappButton": {
+      "label": "Message us on WhatsApp",
+      "message": "Hi, I'd like to learn more about SiriusMenu."
     }
   },
   "Themes": {

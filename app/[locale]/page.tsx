@@ -4,6 +4,7 @@ import { MenuView, Phone } from "@/app/lib/MenuView";
 import { DEFAULT_MENU, THEMES, PRICING } from "@/app/lib/menu";
 import { DEMOS } from "@/app/lib/demos";
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
+import { WhatsAppButton } from "@/app/components/WhatsAppButton";
 
 const ring =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]";
@@ -29,6 +30,7 @@ export default async function Landing() {
 
   return (
     <main>
+      <WhatsAppButton message={t("whatsappButton.message")} label={t("whatsappButton.label")} />
       {/* NAV */}
       <nav className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--bg)]/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -374,6 +376,12 @@ export default async function Landing() {
           <Link href="/kullanim-sartlari" className="transition hover:text-[var(--ink)]">{t("footer.links.terms")}</Link>
           <Link href="/mesafeli-satis-sozlesmesi" className="transition hover:text-[var(--ink)]">{t("footer.links.distanceSales")}</Link>
           <Link href="/iade-iptal-politikasi" className="transition hover:text-[var(--ink)]">{t("footer.links.refund")}</Link>
+        </div>
+        <div className="mx-auto mt-6 flex max-w-6xl flex-col items-center gap-2 border-t border-[var(--line)] px-6 pt-6 text-sm text-[var(--muted)] md:flex-row md:justify-center md:gap-6">
+          <span className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("footer.contact.title")}</span>
+          <a href="https://wa.me/905355032634" target="_blank" rel="noopener noreferrer" className="transition hover:text-[var(--ink)]">{t("footer.contact.whatsapp")}</a>
+          <a href="mailto:info@bysirius.com" className="transition hover:text-[var(--ink)]">{t("footer.contact.email")}</a>
+          <a href="tel:+905355032634" className="transition hover:text-[var(--ink)]">{t("footer.contact.phone")}</a>
         </div>
         <p className="mx-auto mt-6 max-w-6xl px-6 text-center text-xs text-[var(--muted)] md:text-left">
           {t("footer.companyLine")}

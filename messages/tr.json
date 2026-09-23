@@ -175,7 +175,17 @@
         "distanceSales": "Mesafeli Satış Sözleşmesi",
         "refund": "İade & İptal Politikası"
       },
+      "contact": {
+        "title": "İletişim",
+        "whatsapp": "WhatsApp'tan yaz",
+        "email": "info@bysirius.com",
+        "phone": "+90 535 503 26 34"
+      },
       "companyLine": "SiriusMenu, BY Sirius Group AI and Technology Co. Ltd. (Companies House No: 17142392) tarafından işletilmektedir."
+    },
+    "whatsappButton": {
+      "label": "WhatsApp'tan yaz",
+      "message": "Merhaba, SiriusMenu hakkında bilgi almak istiyorum."
     }
   },
   "Themes": {

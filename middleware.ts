@@ -32,8 +32,21 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match all pathnames except for
-  // - … if they start with `/api`, `/_next` or `/_vercel`
-  // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  matcher: [
+    {
+      // Match all pathnames except for
+      // - … if they start with `/api`, `/_next` or `/_vercel`
+      // - … the ones containing a dot (e.g. `favicon.ico`)
+      source: '/((?!api|_next|_vercel|.*\\..*).*)',
+      // Next.js prefetches every visible <Link> in the background (e.g. the panel
+      // header's Ana sayfa/Panel/Stüdyo links all at once). Each prefetch used to
+      // run its own Supabase getUser()/token-refresh here; several firing at the
+      // same moment raced on the same refresh token and Supabase's rotation
+      // invalidated the session, forcing a re-login after simply navigating.
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
 };
