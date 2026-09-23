@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/routing";
 import { createClient } from "@/app/lib/supabase/client";
 
 export function AccountMenu({ email }: { email: string }) {
+  const t = useTranslations("Panel.accountMenu");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -51,14 +52,14 @@ export function AccountMenu({ email }: { email: string }) {
             className="menu-item"
             style={{ display: "block", padding: "9px 12px", borderRadius: 8, fontSize: 13.5, color: "var(--ink)", textDecoration: "none" }}
           >
-            Hesap ayarları
+            {t("settings")}
           </Link>
           <button
             onClick={signOut}
             className="menu-item"
             style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 12px", borderRadius: 8, fontSize: 13.5, background: "none", border: "none", cursor: "pointer", color: "var(--ink)" }}
           >
-            Çıkış yap
+            {t("signOut")}
           </button>
         </div>
       )}

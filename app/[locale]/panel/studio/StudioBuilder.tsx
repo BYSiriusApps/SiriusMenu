@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import { PRICING, type Category, type Item } from "@/app/lib/menu";
 import { createClient } from "@/app/lib/supabase/client";
 
@@ -9,6 +10,8 @@ const BUCKET = "menu-photos";
 export function StudioBuilder({ restaurantId, initialCategories, imageQuota, imageQuotaUsed }: {
   restaurantId: string; initialCategories: Category[]; imageQuota: number; imageQuotaUsed: number;
 }) {
+  const t = useTranslations("Panel.studio");
+  const tNav = useTranslations("Panel.nav");
   const supabase = useRef(createClient()).current;
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [busyKey, setBusyKey] = useState<string | null>(null);
@@ -37,7 +40,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
       const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
       await persist(setItemImage(cat.id, it.id, `${pub.publicUrl}?v=${Date.now()}`));
     } catch {
-      alert("Yükleme başarısız oldu.");
+      alert(t("errUploadFailed"));
     }
     setBusyKey(null);
   };
@@ -58,12 +61,12 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
         await persist(setItemImage(cat.id, it.id, d.url));
         setQuotaUsed(d.used);
       } else if (r.status === 402) {
-        alert(d.message || "Görsel kotan doldu.");
+        alert(d.message || t("errQuotaFull"));
       } else {
-        alert(d.error || "Yeniden oluşturma başarısız.");
+        alert(d.error || t("errRegenerateFailed"));
       }
     } catch {
-      alert("Yeniden oluşturma başarısız.");
+      alert(t("errRegenerateFailed"));
     }
     setBusyKey(null);
   };
@@ -79,23 +82,20 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
   return (
     <main style={{ maxWidth: 960, margin: "0 auto", padding: "22px 22px 80px" }}>
       <div style={{ marginBottom: 18 }}>
-        <div className="tag">Stüdyo</div>
-        <h1 className="font-display" style={{ fontSize: 24, marginTop: 6 }}>Kendi fotoğraflarınla çalış</h1>
+        <div className="tag">{tNav("studio")}</div>
+        <h1 className="font-display" style={{ fontSize: 24, marginTop: 6 }}>{t("title")}</h1>
         <p style={{ fontSize: 13.5, color: "var(--muted)", marginTop: 6, maxWidth: 640 }}>
-          Şablon görsel yerine kendi ürün fotoğraflarını yükle; dilersen yapay zeka ile ışık, arka plan ve
-          netliği en yüksek detayda yeniden oluştursun. İstersen ek bir talimat da yaz (ör. &quot;ahşap masada&quot;) —
-          ürünün kendisi ve sunumu her zaman sabit tutulur, sadece istediğin detay eklenir. Bu, panelde ürün
-          satırındaki hızlı İyileştir&apos;in daha güçlü sürümüdür ve aynı görsel kotasını kullanır.
+          {t("desc")}
         </p>
-        <Link href="/panel" style={{ fontSize: 12.5, color: "var(--accent)", display: "inline-block", marginTop: 8 }}>← Panele dön</Link>
+        <Link href="/panel" style={{ fontSize: 12.5, color: "var(--accent)", display: "inline-block", marginTop: 8 }}>{t("backToPanel")}</Link>
       </div>
 
       <div className="card" style={{ padding: 16, marginBottom: 20 }}>
-        <div className="tag">Görsel kotası</div>
+        <div className="tag">{t("quota")}</div>
         <div style={{ marginTop: 8, fontSize: 14, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          <span>Bu dönem <b>{quotaUsed}</b> / {imageQuota} görsel işlemi kullanıldı</span>
+          <span>{t.rich("quotaUsed", { used: quotaUsed, quota: imageQuota, b: (chunks) => <b>{chunks}</b> })}</span>
           <button className="btn-ghost btn" style={{ padding: "7px 12px", fontSize: 12.5 }} disabled={billingLoading} onClick={buyImagePack}>
-            +{PRICING.imagePack.credits} paket ({PRICING.imagePack.amount}₺)
+            {t("buyPack", { credits: PRICING.imagePack.credits, amount: PRICING.imagePack.amount })}
           </button>
         </div>
         <div style={{ marginTop: 8, height: 6, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
@@ -115,13 +115,13 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
               ) : (
                 <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 10, border: "1px dashed var(--line)", display: "grid", placeItems: "center", color: "var(--muted)", fontSize: 26 }}>🍽</div>
               )}
-              <div style={{ marginTop: 8, fontSize: 13.5, fontWeight: 600 }}>{item.name || "İsimsiz ürün"}</div>
+              <div style={{ marginTop: 8, fontSize: 13.5, fontWeight: 600 }}>{item.name || t("unnamed")}</div>
               <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{cat.name}</div>
 
               {item.image && (
                 <textarea
                   className="field"
-                  placeholder="İsteğe bağlı talimat (ör. ahşap masada, gün batımı ışığıyla)"
+                  placeholder={t("promptPlaceholder")}
                   value={prompts[key] || ""}
                   onChange={(e) => setPrompts((p) => ({ ...p, [key]: e.target.value }))}
                   maxLength={240}
@@ -132,12 +132,12 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
 
               <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
                 <label className="btn-ghost btn" style={{ padding: "7px 10px", fontSize: 12, cursor: "pointer" }}>
-                  {busy ? "..." : "Fotoğraf yükle"}
+                  {busy ? "..." : t("uploadPhoto")}
                   <input type="file" accept="image/*" hidden disabled={busy} onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadOwnPhoto(cat, item, f); e.target.value = ""; }} />
                 </label>
                 {item.image && (
                   <button onClick={() => regenerateHd(cat, item)} disabled={busy} className="btn-ghost btn" style={{ padding: "7px 10px", fontSize: 12 }}>
-                    {busy ? "Oluşturuluyor..." : "✨ Yüksek çözünürlükte yeniden oluştur"}
+                    {busy ? t("regenerating") : t("regenerate")}
                   </button>
                 )}
               </div>
@@ -148,7 +148,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
 
       {items.length === 0 && (
         <p style={{ fontSize: 13.5, color: "var(--muted)", marginTop: 20 }}>
-          Önce panelde en az bir ürün ekle, sonra fotoğraflarını buradan yönet.
+          {t("emptyState")}
         </p>
       )}
     </main>

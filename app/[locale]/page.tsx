@@ -14,6 +14,7 @@ type FaqItem = { q: string; a: string };
 
 export default async function Landing() {
   const t = await getTranslations("Landing");
+  const tThemes = await getTranslations("Themes");
   const themeDesc = t.raw("themes.desc") as Record<string, string>;
   const features = t.raw("features.items") as Feature[];
   const whatsappBullets = t.raw("whatsapp.bullets") as string[];
@@ -101,7 +102,7 @@ export default async function Landing() {
             <div key={d.slug} className="flex flex-col items-center">
               <Phone><MenuView menu={d.menu} /></Phone>
               <p className="mt-4 font-display text-lg font-bold">{d.menu.name}</p>
-              <p className="text-sm text-[var(--muted)]">{d.tag} · {d.menu.theme} {t("showcase.themeSuffix")}</p>
+              <p className="text-sm text-[var(--muted)]">{d.tag} · {tThemes(d.menu.theme)} {t("showcase.themeSuffix")}</p>
               <Link href={`/m/${d.slug}`} className={`btn btn-ghost mt-3 !px-4 !py-2 text-sm ${ring}`}>{t("showcase.liveMenu")}</Link>
             </div>
           ))}
@@ -141,7 +142,7 @@ export default async function Landing() {
                     className="mt-auto w-fit rounded-full px-3 py-1 text-xs font-semibold text-white"
                     style={{ background: th.accent }}
                   >
-                    {th.label}
+                    {tThemes(th.key)}
                   </span>
                 </div>
                 <p className="p-4 text-sm text-[var(--muted)]">{themeDesc[th.key]}</p>
