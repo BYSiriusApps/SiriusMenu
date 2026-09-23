@@ -38,6 +38,7 @@ input, select, textarea { font-family: inherit; }
 }
 .field:focus { border-color: var(--accent); }
 label > span { font-size: 12px; font-weight: 600; color: var(--muted); }
+.menu-item:hover { background: var(--accent-soft); }
 
 .legal-prose h2 {
   font-family: var(--font-display), system-ui, sans-serif;

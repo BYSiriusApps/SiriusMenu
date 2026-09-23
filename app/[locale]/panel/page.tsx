@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
-import { DEFAULT_MENU, type Category } from "@/app/lib/menu";
+import { DEFAULT_MENU, type Category, type SocialLinks } from "@/app/lib/menu";
 import { PanelBuilder } from "./PanelBuilder";
 
 export default async function PanelPage() {
@@ -10,7 +10,7 @@ export default async function PanelPage() {
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, published, plan, image_quota, image_quota_used, qr_token")
+    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, social, published, plan, image_quota, image_quota_used, qr_token")
     .eq("user_id", user.id)
     .single();
 
@@ -39,6 +39,8 @@ export default async function PanelPage() {
         image_quota: restaurant.image_quota ?? 0,
         image_quota_used: restaurant.image_quota_used ?? 0,
         qr_token: restaurant.qr_token ?? "",
+        logo_url: restaurant.logo_url ?? "",
+        social: (restaurant.social as SocialLinks | null) ?? {},
       }}
       subscription={{
         status: subscription?.status ?? "trialing",

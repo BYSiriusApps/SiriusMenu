@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
   // We need to apply auth cookies to intlResponse.
   
   response.cookies.getAll().forEach((cookie) => {
-    intlResponse.cookies.set(cookie.name, cookie.value);
+    intlResponse.cookies.set(cookie);
   });
   
   return intlResponse;

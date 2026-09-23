@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, backfillCodes, nextCategoryCode, nextItemCode,
-  type MenuData, type Category, type Item, type Tag,
+  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, backfillCodes, nextCategoryCode, nextItemCode,
+  type MenuData, type Category, type Item, type Tag, type SocialLinks,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
@@ -13,6 +13,7 @@ type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
   plan: string; image_quota: number; image_quota_used: number; qr_token: string;
+  logo_url: string; social: SocialLinks;
 };
 type ParsedCategory = { name: string; items: { name: string; desc?: string; price?: string }[] };
 type ImportRow = { include: boolean; catName: string; name: string; desc: string; price: string };
@@ -29,7 +30,12 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [menu, setMenu] = useState<MenuData>({
     name: restaurant.name, subtitle: restaurant.subtitle, theme: restaurant.theme,
     currency: restaurant.currency, categories: backfillCodes(restaurant.categories),
+    logo: restaurant.logo_url || undefined, social: restaurant.social || {},
   });
+  const [socialOpen, setSocialOpen] = useState<Set<keyof SocialLinks>>(
+    new Set((Object.keys(restaurant.social || {}) as (keyof SocialLinks)[]).filter((k) => restaurant.social?.[k])),
+  );
+  const [logoBusy, setLogoBusy] = useState(false);
   const [published, setPublished] = useState(restaurant.published);
   const [qr, setQr] = useState("");
   const [copied, setCopied] = useState(false);
@@ -68,6 +74,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     saveTimer.current = setTimeout(async () => {
       await supabase.from("restaurants").update({
         name: menu.name, subtitle: menu.subtitle, theme: menu.theme, currency: menu.currency, menu: menu.categories,
+        logo_url: menu.logo || null, social: menu.social || {},
       }).eq("id", restaurant.id);
       setSaving("saved");
     }, 700);
@@ -76,6 +83,19 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   }, [menu]);
 
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
+  const setSocial = (key: keyof SocialLinks, v: string) => setMenu((p) => ({ ...p, social: { ...p.social, [key]: v } }));
+  const toggleSocial = (key: keyof SocialLinks) => {
+    setSocialOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+        setMenu((p) => ({ ...p, social: { ...p.social, [key]: undefined } }));
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
   const nextId = () => Math.floor(Math.random() * 1e9);
 
   const addCat = () => setMenu((p) => ({ ...p, categories: [...p.categories, { id: nextId(), name: "Yeni kategori", code: nextCategoryCode(p.categories), items: [] }] }));
@@ -114,6 +134,22 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
       alert("Yükleme başarısız oldu.");
     }
     setImgBusy(null);
+  };
+
+  // === İşletme logosu (isteğe bağlı) ===
+  const uploadLogo = async (file: File) => {
+    setLogoBusy(true);
+    try {
+      const ext = file.type.includes("png") ? "png" : file.type.includes("webp") ? "webp" : "jpg";
+      const path = `${restaurant.id}/logo/original.${ext}`;
+      const up = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+      if (up.error) throw up.error;
+      const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
+      setField("logo", `${pub.publicUrl}?v=${Date.now()}`);
+    } catch {
+      alert("Logo yüklenemedi.");
+    }
+    setLogoBusy(false);
   };
 
   const enhanceImage = async (cid: number, it: Item) => {
@@ -224,6 +260,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
+    else alert(d.error || "Ödeme sayfası açılamadı.");
   };
   const goPortal = async () => {
     setBillingLoading(true);
@@ -231,6 +268,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
+    else alert(d.error || "Abonelik yönetim sayfası açılamadı.");
   };
   const buyImagePack = async () => {
     setBillingLoading(true);
@@ -238,6 +276,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
+    else alert(d.error || "Ödeme sayfası açılamadı.");
   };
 
   // === WhatsApp yetkili numaralar (whitelist) ===
@@ -427,6 +466,42 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                   padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: menu.theme === t.key ? 600 : 400,
                   border: menu.theme === t.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.theme === t.key ? "var(--accent-soft)" : "var(--paper)",
                 }}>{t.label}</button>
+              ))}
+            </div>
+
+            <div className="tag" style={{ marginTop: 18 }}>Logo (isteğe bağlı)</div>
+            <div style={{ display: "flex", gap: 10, marginTop: 10, alignItems: "center" }}>
+              {menu.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={menu.logo} alt="" style={{ width: 54, height: 54, borderRadius: 10, objectFit: "cover", border: "1px solid var(--line)" }} />
+              ) : (
+                <div style={{ width: 54, height: 54, borderRadius: 10, border: "1px dashed var(--line)", display: "grid", placeItems: "center", color: "var(--muted)", fontSize: 18 }}>🏷</div>
+              )}
+              <label className="btn-ghost btn" style={{ padding: "8px 12px", fontSize: 12.5, cursor: "pointer" }}>
+                {logoBusy ? "..." : menu.logo ? "Değiştir" : "Logo yükle"}
+                <input type="file" accept="image/*" hidden disabled={logoBusy} onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadLogo(f); e.target.value = ""; }} />
+              </label>
+              {menu.logo && (
+                <button onClick={() => setField("logo", "")} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12.5, textDecoration: "underline" }}>kaldır</button>
+              )}
+            </div>
+
+            <div className="tag" style={{ marginTop: 18 }}>Sosyal medya ve web sitesi (isteğe bağlı)</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>Göstermek istediğin hesapları seç, altına bağlantıyı veya kullanıcı adını yaz.</p>
+            <div style={{ display: "grid", gap: 10, marginTop: 10 }}>
+              {SOCIAL_PLATFORMS.map((p) => (
+                <div key={p.key}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, cursor: "pointer" }}>
+                    <input type="checkbox" checked={socialOpen.has(p.key)} onChange={() => toggleSocial(p.key)} />
+                    {p.label}
+                  </label>
+                  {socialOpen.has(p.key) && (
+                    <input
+                      className="field" style={{ marginTop: 5 }} placeholder={p.placeholder}
+                      value={menu.social?.[p.key] || ""} onChange={(e) => setSocial(p.key, e.target.value)}
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </div>

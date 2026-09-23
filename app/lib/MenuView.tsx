@@ -1,15 +1,65 @@
 import React from "react";
-import { TAGS, THEMES, money, type MenuData } from "./menu";
+import { SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
+
+const SOCIAL_ICON_PATHS: Record<keyof SocialLinks, React.ReactNode> = {
+  instagram: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </>
+  ),
+  website: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9s1.3-6.5 3.8-9z" />
+    </>
+  ),
+  facebook: null,
+  tiktok: null,
+};
+
+function SocialIcon({ platform }: { platform: keyof SocialLinks }) {
+  if (platform === "facebook") {
+    return (
+      <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M13.5 21v-7.2h2.4l.4-2.8h-2.8v-1.8c0-.8.2-1.4 1.4-1.4h1.5V5.2c-.3 0-1.1-.1-2.1-.1-2.1 0-3.5 1.3-3.5 3.6v2H8.4v2.8h2.4V21h2.7z" /></svg>
+    );
+  }
+  if (platform === "tiktok") {
+    return (
+      <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M16.5 3c.4 2.2 1.8 3.6 4 3.9v2.7c-1.5 0-2.8-.4-4-1.2v6.4c0 3.1-2.5 5.2-5.3 5.2-2.9 0-5.2-2.3-5.2-5.2 0-2.9 2.4-5.3 5.4-5.1v2.8c-1.4-.2-2.6.8-2.6 2.2 0 1.3 1.1 2.4 2.5 2.4 1.5 0 2.6-1.2 2.6-2.7V3h2.6z" /></svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      {SOCIAL_ICON_PATHS[platform]}
+    </svg>
+  );
+}
 
 /** Müşteri-görünümü dijital menü (temaya göre). */
 export function MenuView({ menu }: { menu: MenuData }) {
   const th = THEMES.find((t) => t.key === menu.theme) ?? THEMES[0];
+  const socialEntries = SOCIAL_PLATFORMS.filter((p) => menu.social?.[p.key]);
   return (
     <div style={{ background: th.bg, color: th.ink, fontFamily: "var(--font-body)", minHeight: "100%" }}>
       {/* Başlık */}
       <div style={{ textAlign: "center", padding: "34px 22px 22px", borderBottom: `1px solid ${th.accent}33` }}>
+        {menu.logo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={menu.logo} alt="" style={{ width: 56, height: 56, borderRadius: 14, objectFit: "cover", margin: "0 auto 12px", display: "block" }} />
+        )}
         <div style={{ fontFamily: th.font, fontSize: 30, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.05 }}>{menu.name || "Menü"}</div>
         {menu.subtitle && <div style={{ color: th.sub, fontSize: 13.5, marginTop: 8, maxWidth: 300, marginInline: "auto" }}>{menu.subtitle}</div>}
+        {socialEntries.length > 0 && (
+          <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 14 }}>
+            {socialEntries.map((p) => (
+              <a key={p.key} href={socialHref(p.key, menu.social![p.key]!)} target="_blank" rel="noopener noreferrer" aria-label={p.label} style={{ color: th.accent, opacity: 0.85, display: "flex" }}>
+                <SocialIcon platform={p.key} />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Kategoriler */}

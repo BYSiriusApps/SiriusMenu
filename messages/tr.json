@@ -4,5 +4,184 @@
     "description": "Kafe ve restoranlar için QR menü. Ürünleri gir, temayı seç, QR kodu masaya koy. Fiyat güncellemesi anında, baskı maliyeti yok.",
     "heroTitle": "SiriusMenu ile QR Menü",
     "heroSubtitle": "Hızlı, kolay ve masrafsız dijital menü deneyimi."
+  },
+  "Landing": {
+    "nav": {
+      "example": "Örnek",
+      "themes": "Temalar",
+      "howItWorks": "Nasıl çalışır",
+      "pricing": "Fiyat",
+      "login": "Giriş yap",
+      "cta": "Menünü oluştur"
+    },
+    "hero": {
+      "eyebrow": "QR dijital menü",
+      "title": "Masaya QR koy, menü telefonda açılsın.",
+      "subtitle": "Ürünleri gir, temayı seç, QR kodu masaya koy. Müşteri okutur, menü anında telefonunda açılır. Fiyat değişince <b>tek yerden güncelle</b>; baskı maliyeti ve eski menü derdi biter.",
+      "ctaPrimary": "Ücretsiz oluştur →",
+      "ctaSecondary": "Nasıl çalışır?",
+      "checks": ["Kart gerekmez", "Anlık güncelleme", "Baskı yok"]
+    },
+    "contextStrip": {
+      "label": "Nerede kullanılır",
+      "items": ["Kafe", "Restoran", "Bar", "Pastane", "Fast food", "Otel"]
+    },
+    "showcase": {
+      "eyebrow": "Örnek",
+      "title": "Fotoğraflı, canlı, tek QR ile telefonda.",
+      "subtitle": "SiriusMenu bir PDF değil, yaşayan bir menü. Ürün fotoğrafları, kategoriler, fiyatlar ve etiketler telefonda tertemiz açılır. Bir ürünü değiştirdiğinde herkes anında yeni halini görür.",
+      "themeSuffix": "teması",
+      "liveMenu": "Canlı menü →",
+      "allExamples": "Tüm örnekleri incele"
+    },
+    "themes": {
+      "eyebrow": "Temalar",
+      "title": "İşletmene uyan görünüm",
+      "subtitle": "Altı hazır tema. Mekanının tarzına en yakın olanı seç, menü o görünüme bürünsün.",
+      "sampleName": "Kahve Durağı",
+      "sampleItem1": "Flat White",
+      "sampleItem2": "San Sebastian",
+      "desc": {
+        "kafe": "Sıcak krem tonlar, zarif serif başlıklar. Üçüncü nesil kahveciler ve butik kafeler için.",
+        "klasik": "Sade beyaz zemin, dingin tipografi. Aile restoranı ve lokantalar için.",
+        "modern": "Nötr gri, geometrik başlıklar. Fast food, brunch ve şık mekanlar için.",
+        "gece": "Koyu zemin, sıcak altın vurgu. Bar, meyhane ve akşam servisi için.",
+        "bahce": "Yumuşak yeşil tonlar, botanik serif başlıklar. Vegan, sağlıklı beslenme ve bahçe konseptli mekanlar için.",
+        "deniz": "Ferah mavi-yeşil tonlar, temiz modern başlıklar. Balık restoranları ve deniz mahsulleri mekanları için."
+      }
+    },
+    "features": {
+      "eyebrow": "Özellikler",
+      "title": "Matbaaya gitmeden, matbaa derdi olmadan",
+      "items": [
+        { "t": "WhatsApp'tan güncelle", "d": "Tanımlı numaraya \"Latte 120 olsun\" yaz, menü anında değişsin. Panele girmeye gerek yok." },
+        { "t": "AI fotoğraf iyileştirme", "d": "Telefonla çektiğin yemek fotoğrafını yükle; yapay zeka ışığı, rengi ve arka planı menülük hale getirsin." },
+        { "t": "Anlık güncelleme", "d": "Tükenen ürünü saniyede kaldır, yeni fiyatı yaz. Müşteri her zaman güncel menüyü görür." },
+        { "t": "AI açıklama yardımcısı", "d": "Ürün adını yaz, yapay zeka iştah açan bir açıklama önersin. Boş açıklama kutusu kalmasın." },
+        { "t": "Altı hazır tema", "d": "Kafe, klasik, modern, gece, bahçe ve deniz. Mekanının tarzına uyan görünümü tek tıkla seç." },
+        { "t": "Baskı maliyeti sıfır", "d": "Menü her değiştiğinde matbaaya gitme. Bir kez QR bas, içeriği hep ekrandan güncelle." }
+      ]
+    },
+    "whatsapp": {
+      "eyebrow": "WhatsApp AI",
+      "title": "Panelsiz güncelleme. Sadece yaz.",
+      "subtitle": "Tanımlı, yetkili numaradan \"Latte 120 olsun\" yaz, menü anında değişsin. Tanımsız numaralardan gelen mesajlar otomatik reddedilir; her değişiklik kayıt altında, \"geri\" ile geri alınır.",
+      "bullets": [
+        "Numara bazlı yetkilendirme (Patron / Müdür)",
+        "Fiyat, açıklama, stok durumu, yeni ürün",
+        "Fotoğraf gönder, AI menülük hale getirsin"
+      ],
+      "chat": [
+        "Latte fiyatını 120 yap",
+        "✅ Latte fiyatı 120 olarak güncellendi. Menü anında yayında.",
+        "San Sebastian tükendi",
+        "✅ San Sebastian \"tükendi\" olarak işaretlendi."
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "Nasıl çalışır",
+      "title": "Üç adımda yayında",
+      "steps": [
+        { "n": "1", "t": "Menünü gir", "d": "Kategorileri ve ürünleri yaz, fiyat ekle, temayı seç. AI açıklama yazmana yardım eder." },
+        { "n": "2", "t": "QR kodu indir", "d": "Menünün QR kodunu tek tıkla indir; masa kartına, vitrine ya da adisyona bas." },
+        { "n": "3", "t": "Güncel tut", "d": "Fiyat ya da ürün değişti mi tek yerden düzelt. QR aynı kalır, menü anında yenilenir." }
+      ]
+    },
+    "uses": {
+      "eyebrow": "Kullanım alanları",
+      "title": "Her mekana göre bir menü",
+      "items": [
+        { "t": "Kafe", "d": "Kahve ve tatlı menün sık değişiyor. Sezonluk ürünü ekle, biteni kaldır, QR aynı kalsın." },
+        { "t": "Restoran", "d": "Uzun menüyü kategorilere ayır; etiketlerle vegan ve acı seçenekleri tek bakışta işaretle." },
+        { "t": "Bar", "d": "Gece temasıyla kokteyl ve içki listeni şık göster. Fiyatları akşam servisine göre güncelle." },
+        { "t": "Pastane", "d": "Vitrindeki ürünleri net fiyatla listele; glutensiz ve vegan etiketleriyle seçim kolaylaşsın." }
+      ]
+    },
+    "comparison": {
+      "eyebrow": "Karşılaştırma",
+      "title": "Basılı menü yerine SiriusMenu",
+      "oldTitle": "Basılı menü",
+      "newTitle": "SiriusMenu",
+      "old": [
+        "Fiyat değişince menü yeniden baskıya girer",
+        "Her küçük değişiklik matbaa masrafı demek",
+        "Kartlar yıpranır, lekelenir, eskir",
+        "Yeni ürün için tüm menüyü baştan dizersin"
+      ],
+      "new": [
+        "Fiyatı ekrandan tek tıkla değiştir",
+        "Baskı masrafı bir kere, sonrası sıfır",
+        "QR yıpranmaz, menü hep temiz görünür",
+        "Yeni ürünü saniyeler içinde ekle"
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Fiyat",
+      "title": "Basit ve net",
+      "trial": {
+        "title": "Deneme",
+        "price": "Ücretsiz",
+        "desc": "Menünü oluştur, önizle, QR'ını indir.",
+        "feature1": "Menü oluşturucu + 6 tema",
+        "feature2": "QR kodu indirme",
+        "feature3": "Fotoğraf, WhatsApp, yayın",
+        "cta": "Başla"
+      },
+      "monthly": {
+        "badge": "İŞLETME",
+        "title": "Aylık",
+        "perMonth": "TL/ay",
+        "setupNote": "+ tek seferlik {amount} TL kurulum",
+        "feature1": "Geniş menülere uygun (200+ ürün), tüm temalar, logo",
+        "feature2": "WhatsApp AI ile menü güncelleme",
+        "feature3": "Ayda {quota} AI fotoğraf iyileştirme",
+        "feature4": "Anlık güncelleme, QR sabit",
+        "cta": "Menünü yayınla"
+      },
+      "yearly": {
+        "title": "Yıllık",
+        "perYear": "TL/yıl",
+        "setupNote": "~2 ay bedava · + {amount} TL kurulum",
+        "feature1": "Aylık planın tüm özellikleri",
+        "feature2": "Ayda {quota} AI fotoğraf iyileştirme",
+        "feature3": "Öncelikli destek",
+        "cta": "Yıllık başla"
+      },
+      "footnote": "Kota aşımı {overage} TL/görsel ya da {packCredits}'li paket {packAmount} TL. Toplu fotoğraf iyileştirme (50/100 foto {bulk50}/{bulk100} TL) kotadan bağımsızdır. Zincir işletmeler için özel plan mevcut."
+    },
+    "faq": {
+      "eyebrow": "SSS",
+      "title": "Sık sorulanlar",
+      "items": [
+        { "q": "Müşterinin uygulama indirmesi gerekir mi?", "a": "Hayır. QR'ı telefon kamerasıyla okutması yeter; menü doğrudan tarayıcıda açılır. Hiçbir uygulama kurulmaz, üyelik istenmez." },
+        { "q": "Fiyatı değiştirince QR'ı yeniden mi basmalıyım?", "a": "Gerekmez. QR hep aynı bağlantıya gider; sen içeriği güncelleyince müşteri okuttuğunda otomatik olarak güncel menüyü görür." },
+        { "q": "İnternet olmadan çalışır mı?", "a": "Menüyü açmak için müşterinin telefonunda internet olması gerekir; mobil veri bu iş için fazlasıyla yeter. Zayıf sinyalli mekanlarda masaya kısa bir Wi-Fi notu koymanı öneririz." },
+        { "q": "Kaç ürün ekleyebilirim?", "a": "Deneme planında menünü kurup önizleyebilir ve QR'ını indirebilirsin. Pro planda ürün ve kategori sayısında sınır yoktur." },
+        { "q": "Kendi logomu ve renklerimi koyabilir miyim?", "a": "Pro planda logonu ekleyebilir, altı hazır temadan mekanının tarzına en uygun görünümü seçebilirsin." }
+      ]
+    },
+    "finalCta": {
+      "title": "Basılı menü çağı bitti.",
+      "subtitle": "Masaya QR koy, menünü hep güncel tut. Kart gerekmez, baskı masrafı yok.",
+      "cta": "Menünü oluştur →"
+    },
+    "footer": {
+      "tagline": "QR ile dijital menü · Baskı yok, anlık güncelleme",
+      "links": {
+        "privacy": "Gizlilik Politikası",
+        "kvkk": "KVKK Aydınlatma Metni",
+        "cookies": "Çerez Politikası",
+        "terms": "Kullanım Şartları",
+        "distanceSales": "Mesafeli Satış Sözleşmesi",
+        "refund": "İade & İptal Politikası"
+      },
+      "companyLine": "SiriusMenu, BY Sirius Group AI and Technology Co. Ltd. (Companies House No: 17142392) tarafından işletilmektedir."
+    }
+  },
+  "CookieConsent": {
+    "text": "Bu sitede sadece hizmetin çalışması için gerekli çerezler (oturum ve ödeme) kullanılır. Detaylar için çerez politikamıza bakabilirsin.",
+    "policyLink": "Çerez politikası",
+    "reject": "Reddet",
+    "accept": "Kabul et"
   }
 }

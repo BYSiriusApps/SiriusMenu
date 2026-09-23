@@ -9,7 +9,35 @@ export const TAGS: { key: Tag; label: string; emoji: string }[] = [
 
 export type Item = { id: number; name: string; desc: string; price: string; tags: Tag[]; image?: string; available?: boolean; code?: string };
 export type Category = { id: number; name: string; items: Item[]; code?: string };
-export type MenuData = { name: string; subtitle: string; theme: string; currency: string; categories: Category[] };
+
+/** İşletmenin kendi sosyal medya / web sitesi bilgileri — hepsi isteğe bağlı. */
+export type SocialLinks = { instagram?: string; facebook?: string; tiktok?: string; website?: string };
+export const SOCIAL_PLATFORMS: { key: keyof SocialLinks; label: string; placeholder: string }[] = [
+  { key: "instagram", label: "Instagram", placeholder: "instagram.com/kullaniciadi" },
+  { key: "facebook", label: "Facebook", placeholder: "facebook.com/sayfaadi" },
+  { key: "tiktok", label: "TikTok", placeholder: "tiktok.com/@kullaniciadi" },
+  { key: "website", label: "Web sitesi", placeholder: "https://siteniz.com" },
+];
+
+/** Girilen kullanıcı adı/handle/URL'i tıklanabilir bir bağlantıya çevirir. */
+export function socialHref(key: keyof SocialLinks, value: string): string {
+  const v = value.trim();
+  if (/^https?:\/\//i.test(v)) return v;
+  if (v.includes(".")) return `https://${v}`;
+  const handle = v.replace(/^@/, "");
+  if (key === "tiktok") return `https://tiktok.com/@${handle}`;
+  if (key === "instagram") return `https://instagram.com/${handle}`;
+  if (key === "facebook") return `https://facebook.com/${handle}`;
+  return `https://${handle}`;
+}
+
+export type MenuData = {
+  name: string; subtitle: string; theme: string; currency: string; categories: Category[];
+  /** İşletmenin kendi logosu (SiriusMenu marka yazısından ayrı, isteğe bağlı). */
+  logo?: string;
+  /** İsteğe bağlı: seçilip doldurulan sosyal medya / web sitesi bilgileri. */
+  social?: SocialLinks;
+};
 
 /**
  * Muhasebe usulü ürün kodu: kategori 2 haneli sıra numarası alır (01, 02...),

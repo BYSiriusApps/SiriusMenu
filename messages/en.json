@@ -4,5 +4,184 @@
     "description": "QR menu for cafes and restaurants. Enter products, choose a theme, put the QR code on the table. Instant price update, no printing costs.",
     "heroTitle": "QR Menu with SiriusMenu",
     "heroSubtitle": "Fast, easy and cost-free digital menu experience."
+  },
+  "Landing": {
+    "nav": {
+      "example": "Example",
+      "themes": "Themes",
+      "howItWorks": "How it works",
+      "pricing": "Pricing",
+      "login": "Log in",
+      "cta": "Create your menu"
+    },
+    "hero": {
+      "eyebrow": "QR digital menu",
+      "title": "Put a QR on the table, the menu opens on the phone.",
+      "subtitle": "Enter your products, pick a theme, put the QR code on the table. The customer scans it and the menu opens instantly on their phone. When a price changes, <b>update it in one place</b>; printing costs and outdated menus become a thing of the past.",
+      "ctaPrimary": "Create for free →",
+      "ctaSecondary": "How it works?",
+      "checks": ["No card needed", "Instant updates", "No printing"]
+    },
+    "contextStrip": {
+      "label": "Where it's used",
+      "items": ["Cafe", "Restaurant", "Bar", "Bakery", "Fast food", "Hotel"]
+    },
+    "showcase": {
+      "eyebrow": "Example",
+      "title": "Photo-rich, live, one QR code on the phone.",
+      "subtitle": "SiriusMenu isn't a PDF, it's a living menu. Product photos, categories, prices and tags open up crisp and clean on the phone. Change one item and everyone sees the new version instantly.",
+      "themeSuffix": "theme",
+      "liveMenu": "Live menu →",
+      "allExamples": "Browse all examples"
+    },
+    "themes": {
+      "eyebrow": "Themes",
+      "title": "A look that fits your business",
+      "subtitle": "Six ready-made themes. Pick the one closest to your place's style and the menu takes on that look.",
+      "sampleName": "Coffee Stop",
+      "sampleItem1": "Flat White",
+      "sampleItem2": "San Sebastian",
+      "desc": {
+        "kafe": "Warm cream tones, elegant serif headings. For third-wave coffee shops and boutique cafes.",
+        "klasik": "Clean white background, calm typography. For family restaurants and traditional eateries.",
+        "modern": "Neutral gray, geometric headings. For fast food, brunch spots and stylish venues.",
+        "gece": "Dark background, warm gold accent. For bars, taverns and evening service.",
+        "bahce": "Soft green tones, botanical serif headings. For vegan, healthy-eating and garden-concept venues.",
+        "deniz": "Fresh blue-green tones, clean modern headings. For fish restaurants and seafood venues."
+      }
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "No print shop, no print hassle",
+      "items": [
+        { "t": "Update from WhatsApp", "d": "Text the registered number \"Latte is now 120\" and the menu changes instantly. No need to log into the panel." },
+        { "t": "AI photo enhancement", "d": "Upload a food photo you took on your phone; AI fixes the lighting, color and background to make it menu-ready." },
+        { "t": "Instant updates", "d": "Remove a sold-out item in seconds, write the new price. Customers always see the current menu." },
+        { "t": "AI description helper", "d": "Type the product name and AI suggests an appetizing description. No more empty description boxes." },
+        { "t": "Six ready-made themes", "d": "Cafe, classic, modern, night, garden and sea. Pick the look that fits your place in one click." },
+        { "t": "Zero printing costs", "d": "No trip to the print shop every time the menu changes. Print the QR once, update the content from the screen forever." }
+      ]
+    },
+    "whatsapp": {
+      "eyebrow": "WhatsApp AI",
+      "title": "No panel needed. Just type.",
+      "subtitle": "Text \"Latte is now 120\" from the registered, authorized number and the menu changes instantly. Messages from unregistered numbers are rejected automatically; every change is logged and can be undone with \"undo\".",
+      "bullets": [
+        "Number-based authorization (Owner / Manager)",
+        "Price, description, stock status, new products",
+        "Send a photo, let AI make it menu-ready"
+      ],
+      "chat": [
+        "Set the latte price to 120",
+        "✅ Latte price updated to 120. Live on the menu instantly.",
+        "San Sebastian is sold out",
+        "✅ San Sebastian marked as \"sold out\"."
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "Live in three steps",
+      "steps": [
+        { "n": "1", "t": "Enter your menu", "d": "Write your categories and products, add prices, pick a theme. AI helps you write descriptions." },
+        { "n": "2", "t": "Download the QR code", "d": "Download your menu's QR code in one click; print it on a table card, a window sign or the receipt." },
+        { "n": "3", "t": "Keep it current", "d": "Price or product changed? Fix it in one place. The QR stays the same, the menu refreshes instantly." }
+      ]
+    },
+    "uses": {
+      "eyebrow": "Use cases",
+      "title": "A menu for every kind of place",
+      "items": [
+        { "t": "Cafe", "d": "Your coffee and dessert menu changes often. Add a seasonal item, remove a sold-out one, keep the same QR." },
+        { "t": "Restaurant", "d": "Split a long menu into categories; use tags to mark vegan and spicy options at a glance." },
+        { "t": "Bar", "d": "Show off your cocktail and drinks list in style with the night theme. Update prices for evening service." },
+        { "t": "Bakery", "d": "List display items with clear prices; gluten-free and vegan tags make choosing easier." }
+      ]
+    },
+    "comparison": {
+      "eyebrow": "Comparison",
+      "title": "SiriusMenu instead of a printed menu",
+      "oldTitle": "Printed menu",
+      "newTitle": "SiriusMenu",
+      "old": [
+        "A price change means reprinting the menu",
+        "Every small change means a print shop bill",
+        "Cards wear out, get stained, age",
+        "A new product means redesigning the whole menu"
+      ],
+      "new": [
+        "Change a price from the screen in one click",
+        "Printing cost is a one-time thing, then zero",
+        "QR never wears out, the menu always looks clean",
+        "Add a new product in seconds"
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Simple and clear",
+      "trial": {
+        "title": "Trial",
+        "price": "Free",
+        "desc": "Build your menu, preview it, download your QR.",
+        "feature1": "Menu builder + 6 themes",
+        "feature2": "QR code download",
+        "feature3": "Photos, WhatsApp, publishing",
+        "cta": "Get started"
+      },
+      "monthly": {
+        "badge": "BUSINESS",
+        "title": "Monthly",
+        "perMonth": "TL/mo",
+        "setupNote": "+ one-time {amount} TL setup",
+        "feature1": "Great for large menus (200+ items), all themes, logo",
+        "feature2": "Update your menu with WhatsApp AI",
+        "feature3": "{quota} AI photo enhancements per month",
+        "feature4": "Instant updates, QR stays fixed",
+        "cta": "Publish your menu"
+      },
+      "yearly": {
+        "title": "Yearly",
+        "perYear": "TL/yr",
+        "setupNote": "~2 months free · + {amount} TL setup",
+        "feature1": "Everything in the monthly plan",
+        "feature2": "{quota} AI photo enhancements per month",
+        "feature3": "Priority support",
+        "cta": "Start yearly"
+      },
+      "footnote": "Quota overage is {overage} TL/photo or a pack of {packCredits} for {packAmount} TL. Bulk photo enhancement (50/100 photos for {bulk50}/{bulk100} TL) is independent of the quota. Custom plans are available for chains."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Frequently asked questions",
+      "items": [
+        { "q": "Does the customer need to download an app?", "a": "No. Scanning the QR with the phone camera is enough; the menu opens directly in the browser. No app is installed, no account is required." },
+        { "q": "Do I need to reprint the QR when the price changes?", "a": "No. The QR always points to the same link; once you update the content, the customer sees the current menu automatically the next time they scan it." },
+        { "q": "Does it work without internet?", "a": "The customer's phone needs internet to open the menu; mobile data is more than enough. For venues with weak signal, we recommend leaving a short Wi-Fi note on the table." },
+        { "q": "How many products can I add?", "a": "On the trial plan you can set up and preview your menu and download your QR. On the Pro plan there is no limit on the number of products or categories." },
+        { "q": "Can I add my own logo and colors?", "a": "On the Pro plan you can add your logo and pick the look that fits your venue best from six ready-made themes." }
+      ]
+    },
+    "finalCta": {
+      "title": "The age of printed menus is over.",
+      "subtitle": "Put a QR on the table and keep your menu always up to date. No card needed, no printing costs.",
+      "cta": "Create your menu →"
+    },
+    "footer": {
+      "tagline": "Digital menu with QR · No printing, instant updates",
+      "links": {
+        "privacy": "Privacy Policy",
+        "kvkk": "KVKK Disclosure Notice",
+        "cookies": "Cookie Policy",
+        "terms": "Terms of Use",
+        "distanceSales": "Distance Sales Agreement",
+        "refund": "Refund & Cancellation Policy"
+      },
+      "companyLine": "SiriusMenu is operated by BY Sirius Group AI and Technology Co. Ltd. (Companies House No: 17142392)."
+    }
+  },
+  "CookieConsent": {
+    "text": "This site only uses cookies required for the service to work (session and payment). See our cookie policy for details.",
+    "policyLink": "Cookie policy",
+    "reject": "Reject",
+    "accept": "Accept"
   }
 }
