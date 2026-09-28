@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { createServiceClient } from "../../../lib/supabase/server";
 import { parseMenuCommand, enhanceFoodPhoto, isGeminiConfigured, type MenuIntent } from "../../../lib/gemini";
 import { applyMenuIntent, findItem, menuContext } from "../../../lib/menu-ops";
-import { sendText, mediaBase64, extractText, jidToE164 } from "../../../lib/evolution";
+import { getWhatsAppProvider } from "../../../lib/whatsapp";
 import type { Category } from "../../../lib/menu";
+
+const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["trialing", "active"]);
 
 export const maxDuration = 60;
 
@@ -22,16 +24,11 @@ function authed(req: Request): boolean {
 export async function POST(req: Request) {
   if (!authed(req)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
+  const provider = getWhatsAppProvider();
   const payload = await req.json().catch(() => null);
-  const event = payload?.event as string | undefined;
-  const data = payload?.data;
-  if (event !== "messages.upsert" || !data || data?.key?.fromMe) return NextResponse.json({ ok: true });
-
-  const waMessageId: string = data.key?.id ?? "";
-  const from = jidToE164(data.key?.remoteJid ?? "");
-  const text = extractText(data.message);
-  const hasImage = Boolean(data.message?.imageMessage);
-  if (!from) return NextResponse.json({ ok: true });
+  const incoming = provider.parseIncoming(payload);
+  if (!incoming) return NextResponse.json({ ok: true });
+  const { waMessageId, from, text, hasImage, raw } = incoming;
 
   const svc = createServiceClient();
 
@@ -43,7 +40,7 @@ export async function POST(req: Request) {
   if (ins.error) return NextResponse.json({ ok: true }); // zaten işlenmiş
 
   const reply = async (msg: string, applied = false) => {
-    await sendText(from, msg);
+    await provider.sendTextMessage(from, msg);
     await svc.from("whatsapp_messages").insert({ wa_from: from, direction: "out", body: msg });
     if (applied) await svc.from("whatsapp_messages").update({ applied: true }).eq("id", ins.data!.id);
   };
@@ -86,6 +83,13 @@ export async function POST(req: Request) {
     }
     // Tanımsız numara: sessizce reddet, menüye asla dokunma.
     await reply("Bu numara SiriusMenu'de tanımlı/yetkili bir numara değil. Panelden \"WhatsApp bağla\" ile numaranı ekleyip aldığın 6 haneli kodu buraya yaz.");
+    return NextResponse.json({ ok: true });
+  }
+
+  // Abonelik pasifse otomasyonu durdur; menü verisi silinmez, sadece WhatsApp'tan işlem kapanır.
+  const { data: sub } = await svc.from("subscriptions").select("status").eq("restaurant_id", r.id).maybeSingle();
+  if (!sub || !ACTIVE_SUBSCRIPTION_STATUSES.has(sub.status)) {
+    await reply("Aboneliğin şu anda aktif değil, bu yüzden WhatsApp'tan menü güncelleme geçici olarak kapalı. Panelden aboneliğini kontrol edip yenileyebilirsin.");
     return NextResponse.json({ ok: true });
   }
 
@@ -134,7 +138,7 @@ export async function POST(req: Request) {
 
   // 1) Fotoğraf geldi
   if (hasImage) {
-    const media = await mediaBase64(data.message ? { key: data.key, message: data.message } : data);
+    const media = await provider.fetchMedia(raw);
     if (!media) { await reply("Fotoğrafı alamadım, tekrar gönderir misin?"); return NextResponse.json({ ok: true }); }
     const ext = media.mimetype.includes("png") ? "png" : "jpg";
     const path = `${r.id}/wa/${Date.now()}/original.${ext}`;
