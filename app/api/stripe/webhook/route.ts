@@ -7,9 +7,9 @@ import { processImageQueue } from "../../../lib/image-queue";
 
 export const maxDuration = 60;
 
-const QUOTA_BY_INTERVAL: Record<string, number> = {
-  month: PRICING.monthly.imageQuota,
-  year: PRICING.yearly.imageQuota,
+const QUOTA_BY_TIER_INTERVAL: Record<string, Record<string, number>> = {
+  starter: { month: PRICING.monthly.imageQuota, year: PRICING.yearly.imageQuota },
+  pro: { month: PRICING.monthlyPro.imageQuota, year: PRICING.yearlyPro.imageQuota },
 };
 const CREDITS_BY_PRODUCT: Record<string, number> = {
   image_pack: PRICING.imagePack.credits,
@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     const periodEndUnix = subscription.items.data[0]?.current_period_end;
     const periodEndIso = periodEndUnix ? new Date(periodEndUnix * 1000).toISOString() : null;
     const interval = subscription.metadata?.plan_interval || subscription.items.data[0]?.price?.recurring?.interval || "month";
+    const tier = subscription.metadata?.tier === "pro" ? "pro" : "starter";
 
     await supabase.from("subscriptions").update({
       stripe_customer_id: typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id,
@@ -53,10 +54,11 @@ export async function POST(req: Request) {
       // Dönem ilerlediyse (ilk kez / yenileme) taban kotayı ve sayaçları sıfırla;
       // dönem içi güncellemelerde satın alınan ek paketleri koru.
       const advanced = !cur?.image_quota_period_end || (periodEndIso && periodEndIso > cur.image_quota_period_end);
-      const base = QUOTA_BY_INTERVAL[interval] ?? PRICING.monthly.imageQuota;
+      const base = QUOTA_BY_TIER_INTERVAL[tier][interval] ?? PRICING.monthly.imageQuota;
 
       await supabase.from("restaurants").update({
         plan: interval === "year" ? "yearly" : "monthly",
+        tier,
         image_quota_period_end: periodEndIso,
         ...(advanced ? { image_quota: base, image_quota_used: 0 } : {}),
       }).eq("id", rid);
@@ -90,12 +92,8 @@ export async function POST(req: Request) {
           // Günlük cron yalnızca yedek; ödeme sonrası kuyruğu hemen boşaltmayı dene.
           after(() => processImageQueue());
         }
-        if (product === "edit_unlock") {
-          const { data: r } = await supabase.from("restaurants").select("edit_unlock_until").eq("id", rid).single();
-          const current = r?.edit_unlock_until ? new Date(r.edit_unlock_until) : null;
-          const base = current && current > new Date() ? current : new Date();
-          const until = new Date(base.getTime() + PRICING.editUnlock.hours * 60 * 60 * 1000);
-          await supabase.from("restaurants").update({ edit_unlock_until: until.toISOString() }).eq("id", rid);
+        if (product === "lifetime") {
+          await supabase.from("restaurants").update({ is_lifetime: true }).eq("id", rid);
         }
       }
       break;
@@ -128,7 +126,7 @@ export async function POST(req: Request) {
       const rid = subscription.metadata?.restaurant_id;
       if (rid) {
         await supabase.from("subscriptions").update({ status: "canceled" }).eq("restaurant_id", rid);
-        await supabase.from("restaurants").update({ plan: "trial", image_quota: 0 }).eq("id", rid);
+        await supabase.from("restaurants").update({ plan: "trial", tier: "starter", image_quota: 0 }).eq("id", rid);
       }
       break;
     }

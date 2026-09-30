@@ -13,7 +13,7 @@ import { createClient } from "@/app/lib/supabase/client";
 type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
-  plan: string; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
+  plan: string; tier: string; is_lifetime: boolean; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
   logo_url: string; social: SocialLinks; social_position: string; font: string;
 };
 type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[] };
@@ -61,6 +61,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [billingLoading, setBillingLoading] = useState(false);
   const [editLocked, setEditLocked] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
+  const [tierChoice, setTierChoice] = useState<"starter" | "pro">(restaurant.tier === "pro" ? "pro" : "starter");
   const [quotaUsed, setQuotaUsed] = useState(restaurant.image_quota_used);
   const [waNumbers, setWaNumbers] = useState<WaNumber[]>([]);
   const [waInput, setWaInput] = useState("");
@@ -71,7 +72,8 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appliedPendingRef = useRef(false);
 
-  const canPublish = ACTIVE_STATUSES.has(subscription.status);
+  const isLifetime = restaurant.is_lifetime;
+  const canPublish = isLifetime || ACTIVE_STATUSES.has(subscription.status);
   const isPro = subscription.status === "active";
   const quota = restaurant.image_quota;
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/m/${restaurant.slug}` : `https://siriusmenu.com/m/${restaurant.slug}`;
@@ -357,7 +359,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   const goCheckout = async () => {
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval, tier: tierChoice }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -379,9 +381,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     if (d.url) window.location.href = d.url;
     else alert(d.error || t("errCheckoutFailed"));
   };
-  const buyEditUnlock = async () => {
+  const buyLifetime = async () => {
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "edit_unlock" }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "lifetime" }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -417,24 +419,42 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <div>
               <div className="tag">{t("subscription")}</div>
               <div style={{ marginTop: 4, fontSize: 14 }}>
-                {subscription.status === "active" && t("activePlan", { interval: subscription.plan_interval === "year" ? tAccount("intervalYear") : tAccount("intervalMonth") })}
-                {subscription.status === "trialing" && t("trialManage")}
-                {(subscription.status === "past_due" || subscription.status === "canceled" || subscription.status === "unpaid") && t("inactive")}
+                {isLifetime && t("lifetimeActive")}
+                {!isLifetime && subscription.status === "active" && t("activePlan", { interval: subscription.plan_interval === "year" ? tAccount("intervalYear") : tAccount("intervalMonth") })}
+                {!isLifetime && subscription.status === "trialing" && t("trialManage")}
+                {!isLifetime && (subscription.status === "past_due" || subscription.status === "canceled" || subscription.status === "unpaid") && t("inactive")}
               </div>
             </div>
             {isPro ? (
               <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goPortal}>{t("manageSubscription")}</button>
             ) : (
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
-                  {(["month", "year"] as const).map((iv) => (
-                    <button key={iv} onClick={() => setInterval_(iv)} style={{
-                      padding: "7px 14px", fontSize: 13, cursor: "pointer", border: "none",
-                      background: interval === iv ? "var(--accent)" : "transparent", color: interval === iv ? "#fff" : "var(--muted)", fontWeight: 600,
-                    }}>{iv === "month" ? t("monthlyOption", { amount: PRICING.monthly.amount }) : t("yearlyOption", { amount: PRICING.yearly.amount })}</button>
-                  ))}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+                    {(["starter", "pro"] as const).map((tr) => (
+                      <button key={tr} onClick={() => setTierChoice(tr)} style={{
+                        padding: "7px 12px", fontSize: 13, cursor: "pointer", border: "none",
+                        background: tierChoice === tr ? "var(--accent)" : "transparent", color: tierChoice === tr ? "#fff" : "var(--muted)", fontWeight: 600,
+                      }}>{tr === "starter" ? t("tierStarter") : t("tierPro")}</button>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+                    {(["month", "year"] as const).map((iv) => (
+                      <button key={iv} onClick={() => setInterval_(iv)} style={{
+                        padding: "7px 14px", fontSize: 13, cursor: "pointer", border: "none",
+                        background: interval === iv ? "var(--accent)" : "transparent", color: interval === iv ? "#fff" : "var(--muted)", fontWeight: 600,
+                      }}>{iv === "month"
+                        ? t("monthlyOption", { amount: tierChoice === "pro" ? PRICING.monthlyPro.amount : PRICING.monthly.amount })
+                        : t("yearlyOption", { amount: tierChoice === "pro" ? PRICING.yearlyPro.amount : PRICING.yearly.amount })}</button>
+                    ))}
+                  </div>
+                  <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
                 </div>
-                <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
+                {!isLifetime && (
+                  <button className="btn-ghost btn" style={{ padding: "6px 10px", fontSize: 12.5 }} disabled={billingLoading} onClick={buyLifetime}>
+                    {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -442,9 +462,14 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
           {editLocked && (
             <div className="card" style={{ padding: 16, marginBottom: 16, background: "var(--accent-10, rgba(224,137,27,0.08))", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
               <div style={{ fontSize: 14 }}>{t("editLocked")}</div>
-              <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={buyEditUnlock}>
-                {t("buyEditUnlock", { hours: PRICING.editUnlock.hours, amount: PRICING.editUnlock.amount })}
-              </button>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={buyLifetime}>
+                  {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
+                </button>
+                <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>
+                  {t("upgrade")}
+                </button>
+              </div>
             </div>
           )}
 

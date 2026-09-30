@@ -285,8 +285,11 @@
       "trialManage": "Deneme sürümü — yayınlamak için plana geç",
       "inactive": "Abonelik pasif",
       "manageSubscription": "Aboneliği yönet",
+      "lifetimeActive": "Ömür Boyu Menü — sınırsız düzenleme, abonelik gerekmez",
       "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
-      "buyEditUnlock": "{hours} saat düzenleme aç ({amount}₺)",
+      "buyLifetime": "Tek Seferlik satın al, {items} ürüne kadar ({amount}₺)",
+      "tierStarter": "Başlangıç",
+      "tierPro": "Profesyonel",
       "monthlyOption": "Aylık {amount}₺",
       "yearlyOption": "Yıllık {amount}₺",
       "upgrade": "Plana geç",
@@ -399,7 +402,7 @@
       "errUploadFailed": "Yükleme başarısız oldu.",
       "errQuotaFull": "Görsel kotan doldu.",
       "errRegenerateFailed": "Yeniden oluşturma başarısız.",
-      "errEditLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Panelden düzenleme erişimi satın alabilirsin."
+      "errEditLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Panelden abone olabilir ya da Tek Seferlik (Ömür Boyu Menü) satın alabilirsin."
     }
   },
   "CookieConsent": {

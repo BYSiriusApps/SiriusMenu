@@ -285,8 +285,11 @@
       "trialManage": "Trial — upgrade to a plan to publish",
       "inactive": "Subscription inactive",
       "manageSubscription": "Manage subscription",
+      "lifetimeActive": "Lifetime Menu — unlimited editing, no subscription needed",
       "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
-      "buyEditUnlock": "Unlock {hours}h editing ({amount}₺)",
+      "buyLifetime": "Buy Lifetime, up to {items} items ({amount}₺)",
+      "tierStarter": "Starter",
+      "tierPro": "Professional",
       "monthlyOption": "Monthly {amount}₺",
       "yearlyOption": "Yearly {amount}₺",
       "upgrade": "Upgrade",
@@ -399,7 +402,7 @@
       "errUploadFailed": "Upload failed.",
       "errQuotaFull": "Your photo quota is full.",
       "errRegenerateFailed": "Regeneration failed.",
-      "errEditLocked": "Your subscription isn't active, so menu editing is off. You can buy editing access from the panel."
+      "errEditLocked": "Your subscription isn't active, so menu editing is off. You can subscribe or buy the Lifetime Menu from the panel."
     }
   },
   "CookieConsent": {

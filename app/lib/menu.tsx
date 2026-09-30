@@ -109,13 +109,19 @@ export const CURRENCIES = ["₺", "$", "€"];
 /** Fiyatlama (taslak; Stripe price'larıyla eşleşir). Landing + panel ortak kullanır. */
 export const PRICING = {
   setup: { amount: 2500, label: "Kurulum (tek seferlik)" },
-  monthly: { amount: 999, interval: "month" as const, imageQuota: 30, label: "Aylık" },
-  yearly: { amount: 9990, interval: "year" as const, imageQuota: 40, label: "Yıllık" },
+  monthly: { amount: 999, interval: "month" as const, imageQuota: 30, label: "Aylık (Başlangıç)" },
+  yearly: { amount: 9990, interval: "year" as const, imageQuota: 40, label: "Yıllık (Başlangıç)" },
+  monthlyPro: { amount: 1499, interval: "month" as const, imageQuota: 60, label: "Aylık (Profesyonel)" },
+  yearlyPro: { amount: 14990, interval: "year" as const, imageQuota: 80, label: "Yıllık (Profesyonel)" },
   imagePack: { amount: 400, credits: 20, label: "20'li görsel iyileştirme paketi" },
   overagePerImage: 25,
   bulk50: { amount: 999, credits: 50, label: "50 fotoğraf toplu iyileştirme" },
   bulk100: { amount: 1799, credits: 100, label: "100 fotoğraf toplu iyileştirme" },
-  editUnlock: { amount: 299, hours: 48, label: "Düzenleme erişimi (48 saat)" },
+  // Tek seferlik, abonelik gerektirmeyen kalıcı düzenleme hakkı. WhatsApp otomasyonu ve AI
+  // görsel kotası dahil değil (bunlar sürekli maliyet taşıyor) — ayrıca satın alınabilir.
+  lifetime: { amount: 12000, items: 50, extraBlockAmount: 4000, extraBlockItems: 50, label: "Tek Seferlik (Ömür Boyu Menü)" },
+  // Menüyü uçtan uca SiriusMenu'nün kurduğu, müşterinin veri girişi yapmadığı yönetilen hizmet.
+  fullService: { amount: 9900, items: 50, extraBlockAmount: 3000, extraBlockItems: 50, label: "Anahtar Teslim Kurulum" },
 };
 
 export const DEFAULT_MENU: MenuData = {

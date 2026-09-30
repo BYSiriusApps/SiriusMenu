@@ -10,7 +10,7 @@ export default async function PanelPage() {
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, social, social_position, font, published, plan, image_quota, image_quota_used, qr_token")
+    .select("id, slug, name, subtitle, theme, currency, menu, logo_url, social, social_position, font, published, plan, tier, is_lifetime, image_quota, image_quota_used, qr_token")
     .eq("user_id", user.id)
     .single();
 
@@ -36,6 +36,8 @@ export default async function PanelPage() {
         categories,
         published: restaurant.published,
         plan: restaurant.plan ?? "trial",
+        tier: restaurant.tier ?? "starter",
+        is_lifetime: restaurant.is_lifetime ?? false,
         image_quota: restaurant.image_quota ?? 0,
         image_quota_used: restaurant.image_quota_used ?? 0,
         qr_token: restaurant.qr_token ?? "",

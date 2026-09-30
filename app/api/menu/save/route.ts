@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, edit_unlock_until")
+    .select("id, is_lifetime")
     .eq("user_id", user.id)
     .single();
   if (!restaurant) return NextResponse.json({ error: "Restoran bulunamadı" }, { status: 404 });
@@ -26,13 +26,12 @@ export async function POST(req: Request) {
     .maybeSingle();
 
   const active = Boolean(sub && ACTIVE_STATUSES.has(sub.status));
-  const unlocked = Boolean(restaurant.edit_unlock_until && new Date(restaurant.edit_unlock_until) > new Date());
 
   // Yayında kalan menü aboneliksiz de ücretsiz görüntülenmeye devam eder (bilinçli tasarım);
-  // bu kontrol sadece panelden İÇERİK DÜZENLEMEYİ pasif abonelikte kısıtlar.
-  if (!active && !unlocked) {
+  // bu kontrol sadece panelden İÇERİK DÜZENLEMEYİ pasif abonelikte (Tek Seferlik alınmadıysa) kısıtlar.
+  if (!active && !restaurant.is_lifetime) {
     return NextResponse.json(
-      { error: "edit_locked", message: "Aboneliğin aktif değil. Menüyü düzenlemek için abone ol ya da tek seferlik düzenleme erişimi satın al." },
+      { error: "edit_locked", message: "Aboneliğin aktif değil. Menüyü düzenlemek için abone ol ya da Tek Seferlik (Ömür Boyu Menü) satın al." },
       { status: 402 },
     );
   }
