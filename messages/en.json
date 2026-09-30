@@ -285,6 +285,8 @@
       "trialManage": "Trial — upgrade to a plan to publish",
       "inactive": "Subscription inactive",
       "manageSubscription": "Manage subscription",
+      "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
+      "buyEditUnlock": "Unlock {hours}h editing ({amount}₺)",
       "monthlyOption": "Monthly {amount}₺",
       "yearlyOption": "Yearly {amount}₺",
       "upgrade": "Upgrade",
@@ -396,7 +398,8 @@
       "emptyState": "First add at least one product in the panel, then manage its photos here.",
       "errUploadFailed": "Upload failed.",
       "errQuotaFull": "Your photo quota is full.",
-      "errRegenerateFailed": "Regeneration failed."
+      "errRegenerateFailed": "Regeneration failed.",
+      "errEditLocked": "Your subscription isn't active, so menu editing is off. You can buy editing access from the panel."
     }
   },
   "CookieConsent": {

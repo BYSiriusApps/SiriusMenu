@@ -23,7 +23,14 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
 
   const persist = async (next: Category[]) => {
     setCategories(next);
-    await supabase.from("restaurants").update({ menu: next }).eq("id", restaurantId);
+    const r = await fetch("/api/menu/save", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ categories: next }),
+    });
+    if (r.status === 402) {
+      const d = await r.json().catch(() => ({}));
+      alert(d.message || t("errEditLocked"));
+    }
   };
 
   const setItemImage = (cid: number, iid: number, image: string) =>

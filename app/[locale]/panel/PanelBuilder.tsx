@@ -59,6 +59,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [saving, setSaving] = useState<"idle" | "saving" | "saved">("idle");
   const [draftJustSaved, setDraftJustSaved] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const [editLocked, setEditLocked] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
   const [quotaUsed, setQuotaUsed] = useState(restaurant.image_quota_used);
   const [waNumbers, setWaNumbers] = useState<WaNumber[]>([]);
@@ -84,11 +85,20 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   const persistMenu = useCallback(async (m: MenuData) => {
     setSaving("saving");
-    await supabase.from("restaurants").update({
-      name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, menu: m.categories,
-      logo_url: m.logo || null, social: m.social || {},
-      social_position: m.socialPosition || "top", font: m.font || null,
-    }).eq("id", restaurant.id);
+    const r = await fetch("/api/menu/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, categories: m.categories,
+        logo: m.logo || null, social: m.social || {}, socialPosition: m.socialPosition || "top", font: m.font || null,
+      }),
+    });
+    if (r.status === 402) {
+      setEditLocked(true);
+      setSaving("idle");
+      return;
+    }
+    setEditLocked(false);
     setSaving("saved");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant.id]);
@@ -369,6 +379,14 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     if (d.url) window.location.href = d.url;
     else alert(d.error || t("errCheckoutFailed"));
   };
+  const buyEditUnlock = async () => {
+    setBillingLoading(true);
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "edit_unlock" }) });
+    const d = await r.json();
+    setBillingLoading(false);
+    if (d.url) window.location.href = d.url;
+    else alert(d.error || t("errCheckoutFailed"));
+  };
 
   // === WhatsApp yetkili numaralar (whitelist) ===
   const refreshWa = async () => {
@@ -420,6 +438,15 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
               </div>
             )}
           </div>
+
+          {editLocked && (
+            <div className="card" style={{ padding: 16, marginBottom: 16, background: "var(--accent-10, rgba(224,137,27,0.08))", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+              <div style={{ fontSize: 14 }}>{t("editLocked")}</div>
+              <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={buyEditUnlock}>
+                {t("buyEditUnlock", { hours: PRICING.editUnlock.hours, amount: PRICING.editUnlock.amount })}
+              </button>
+            </div>
+          )}
 
           {/* Görsel kotası */}
           <div className="card" style={{ padding: 16, marginBottom: 16 }}>

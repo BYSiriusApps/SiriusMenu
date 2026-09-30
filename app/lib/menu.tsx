@@ -115,6 +115,7 @@ export const PRICING = {
   overagePerImage: 25,
   bulk50: { amount: 999, credits: 50, label: "50 fotoğraf toplu iyileştirme" },
   bulk100: { amount: 1799, credits: 100, label: "100 fotoğraf toplu iyileştirme" },
+  editUnlock: { amount: 299, hours: 48, label: "Düzenleme erişimi (48 saat)" },
 };
 
 export const DEFAULT_MENU: MenuData = {

@@ -285,6 +285,8 @@
       "trialManage": "Deneme sürümü — yayınlamak için plana geç",
       "inactive": "Abonelik pasif",
       "manageSubscription": "Aboneliği yönet",
+      "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
+      "buyEditUnlock": "{hours} saat düzenleme aç ({amount}₺)",
       "monthlyOption": "Aylık {amount}₺",
       "yearlyOption": "Yıllık {amount}₺",
       "upgrade": "Plana geç",
@@ -396,7 +398,8 @@
       "emptyState": "Önce panelde en az bir ürün ekle, sonra fotoğraflarını buradan yönet.",
       "errUploadFailed": "Yükleme başarısız oldu.",
       "errQuotaFull": "Görsel kotan doldu.",
-      "errRegenerateFailed": "Yeniden oluşturma başarısız."
+      "errRegenerateFailed": "Yeniden oluşturma başarısız.",
+      "errEditLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Panelden düzenleme erişimi satın alabilirsin."
     }
   },
   "CookieConsent": {

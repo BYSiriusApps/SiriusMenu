@@ -90,6 +90,13 @@ export async function POST(req: Request) {
           // Günlük cron yalnızca yedek; ödeme sonrası kuyruğu hemen boşaltmayı dene.
           after(() => processImageQueue());
         }
+        if (product === "edit_unlock") {
+          const { data: r } = await supabase.from("restaurants").select("edit_unlock_until").eq("id", rid).single();
+          const current = r?.edit_unlock_until ? new Date(r.edit_unlock_until) : null;
+          const base = current && current > new Date() ? current : new Date();
+          const until = new Date(base.getTime() + PRICING.editUnlock.hours * 60 * 60 * 1000);
+          await supabase.from("restaurants").update({ edit_unlock_until: until.toISOString() }).eq("id", rid);
+        }
       }
       break;
     }

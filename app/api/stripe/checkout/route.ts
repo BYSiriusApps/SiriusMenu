@@ -8,6 +8,7 @@ const ONE_OFF: Record<string, string | undefined> = {
   image_pack: process.env.STRIPE_PRICE_ID_IMAGE_PACK,
   bulk50: process.env.STRIPE_PRICE_ID_BULK50,
   bulk100: process.env.STRIPE_PRICE_ID_BULK100,
+  edit_unlock: process.env.STRIPE_PRICE_ID_EDIT_UNLOCK,
 };
 
 export async function POST(req: Request) {
