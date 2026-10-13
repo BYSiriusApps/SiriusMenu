@@ -204,6 +204,8 @@
         "feature3": "Priority support",
         "cta": "Start yearly"
       },
+      "basicNote": "If you only need a QR menu, the Basic plan is {monthly} TL/month or {yearly} TL/year (WhatsApp updates and the monthly AI photo quota are not included).",
+      "serviceNote": "We can build the menu for you: done-for-you setup starts at {from} TL (up to 50 items), with the price set by item count and what you already have (ready menu, photo enhancement, image generation, from scratch). Generated images are shown with an \"Illustrative image\" label.",
       "footnote": "Quota overage is {overage} TL/photo or a pack of {packCredits} for {packAmount} TL. Bulk photo enhancement (50/100 photos for {bulk50}/{bulk100} TL) is independent of the quota. Custom plans are available for chains."
     },
     "faq": {
@@ -224,11 +226,11 @@
         },
         {
           "q": "How many products can I add?",
-          "a": "On the trial plan you can set up and preview your menu and download your QR. On the Pro plan there is no limit on the number of products or categories."
+          "a": "On the trial plan you can set up and preview your menu and download your QR. Paid plans support large menus (200+ items)."
         },
         {
           "q": "Can I add my own logo and colors?",
-          "a": "On the Pro plan you can add your logo and pick the look that fits your venue best from six ready-made themes."
+          "a": "On paid plans you can add your logo and pick the look that fits your venue best from six ready-made themes."
         }
       ]
     },
@@ -245,7 +247,8 @@
         "cookies": "Cookie Policy",
         "terms": "Terms of Use",
         "distanceSales": "Distance Sales Agreement",
-        "refund": "Refund & Cancellation Policy"
+        "refund": "Refund & Cancellation Policy",
+        "commercial": "Commercial Messages"
       },
       "contact": {
         "title": "Contact",
@@ -295,7 +298,10 @@
       "createAccount": "Create account",
       "errNotConfigured": "The panel isn't set up yet (missing Supabase connection).",
       "errInvalid": "Incorrect email or password.",
-      "expired": "Your session ended due to inactivity. Your work was saved — you can log back in."
+      "expired": "Your session ended due to inactivity. Your work was saved — you can log back in.",
+      "errUnconfirmed": "Your email isn't confirmed yet. Click the link in the confirmation email.",
+      "errConfirmLink": "The confirmation link is invalid or expired. Try logging in or sign up again.",
+      "forgot": "Forgot your password?"
     },
     "register": {
       "title": "Create account",
@@ -311,7 +317,41 @@
       "errNotConfigured": "The panel isn't set up yet (missing Supabase connection).",
       "errConsent": "To continue, you need to check the Terms of Use and KVKK Disclosure Notice boxes.",
       "sentTitle": "Account created",
-      "sentBody": "We sent a confirmation link to <b>{email}</b>. Check your inbox and you'll be redirected to the panel once you click it."
+      "sentBody": "We sent a confirmation link to <b>{email}</b>. Check your inbox and you'll be redirected to the panel once you click it.",
+      "errPasswordShort": "Password must be at least 8 characters.",
+      "errExists": "An account with this email already exists.",
+      "errRate": "Too many attempts, try again in a few minutes.",
+      "forgot": "Forgot your password?",
+      "passwordHint": "At least 8 characters.",
+      "show": "Show",
+      "hide": "Hide",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "sentHint": "This page moves to the panel automatically once you click the link. Check spam if it doesn't arrive.",
+      "resend": "Resend confirmation email",
+      "resendOk": "Confirmation email sent again.",
+      "resendErr": "Couldn't send, try again in a few minutes.",
+      "wrongEmail": "Fix email"
+    },
+    "reset": {
+      "title": "Reset your password",
+      "intro": "Enter your account email and we'll send you a reset link.",
+      "email": "Email",
+      "submit": "Send link",
+      "submitting": "...",
+      "sent": "If an account exists for this address, a reset link was sent. Check your inbox and spam folder.",
+      "back": "Back to log in",
+      "errNotConfigured": "The panel isn't set up yet (missing Supabase connection).",
+      "errRate": "Too many attempts, try again in a few minutes."
+    },
+    "newPassword": {
+      "title": "Set a new password",
+      "password": "New password",
+      "hint": "At least 8 characters.",
+      "submit": "Save password",
+      "submitting": "...",
+      "errShort": "Password must be at least 8 characters.",
+      "errSession": "The link has expired. Start the password reset again."
     }
   },
   "Panel": {
@@ -353,7 +393,13 @@
       "language": "Language",
       "languageDesc": "Change the panel interface language.",
       "support": "Support",
-      "supportText": "For issues or questions, email us:"
+      "supportText": "For issues or questions, email us:",
+      "deleteTitle": "Delete account",
+      "deleteDesc": "Your account, menu and uploaded images are permanently deleted and any active subscription is cancelled. Invoice and contract consent records are kept for the legal retention period. This cannot be undone.",
+      "deleteButton": "Permanently delete my account",
+      "deleting": "Deleting…",
+      "deleteConfirm": "Your account and all data will be permanently deleted. Are you sure?",
+      "deleteFailed": "Could not delete the account, please try again."
     },
     "builder": {
       "subscription": "Subscription",
@@ -361,9 +407,10 @@
       "trialManage": "Trial — upgrade to a plan to publish",
       "inactive": "Subscription inactive",
       "manageSubscription": "Manage subscription",
-      "lifetimeActive": "Lifetime Menu — unlimited editing, no subscription needed",
+      "lifetimeActive": "Lifetime Menu — permanent editing access, no subscription needed",
       "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
       "buyLifetime": "Buy Lifetime, up to {items} items ({amount}₺)",
+      "tierBasic": "Basic",
       "tierStarter": "Starter",
       "tierPro": "Professional",
       "monthlyOption": "Monthly {amount}₺",
@@ -427,6 +474,21 @@
       "enhancing": "Enhancing...",
       "enhance": "✨ Enhance",
       "soldOut": "Sold out",
+      "whatsappNotInPlan": "WhatsApp updates are not in the Basic plan. Upgrade to Starter or Professional to enable them.",
+      "aiImageNotice": "Illustrative image (AI)",
+      "serviceTitle": "Done-for-you setup",
+      "serviceDesc": "We build the menu for you. One-time service on top of your subscription.",
+      "serviceScenario": "What do you have?",
+      "scenario_migrate": "Menu and photos are ready, just move them online",
+      "scenario_enhance": "I have photos, please enhance them",
+      "scenario_generate": "I have the menu text but no photos (images are generated)",
+      "scenario_scratch": "Nothing yet, I'll share details (item list, descriptions and images are prepared)",
+      "serviceItemCount": "Approximate number of items",
+      "serviceTotal": "Service fee: {amount}₺ (one-time)",
+      "serviceAiAck": "I accept that generated images represent my products and will be shown with an \"Illustrative image\" label.",
+      "serviceRightsAck": "I confirm I have the right to use the photos, logo and texts I provide.",
+      "serviceBuy": "Buy service",
+      "serviceAckRequired": "Please tick the confirmation boxes to continue.",
       "addItem": "+ Add product",
       "addCategory": "+ Add category",
       "newCategory": "New category",

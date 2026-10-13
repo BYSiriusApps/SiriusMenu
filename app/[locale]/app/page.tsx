@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import QRCode from "qrcode";
 import {
-  DEFAULT_MENU, THEMES, TAGS, CURRENCIES, type MenuData, type Category, type Item, type Tag,
+  DEFAULT_MENU, THEMES, TAGS, CURRENCIES, MENU_LAYOUTS, type MenuLayout, type MenuData, type Category, type Item, type Tag,
 } from "@/app/lib/menu";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { useRouter } from "@/i18n/routing";
@@ -12,6 +12,8 @@ const PENDING_MENU_KEY = "siriusmenu_pending_menu";
 const IMPORT_INTENT_KEY = "siriusmenu_import_intent";
 const CONTACT_EMAIL = "info@bysirius.com";
 const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Menümü SiriusMenu için siz hazırlayın")}&body=${encodeURIComponent("Merhaba,\n\nMenümü kendim oluşturmak yerine sizin hazırlamanızı istiyorum. Ürün/fiyat listemi (dosya, fotoğraf ya da yazılı olarak) bu e-postaya ekliyorum.\n\nİşletme adı: ")}`;
+
+const LAYOUT_LABELS: Record<MenuLayout, string> = { list: "Düz liste", coverflow: "3D vitrin (coverflow)" };
 
 const hasContent = (m: MenuData) => m.categories.some((c) => c.items.some((it) => it.name.trim()));
 
@@ -122,6 +124,19 @@ export default function Builder() {
                   border: menu.theme === t.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.theme === t.key ? "var(--accent-soft)" : "var(--paper)",
                 }}>{t.label}</button>
               ))}
+            </div>
+            <div className="tag" style={{ marginTop: 18 }}>Menü düzeni</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>Menünün müşteriye nasıl görüneceğini seç: düz liste ya da kaydırmalı 3D vitrin.</p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              {MENU_LAYOUTS.map((l) => {
+                const on = (menu.layout || "list") === l;
+                return (
+                  <button key={l} onClick={() => setMenu((p) => ({ ...p, layout: l }))} style={{
+                    padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: on ? 600 : 400,
+                    border: on ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: on ? "var(--accent-soft)" : "var(--paper)",
+                  }}>{LAYOUT_LABELS[l]}</button>
+                );
+              })}
             </div>
           </div>
 

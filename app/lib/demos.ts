@@ -26,6 +26,23 @@ const LIST_DEMOS: Demo[] = [
         { id: 3, name: "Atıştırmalıklar", items: [
           { id: 31, name: "Avokado Tost", desc: "Ekşi maya ekmek, kiraz domates, acı sos", price: "160", tags: ["aci"], image: U("photo-1588137378633-dea1336ce1e2") },
         ] },
+        { id: 4, name: "Sıcak İçecekler", items: [
+          { id: 41, name: "Latte", desc: "Kadifemsi süt köpüğü, tek shot", price: "90", tags: [] },
+          { id: 42, name: "Cappuccino", desc: "Eşit parça espresso ve süt köpüğü", price: "90", tags: [] },
+          { id: 43, name: "Türk Kahvesi", desc: "Közde, lokum ile", price: "70", tags: ["sef"] },
+          { id: 44, name: "Sıcak Çikolata", desc: "Belçika çikolatası, krema", price: "100", tags: ["yeni"] },
+          { id: 45, name: "Bitki Çayı", desc: "Ihlamur, adaçayı veya papatya", price: "65", tags: ["vegan"] },
+        ] },
+        { id: 5, name: "Soğuk İçecekler", items: [
+          { id: 51, name: "Buzlu Latte", desc: "Buz, süt, çift shot", price: "100", tags: [] },
+          { id: 52, name: "Ev Yapımı Limonata", desc: "Taze nane, buz", price: "85", tags: ["vegan"] },
+          { id: 53, name: "Frappe", desc: "Karamel veya vanilya", price: "110", tags: ["yeni"] },
+        ] },
+        { id: 6, name: "Sandviç & Tostlar", items: [
+          { id: 61, name: "Kaşarlı Tost", desc: "Ekşi maya, eritilmiş kaşar", price: "120", tags: [] },
+          { id: 62, name: "Hindi Füme Sandviç", desc: "Cheddar, marul, hardal sos", price: "150", tags: [] },
+          { id: 63, name: "Mozzarella Pesto", desc: "Kurutulmuş domates, fesleğen", price: "155", tags: ["sef"] },
+        ] },
       ],
     },
   },
@@ -47,6 +64,23 @@ const LIST_DEMOS: Demo[] = [
         ] },
         { id: 3, name: "Tatlı", items: [
           { id: 31, name: "Künefe", desc: "Antep fıstığı, kaymak", price: "180", tags: ["sef"], image: U("photo-1778447812923-88a9e3e6b567") },
+        ] },
+        { id: 4, name: "Ana Yemekler", items: [
+          { id: 41, name: "Hünkar Beğendi", desc: "Kuzu eti, közlenmiş patlıcan püresi", price: "360", tags: ["sef"] },
+          { id: 42, name: "Karışık Izgara", desc: "Kuzu şiş, tavuk, köfte, pilav", price: "520", tags: [] },
+          { id: 43, name: "Tavuk Şiş", desc: "Marine edilmiş, bulgur pilavı", price: "280", tags: [] },
+          { id: 44, name: "Mantı", desc: "El açması, sarımsaklı yoğurt, tereyağlı sos", price: "240", tags: ["aci"] },
+        ] },
+        { id: 5, name: "Salatalar", items: [
+          { id: 51, name: "Çoban Salata", desc: "Domates, salatalık, biber, soğan", price: "110", tags: ["vegan","glutensiz"] },
+          { id: 52, name: "Gavurdağı", desc: "Ceviz, nar ekşisi, taze nane", price: "140", tags: ["vegan"] },
+          { id: 53, name: "Roka Peynir", desc: "Parmesan, kiraz domates", price: "150", tags: [] },
+        ] },
+        { id: 6, name: "İçecekler", items: [
+          { id: 61, name: "Ayran", desc: "Köpüklü, bakır kupada", price: "50", tags: [] },
+          { id: 62, name: "Şalgam", desc: "Acılı veya acısız", price: "55", tags: ["aci"] },
+          { id: 63, name: "Türk Çayı", desc: "İnce belli bardakta", price: "30", tags: [] },
+          { id: 64, name: "Maden Suyu", desc: "Taze sıkım limonla", price: "45", tags: [] },
         ] },
       ],
     },
@@ -70,6 +104,21 @@ const LIST_DEMOS: Demo[] = [
           { id: 31, name: "Peynir Tabağı", desc: "Yerel peynirler, bal, ceviz", price: "320", tags: ["sef"], image: U("photo-1452195100486-9cc805987862") },
           { id: 32, name: "Baharatlı Badem", desc: "Ev usulü kavrulmuş", price: "90", tags: ["vegan", "aci"] },
         ] },
+        { id: 4, name: "Bira", items: [
+          { id: 41, name: "Fıçı Bira (40cl)", desc: "Pale ale, taze çekilmiş", price: "180", tags: [] },
+          { id: 42, name: "Craft IPA", desc: "Yerel butik üretim, şişe", price: "210", tags: ["yeni"] },
+          { id: 43, name: "Buğday Birası", desc: "Portakal kabuğu, hafif", price: "190", tags: [] },
+        ] },
+        { id: 5, name: "Viski & Rom", items: [
+          { id: 51, name: "Single Malt (4cl)", desc: "12 yıllık, İskoç", price: "420", tags: ["sef"] },
+          { id: 52, name: "Bourbon (4cl)", desc: "Meşe fıçı, vanilya", price: "340", tags: [] },
+          { id: 53, name: "Koyu Rom (4cl)", desc: "Karamel ve baharat notaları", price: "310", tags: [] },
+        ] },
+        { id: 6, name: "Alkolsüz", items: [
+          { id: 61, name: "Bahçe Mocktail", desc: "Salatalık, nane, tonik", price: "190", tags: ["vegan","yeni"] },
+          { id: 62, name: "Zencefilli Soda", desc: "Ev yapımı şurup", price: "150", tags: ["vegan"] },
+          { id: 63, name: "Tonik Gazoz", desc: "Limon dilimi, buz", price: "90", tags: [] },
+        ] },
       ],
     },
   },
@@ -80,7 +129,7 @@ const LIST_DEMOS: Demo[] = [
       name: "Brunch Sokak", subtitle: "Modern kahvaltı, özel burgerler ve taze sıkım", theme: "modern", currency: "₺",
       categories: [
         { id: 1, name: "Kahvaltı Tabakları", items: [
-          { id: 11, name: "Serpme Kahvaltı", desc: "Peynir çeşitleri, zeytin, reçel, tereyağı, sınırsız çay", price: "280", tags: ["sef"], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/11.png" },
+          { id: 11, name: "Serpme Kahvaltı", desc: "Peynir çeşitleri, zeytin, reçel, tereyağı, demlik çay", price: "280", tags: ["sef"], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/11.png" },
           { id: 12, name: "Avokadolu Yumurta", desc: "Ekşi maya ekmek, poşe yumurta, acı yağ", price: "165", tags: ["yeni"], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/12.png" },
           { id: 13, name: "Simit Waffle", desc: "Susamlı waffle, labne, bal", price: "145", tags: [], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/13.png" },
         ] },
@@ -92,6 +141,21 @@ const LIST_DEMOS: Demo[] = [
         { id: 3, name: "İçecekler", items: [
           { id: 31, name: "Taze Sıkım Portakal", desc: "Günlük sıkım", price: "90", tags: [], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/31.png" },
           { id: 32, name: "Cold Brew", desc: "18 saat demlenmiş", price: "95", tags: [], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-brunch/32.png" },
+        ] },
+        { id: 4, name: "Salata & Bowl", items: [
+          { id: 41, name: "Sezar Salata", desc: "Çıtır tavuk, parmesan, kruton", price: "185", tags: [] },
+          { id: 42, name: "Quinoa Bowl", desc: "Avokado, edamame, tahin sos", price: "195", tags: ["vegan","glutensiz"] },
+          { id: 43, name: "Halloumi Salata", desc: "Izgara hellim, nar, roka", price: "180", tags: ["yeni"] },
+        ] },
+        { id: 5, name: "Tatlılar", items: [
+          { id: 51, name: "Pancake Üçlüsü", desc: "Akçaağaç şurubu, mevsim meyveleri", price: "160", tags: ["sef"] },
+          { id: 52, name: "French Toast", desc: "Vanilya kreması, çilek", price: "155", tags: [] },
+          { id: 53, name: "Cookie", desc: "Sıcak servis, vanilyalı dondurma", price: "120", tags: ["yeni"] },
+        ] },
+        { id: 6, name: "Yan Lezzetler", items: [
+          { id: 61, name: "Patates Kızartması", desc: "Baharatlı, ev yapımı sos ile", price: "80", tags: ["vegan"] },
+          { id: 62, name: "Soğan Halkası", desc: "Çıtır, acı mayonez", price: "85", tags: ["aci"] },
+          { id: 63, name: "Mevsim Meyve Tabağı", desc: "Günlük taze", price: "110", tags: ["vegan","glutensiz"] },
         ] },
       ],
     },
@@ -113,6 +177,21 @@ const LIST_DEMOS: Demo[] = [
         { id: 3, name: "Smoothie & İçecek", items: [
           { id: 31, name: "Yeşil Detoks", desc: "Ispanak, elma, zencefil, limon", price: "110", tags: ["vegan"], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-vegan/31.png" },
           { id: 32, name: "Kırmızı Meyve Smoothie", desc: "Yaban mersini, çilek, badem sütü", price: "115", tags: ["vegan", "yeni"], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-vegan/32.png" },
+        ] },
+        { id: 4, name: "Çorbalar", items: [
+          { id: 41, name: "Mercimek Çorbası", desc: "Limon, kırmızı biber", price: "85", tags: ["vegan"] },
+          { id: 42, name: "Kabak Çorbası", desc: "Hindistan cevizi sütü, tohum", price: "95", tags: ["vegan","glutensiz"] },
+          { id: 43, name: "Domates Çorbası", desc: "Fesleğen yağı, kızarmış ekmek", price: "90", tags: ["vegan"] },
+        ] },
+        { id: 5, name: "Tatlılar", items: [
+          { id: 51, name: "Çiya Pudingi", desc: "Badem sütü, mevsim meyvesi", price: "105", tags: ["vegan","glutensiz"] },
+          { id: 52, name: "Ham Cheesecake", desc: "Kaju, limon, yaban mersini", price: "135", tags: ["vegan","sef"] },
+          { id: 53, name: "Hurmalı Top", desc: "Fındık, kakao, hindistan cevizi", price: "75", tags: ["vegan","glutensiz"] },
+        ] },
+        { id: 6, name: "Sıcak İçecekler", items: [
+          { id: 61, name: "Matcha Latte", desc: "Yulaf sütü", price: "115", tags: ["vegan","yeni"] },
+          { id: 62, name: "Zerdeçallı Latte", desc: "Badem sütü, tarçın", price: "105", tags: ["vegan"] },
+          { id: 63, name: "Bitki Çayı", desc: "Günün karışımı", price: "60", tags: ["vegan"] },
         ] },
       ],
     },
@@ -136,6 +215,21 @@ const LIST_DEMOS: Demo[] = [
         { id: 3, name: "İçecek", items: [
           { id: 31, name: "Rakı (35cl)", desc: "Yeşil şişe", price: "450", tags: [], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-balik/31.png" },
           { id: 32, name: "Beyaz Şarap Kadeh", desc: "Sarıgevrek, taze", price: "240", tags: [], image: "https://gyoxbzrrldmllbrltbbb.supabase.co/storage/v1/object/public/menu-photos/demo-assets/demo-balik/32.png" },
+        ] },
+        { id: 4, name: "Sıcak Başlangıçlar", items: [
+          { id: 41, name: "Karides Tava", desc: "Tereyağı, sarımsak", price: "290", tags: [] },
+          { id: 42, name: "Ahtapot Izgara", desc: "Zeytinyağı, limon", price: "340", tags: ["sef"] },
+          { id: 43, name: "Balık Çorbası", desc: "Günlük balık, limon", price: "160", tags: [] },
+        ] },
+        { id: 5, name: "Salatalar", items: [
+          { id: 51, name: "Roka Salata", desc: "Parmesan, nar ekşisi", price: "120", tags: ["vegan"] },
+          { id: 52, name: "Akdeniz Salata", desc: "Zeytin, domates, salatalık", price: "115", tags: ["vegan","glutensiz"] },
+          { id: 53, name: "Deniz Mahsulleri Salatası", desc: "Karides, kalamar, midye", price: "260", tags: ["yeni"] },
+        ] },
+        { id: 6, name: "Tatlı", items: [
+          { id: 61, name: "Ayva Tatlısı", desc: "Kaymak, ceviz", price: "150", tags: ["sef"] },
+          { id: 62, name: "Revani", desc: "Şerbetli, dondurma", price: "130", tags: [] },
+          { id: 63, name: "Mevsim Meyve", desc: "Günün seçimi", price: "120", tags: ["vegan","glutensiz"] },
         ] },
       ],
     },

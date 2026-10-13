@@ -3,7 +3,7 @@ import { createServiceClient } from "../../../lib/supabase/server";
 import { parseMenuCommand, enhanceFoodPhoto, isGeminiConfigured, type MenuIntent } from "../../../lib/gemini";
 import { applyMenuIntent, findItem, menuContext } from "../../../lib/menu-ops";
 import { getWhatsAppProvider } from "../../../lib/whatsapp";
-import type { Category } from "../../../lib/menu";
+import { tierHasWhatsapp, type Category } from "../../../lib/menu";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["trialing", "active"]);
 
@@ -53,11 +53,11 @@ export async function POST(req: Request) {
     .eq("verified", true)
     .maybeSingle();
 
-  let r: { id: string; slug: string; name: string; menu: unknown; image_quota: number; image_quota_used: number } | null = null;
+  let r: { id: string; slug: string; name: string; menu: unknown; tier: string | null; image_quota: number; image_quota_used: number } | null = null;
   if (authRow) {
     const { data } = await svc
       .from("restaurants")
-      .select("id, slug, name, menu, image_quota, image_quota_used")
+      .select("id, slug, name, menu, tier, image_quota, image_quota_used")
       .eq("id", authRow.restaurant_id)
       .single();
     r = data ?? null;
@@ -90,6 +90,12 @@ export async function POST(req: Request) {
   const { data: sub } = await svc.from("subscriptions").select("status").eq("restaurant_id", r.id).maybeSingle();
   if (!sub || !ACTIVE_SUBSCRIPTION_STATUSES.has(sub.status)) {
     await reply("Aboneliğin şu anda aktif değil, bu yüzden WhatsApp'tan menü güncelleme geçici olarak kapalı. Panelden aboneliğini kontrol edip yenileyebilirsin.");
+    return NextResponse.json({ ok: true });
+  }
+
+  // Temel plan (yalnızca QR menü) WhatsApp ile güncellemeyi içermez.
+  if (!tierHasWhatsapp(r.tier)) {
+    await reply("WhatsApp ile menü güncelleme Temel planda yok. Panelden Başlangıç veya Profesyonel plana geçersen bu özellik açılır.");
     return NextResponse.json({ ok: true });
   }
 

@@ -204,6 +204,8 @@
         "feature3": "Öncelikli destek",
         "cta": "Yıllık başla"
       },
+      "basicNote": "Sadece QR menü yeterliyse Temel plan: aylık {monthly} TL, yıllık {yearly} TL (WhatsApp ile güncelleme ve aylık AI görsel kotası dâhil değildir).",
+      "serviceNote": "Menüyü senin yerine kuralım: anahtar teslim kurulum {from} TL'den başlar (50 ürüne kadar), fiyat ürün sayısına ve elindeki içeriğe (hazır menü, fotoğraf iyileştirme, görsel üretimi, sıfırdan hazırlık) göre netleşir. Üretilen görseller menüde \"Görsel temsilidir\" etiketiyle gösterilir.",
       "footnote": "Kota aşımı {overage} TL/görsel ya da {packCredits}'li paket {packAmount} TL. Toplu fotoğraf iyileştirme (50/100 foto {bulk50}/{bulk100} TL) kotadan bağımsızdır. Zincir işletmeler için özel plan mevcut."
     },
     "faq": {
@@ -224,11 +226,11 @@
         },
         {
           "q": "Kaç ürün ekleyebilirim?",
-          "a": "Deneme planında menünü kurup önizleyebilir ve QR'ını indirebilirsin. Pro planda ürün ve kategori sayısında sınır yoktur."
+          "a": "Deneme planında menünü kurup önizleyebilir ve QR'ını indirebilirsin. Ücretli planlarda geniş menüler (200+ ürün) desteklenir."
         },
         {
           "q": "Kendi logomu ve renklerimi koyabilir miyim?",
-          "a": "Pro planda logonu ekleyebilir, altı hazır temadan mekanının tarzına en uygun görünümü seçebilirsin."
+          "a": "Ücretli planlarda logonu ekleyebilir, altı hazır temadan mekanının tarzına en uygun görünümü seçebilirsin."
         }
       ]
     },
@@ -245,7 +247,8 @@
         "cookies": "Çerez Politikası",
         "terms": "Kullanım Şartları",
         "distanceSales": "Mesafeli Satış Sözleşmesi",
-        "refund": "İade & İptal Politikası"
+        "refund": "İade & İptal Politikası",
+        "commercial": "Ticari Elektronik İleti"
       },
       "contact": {
         "title": "İletişim",
@@ -295,7 +298,10 @@
       "createAccount": "Hesap oluştur",
       "errNotConfigured": "Panel henüz kurulmadı (Supabase bağlantısı eksik).",
       "errInvalid": "E-posta veya şifre hatalı.",
-      "expired": "Uzun süre işlem yapılmadığı için oturumun kapandı. Çalışmaların kaydedildi, tekrar giriş yapabilirsin."
+      "expired": "Uzun süre işlem yapılmadığı için oturumun kapandı. Çalışmaların kaydedildi, tekrar giriş yapabilirsin.",
+      "errUnconfirmed": "E-posta adresin henüz doğrulanmamış. Gelen kutundaki onay bağlantısına tıkla.",
+      "errConfirmLink": "Onay bağlantısı geçersiz veya süresi dolmuş. Giriş yapmayı dene ya da yeniden kayıt ol.",
+      "forgot": "Şifreni mi unuttun?"
     },
     "register": {
       "title": "Hesap oluştur",
@@ -311,7 +317,41 @@
       "errNotConfigured": "Panel henüz kurulmadı (Supabase bağlantısı eksik).",
       "errConsent": "Devam etmek için Kullanım Şartları ve KVKK Aydınlatma Metni kutucuklarını işaretlemelisin.",
       "sentTitle": "Hesap oluşturuldu",
-      "sentBody": "<b>{email}</b> adresine bir onay bağlantısı gönderdik. Gelen kutunu kontrol et ve bağlantıya tıklayınca panele yönlendirileceksin."
+      "sentBody": "<b>{email}</b> adresine bir onay bağlantısı gönderdik. Gelen kutunu kontrol et ve bağlantıya tıklayınca panele yönlendirileceksin.",
+      "errPasswordShort": "Şifre en az 8 karakter olmalı.",
+      "errExists": "Bu e-posta adresiyle zaten bir hesap var.",
+      "errRate": "Çok fazla deneme yapıldı, birkaç dakika sonra tekrar dene.",
+      "forgot": "Şifreni mi unuttun?",
+      "passwordHint": "En az 8 karakter.",
+      "show": "Göster",
+      "hide": "Gizle",
+      "showPassword": "Şifreyi göster",
+      "hidePassword": "Şifreyi gizle",
+      "sentHint": "Bağlantıya tıkladığında bu sayfa da otomatik olarak panele geçer. Gelmediyse spam klasörüne bak.",
+      "resend": "Onay e-postasını tekrar gönder",
+      "resendOk": "Onay e-postası tekrar gönderildi.",
+      "resendErr": "Gönderilemedi, birkaç dakika sonra tekrar dene.",
+      "wrongEmail": "E-postayı düzelt"
+    },
+    "reset": {
+      "title": "Şifreni sıfırla",
+      "intro": "Hesabının e-posta adresini yaz, sana şifre yenileme bağlantısı gönderelim.",
+      "email": "E-posta",
+      "submit": "Bağlantı gönder",
+      "submitting": "...",
+      "sent": "Bu adreste bir hesap varsa şifre yenileme bağlantısı gönderildi. Gelen kutunu ve spam klasörünü kontrol et.",
+      "back": "Giriş sayfasına dön",
+      "errNotConfigured": "Panel henüz kurulmadı (Supabase bağlantısı eksik).",
+      "errRate": "Çok fazla deneme yapıldı, birkaç dakika sonra tekrar dene."
+    },
+    "newPassword": {
+      "title": "Yeni şifre belirle",
+      "password": "Yeni şifre",
+      "hint": "En az 8 karakter.",
+      "submit": "Şifreyi kaydet",
+      "submitting": "...",
+      "errShort": "Şifre en az 8 karakter olmalı.",
+      "errSession": "Bağlantının süresi dolmuş. Şifre sıfırlamayı yeniden başlat."
     }
   },
   "Panel": {
@@ -353,7 +393,13 @@
       "language": "Dil",
       "languageDesc": "Panel arayüz dilini değiştir.",
       "support": "Destek",
-      "supportText": "Sorun veya sorularınız için bize yazın:"
+      "supportText": "Sorun veya sorularınız için bize yazın:",
+      "deleteTitle": "Hesabı sil",
+      "deleteDesc": "Hesabın, menün ve yüklediğin görseller kalıcı olarak silinir; aktif aboneliğin iptal edilir. Fatura ve sözleşme onay kayıtları yasal saklama süresince tutulur. Bu işlem geri alınamaz.",
+      "deleteButton": "Hesabımı kalıcı olarak sil",
+      "deleting": "Siliniyor…",
+      "deleteConfirm": "Hesabın ve tüm verilerin kalıcı olarak silinecek. Emin misin?",
+      "deleteFailed": "Hesap silinemedi, tekrar dene."
     },
     "builder": {
       "subscription": "Abonelik",
@@ -361,9 +407,10 @@
       "trialManage": "Deneme sürümü — yayınlamak için plana geç",
       "inactive": "Abonelik pasif",
       "manageSubscription": "Aboneliği yönet",
-      "lifetimeActive": "Ömür Boyu Menü — sınırsız düzenleme, abonelik gerekmez",
+      "lifetimeActive": "Ömür Boyu Menü — kalıcı düzenleme hakkı, abonelik gerekmez",
       "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
       "buyLifetime": "Tek Seferlik satın al, {items} ürüne kadar ({amount}₺)",
+      "tierBasic": "Temel",
       "tierStarter": "Başlangıç",
       "tierPro": "Profesyonel",
       "monthlyOption": "Aylık {amount}₺",
@@ -427,6 +474,21 @@
       "enhancing": "İyileştiriliyor...",
       "enhance": "✨ İyileştir",
       "soldOut": "Tükendi",
+      "whatsappNotInPlan": "Temel planda WhatsApp ile güncelleme yok. Başlangıç veya Profesyonel plana geçince açılır.",
+      "aiImageNotice": "Görsel temsilidir (yapay zekâ)",
+      "serviceTitle": "Anahtar teslim kurulum",
+      "serviceDesc": "Menüyü senin yerine biz kuralım. Aboneliğe ek, tek seferlik hizmet.",
+      "serviceScenario": "Elinde ne var?",
+      "scenario_migrate": "Menü ve fotoğraflar hazır, sadece dijitale taşınsın",
+      "scenario_enhance": "Fotoğraflar var, iyileştirilsin",
+      "scenario_generate": "Menü metni var, fotoğraf yok (görseller üretilir)",
+      "scenario_scratch": "Hiçbir şey yok, bilgi vereceğim (ürün listesi, açıklama ve görsel hazırlanır)",
+      "serviceItemCount": "Yaklaşık ürün sayısı",
+      "serviceTotal": "Hizmet bedeli: {amount}₺ (tek seferlik)",
+      "serviceAiAck": "Üretilen görsellerin ürünümü temsil ettiğini, menüde \"Görsel temsilidir\" etiketiyle gösterileceğini kabul ediyorum.",
+      "serviceRightsAck": "İlettiğim fotoğraf, logo ve metinlerin kullanım hakkına sahip olduğumu onaylıyorum.",
+      "serviceBuy": "Hizmeti satın al",
+      "serviceAckRequired": "Devam etmek için onay kutularını işaretlemelisin.",
       "addItem": "+ Ürün ekle",
       "addCategory": "+ Kategori ekle",
       "newCategory": "Yeni kategori",

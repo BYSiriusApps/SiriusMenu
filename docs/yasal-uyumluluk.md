@@ -129,12 +129,36 @@ tarafından ayrıca yapılmalıdır.**
 
 ## 6. Çerezler (Cookies)
 
+**Güncel durum (2026-10-13):** `app/components/CookieConsent.tsx` Kabul/Reddet bildirimi var (tercih `localStorage` `sirius_cookie_consent`); şu an bilgilendirme amaçlı, çünkü yalnızca zorunlu çerez kullanılıyor. Analitik eklenirse tercih kodda gerçekten kapı olmalı (reddedilince script yüklenmemeli).
+
 Şu an yalnızca Supabase auth oturum çerezi (kesinlikle gerekli/teknik çerez) kullanılıyor;
 KVKK/e-Ticaret mevzuatında kesinlikle gerekli çerezler için ayrı bir "çerez onayı" banner'ı
 gerekmez. **Eğer ileride Google Analytics, Meta Pixel vb. bir izleme/analitik aracı
 eklenirse**, o an açık rıza tabanlı bir çerez onay banner'ı ve `app/gizlilik-politikasi`
 sayfasına bir "Çerezler" bölümü eklenmesi zorunlu hale gelir — bu commit'te böyle bir araç
 eklenmedi, bu yüzden banner eklenmedi.
+
+## 6b. Yapay Zekâ ile Üretilen / İyileştirilen Ürün Görselleri ve Telif
+
+**Risk:** Menüde ürünü temsil etmeyen bir görsel, tüketiciyi yanıltıcı ticari uygulama (6502 sayılı
+Tüketicinin Korunması Hakkında Kanun ve Ticari Reklam ve Haksız Ticari Uygulamalar Yönetmeliği)
+kapsamında işletme için sorumluluk doğurabilir; hizmeti veren olarak biz de pay sahibi oluruz.
+Bu bölüm hukuki görüş değildir, yayına almadan avukata teyit ettirilmelidir.
+
+**Uygulanan önlemler (anahtar teslim kurulum, `PRICING.service`):**
+- Yapay zekâ ile **üretilen** görseller (senaryo `generate` ve `scratch`) için satın almadan önce müşteri
+  "görsellerin ürünümü temsil ettiğini ve menüde 'Görsel temsilidir' etiketiyle gösterileceğini" onaylar
+  (`ServiceCard`; sunucu `ack.ai` olmadan ödeme oturumu açmaz; sipariş kaydında `service_orders.ack_ai`).
+- Her senaryoda müşteri ilettiği fotoğraf/logo/metinlerin kullanım hakkına sahip olduğunu beyan eder
+  (`ack.rights`). Üçüncü kişi telifi sorumluluğu müşterideki içerikte kalır.
+- Yapay zekâ ile üretilen/temsili görsellerde `Item.aiImage` işaretlenir; `MenuView` ve `Coverflow`
+  "Görsel temsilidir" etiketini gösterir. Etiketi işaretlemek teslimat adımıdır (panelde ürün satırındaki kutu).
+- Fotoğraf **iyileştirme** gerçek ürünü korur (`enhanceFoodPhoto` prompt'u gerçek ürüne sadık kalır);
+  yine de ürün farklı göründüğünde müşteri etiketi işaretleyebilir.
+
+**Yapılacak (kod dışı):** mesafeli satış sözleşmesi ve ön bilgilendirme metnine hizmetin kapsamı,
+üretilen görsellerin temsili niteliği ve müşteri içerik beyanı eklenmeli; ardından `LEGAL_DOC_VERSION` güncellenmeli.
+Üretilen görsellerin telif durumu (yapay zekâ çıktısı) ve Gemini kullanım şartları ticari kullanım için teyit edilmeli.
 
 ## 7. Genel Kontrol Listesi (her yeni özellikte tekrar sorulacak sorular)
 

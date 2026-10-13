@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Gizlilik Politikası — SiriusMenu"
 
 export default function GizlilikPolitikasi() {
   return (
-    <LegalLayout title="Gizlilik Politikası" updated="1 Ekim 2026">
+    <LegalLayout title="Gizlilik Politikası" updated="13 Ekim 2026">
       <h2>1. Veri Sorumlusu</h2>
       <p>
         Bu gizlilik politikası, <strong>SiriusMenu</strong> (QR menü platformu) hizmetini yürüten{" "}
@@ -45,6 +45,7 @@ export default function GizlilikPolitikasi() {
         <li><strong>Supabase</strong> — veritabanı, kimlik doğrulama ve dosya depolama altyapısı,</li>
         <li><strong>Stripe</strong> — abonelik ve ödeme işlemleri,</li>
         <li><strong>Vercel</strong> — uygulama barındırma altyapısı,</li>
+        <li><strong>Resend</strong> — satın alma onayı ve hesap bildirimi e-postalarının gönderimi (e-posta adresin),</li>
         <li><strong>Google (Gemini API)</strong> — &quot;AI açıklama&quot;, ürün fotoğrafı iyileştirme, fotoğraftan menü aktarma ve WhatsApp komut yorumlama özelliklerini kullanırsan,</li>
         <li><strong>Evolution API</strong> — WhatsApp üzerinden AI menü düzenleme özelliğini bağlarsan, WhatsApp mesajlarının iletilmesi için.</li>
       </ul>
@@ -54,11 +55,12 @@ export default function GizlilikPolitikasi() {
       <p>Hesabın aktif olduğu sürece verilerin saklanır. Hesabını sildiğinde işletme ve menü verilerin 30 gün içinde silinir veya anonim hâle getirilir; yasal saklama yükümlülüğü bulunan kayıtlar (örn. fatura/ödeme kayıtları, satın alma sözleşme onay kayıtları) ilgili mevzuatın öngördüğü süre (azami 10 yıl) boyunca saklanır.</p>
 
       <h3>Verilerin saklandığı yerler ve yurt dışına aktarım</h3>
-      <p>Verilerin Türkiye dışındaki (AB, Birleşik Krallık ve/veya ABD) veri merkezlerinde, yukarıdaki hizmet sağlayıcılar tarafından saklanır ve işlenir: Supabase (hesap, menü, görseller), Vercel (uygulama), Stripe (ödeme), Google (Gemini, yalnızca ilgili özellikler kullanıldığında) ve Evolution API (WhatsApp özelliği kullanıldığında). Bu aktarım KVKK m.9 kapsamındaki güvencelerle yapılır. Kaynak kod GitHub&apos;da tutulur; kullanıcı kişisel verisi GitHub&apos;a yazılmaz. Ayrıntı için KVKK Aydınlatma Metni&apos;ne bak.</p>
+      <p>Verilerin Türkiye dışındaki (AB, Birleşik Krallık ve/veya ABD) veri merkezlerinde, yukarıdaki hizmet sağlayıcılar tarafından saklanır ve işlenir: Supabase (hesap, menü, görseller), Vercel (uygulama), Stripe (ödeme), Resend (e-posta), Google (Gemini, yalnızca ilgili özellikler kullanıldığında) ve Evolution API (WhatsApp özelliği kullanıldığında). Bu aktarım KVKK m.9 kapsamındaki güvencelerle yapılır. Kaynak kod GitHub&apos;da tutulur; kullanıcı kişisel verisi GitHub&apos;a yazılmaz. Ayrıntı için KVKK Aydınlatma Metni&apos;ne bak.</p>
 
       <h2>6. Haklarınız</h2>
       <p>KVKK m.11 kapsamında; verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, işlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme, yurt içi/dışı aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, silinmesini/yok edilmesini isteme ve itiraz hakların bulunmaktadır.</p>
       <p>Bu haklarını kullanmak için <a href="mailto:info@bysirius.com">info@bysirius.com</a> adresine yazılı olarak başvurabilirsin. Taleplerin en geç 30 gün içinde sonuçlandırılır.</p>
+      <p>Başvurunun yanıtsız kalması veya yetersiz bulunması hâlinde, KVKK m.14 uyarınca yanıtı öğrendiğin tarihten itibaren 30 gün içinde ve her hâlükârda başvuru tarihinden itibaren 60 gün içinde Kişisel Verileri Koruma Kurulu&apos;na (kvkk.gov.tr) şikâyette bulunabilirsin. Birleşik Krallık GDPR&apos;si kapsamındaki haklarını kullanırken ICO&apos;ya (ico.org.uk) da başvurabilirsin. Hesabını ve verilerini panelindeki hesap ayarlarından kendin silebilirsin.</p>
 
       <h2>7. Değişiklikler</h2>
       <p>Bu politika zaman zaman güncellenebilir; önemli değişikliklerde panel üzerinden veya e-posta ile bilgilendirileceksin.</p>

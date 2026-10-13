@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "KVKK Aydınlatma Metni — SiriusMen
 
 export default function KvkkAydinlatmaMetni() {
   return (
-    <LegalLayout title="KVKK Aydınlatma Metni" updated="1 Ekim 2026">
+    <LegalLayout title="KVKK Aydınlatma Metni" updated="13 Ekim 2026">
       <p>
         Bu aydınlatma metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu (&quot;KVKK&quot;) m.10 uyarınca, veri
         sorumlusu sıfatıyla <strong>BY Sirius Group AI and Technology Co. Ltd.</strong> (Companies House No: 17142392,
@@ -45,10 +45,10 @@ export default function KvkkAydinlatmaMetni() {
       </ul>
 
       <h2>4. Kişisel Verilerin Aktarılabileceği Taraflar ve Amaçları</h2>
-      <p>Verilerin, yukarıdaki amaçlarla sınırlı olmak üzere hizmet sağlayıcılarımız Supabase (veritabanı/kimlik doğrulama), Stripe (ödeme işlemcisi) ve Vercel (barındırma) ile; &quot;AI açıklama&quot; özelliği kullanıldığında ise yalnızca ilgili ürün adı bakımından Google (Gemini API) ile paylaşılabilir. Ürün fotoğrafı yükleme/iyileştirme ve fotoğraftan menü aktarma özellikleri kullanıldığında ilgili görsel/metin veriler de aynı şekilde Google (Gemini API) ile; WhatsApp üzerinden menü güncelleme özelliği kullanıldığında ise WhatsApp mesaj içeriği ve telefon numarası, mesajı işleyen Evolution API (WhatsApp ağ geçidi) altyapısı ile paylaşılır. Bu aktarımlar KVKK m.8 ve m.9 kapsamında, hizmetin ifası için gerekli olan asgari veriyle sınırlıdır.</p>
+      <p>Verilerin, yukarıdaki amaçlarla sınırlı olmak üzere hizmet sağlayıcılarımız Supabase (veritabanı/kimlik doğrulama), Stripe (ödeme işlemcisi), Vercel (barındırma) ve Resend (e-posta gönderimi; satın alma onayı ve hesap bildirimleri için e-posta adresin) ile; &quot;AI açıklama&quot; özelliği kullanıldığında ise yalnızca ilgili ürün adı bakımından Google (Gemini API) ile paylaşılabilir. Ürün fotoğrafı yükleme/iyileştirme ve fotoğraftan menü aktarma özellikleri kullanıldığında ilgili görsel/metin veriler de aynı şekilde Google (Gemini API) ile; WhatsApp üzerinden menü güncelleme özelliği kullanıldığında ise WhatsApp mesaj içeriği ve telefon numarası, mesajı işleyen Evolution API (WhatsApp ağ geçidi) altyapısı ile paylaşılır. Bu aktarımlar KVKK m.8 ve m.9 kapsamında, hizmetin ifası için gerekli olan asgari veriyle sınırlıdır.</p>
 
       <h3>Yurt dışına aktarım ve verilerin saklandığı yerler</h3>
-      <p>Verilerin; Supabase (veritabanı, kimlik doğrulama, dosya depolama), Vercel (uygulama barındırma), Stripe (ödeme), Google (Gemini API) ve Evolution API/WhatsApp ağ geçidi altyapılarında, Türkiye dışındaki (Avrupa Birliği, Birleşik Krallık ve/veya ABD) veri merkezlerinde işlenmesi ve saklanması yurt dışına aktarım niteliğindedir. Bu aktarım KVKK m.9 uyarınca; Kurul&apos;un yeterlilik kararı, standart sözleşme veya diğer uygun güvencelerden biri kapsamında, hizmet sağlayıcılarla yapılan veri işleme sözleşmeleri çerçevesinde gerçekleştirilir. Kaynak kod GitHub üzerinde tutulur; kişisel veri GitHub&apos;a aktarılmaz.</p>
+      <p>Verilerin; Supabase (veritabanı, kimlik doğrulama, dosya depolama), Vercel (uygulama barındırma), Stripe (ödeme), Resend (e-posta), Google (Gemini API) ve Evolution API/WhatsApp ağ geçidi altyapılarında, Türkiye dışındaki (Avrupa Birliği, Birleşik Krallık ve/veya ABD) veri merkezlerinde işlenmesi ve saklanması yurt dışına aktarım niteliğindedir. Bu aktarım KVKK m.9 uyarınca; Kurul&apos;un yeterlilik kararı, standart sözleşme veya diğer uygun güvencelerden biri kapsamında, hizmet sağlayıcılarla yapılan veri işleme sözleşmeleri çerçevesinde gerçekleştirilir. Kaynak kod GitHub üzerinde tutulur; kişisel veri GitHub&apos;a aktarılmaz.</p>
 
       <h3>Saklama süresi</h3>
       <p>Hesap ve menü verilerin hesabın aktif olduğu sürece saklanır; hesabın silinmesinden itibaren 30 gün içinde silinir veya anonim hâle getirilir. Fatura/ödeme kayıtları ve satın alma sözleşme onay kayıtları, ilgili mevzuatın öngördüğü süre (azami 10 yıl) boyunca saklanır.</p>
@@ -59,6 +59,7 @@ export default function KvkkAydinlatmaMetni() {
       <h2>6. KVKK m.11 Kapsamındaki Haklarınız</h2>
       <p>İlgili kişi sıfatıyla; kişisel verinin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde/yurt dışında aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, KVKK ve ilgili mevzuat hükümlerine uygun olarak işlenmiş olmasına rağmen işlenmesini gerektiren sebeplerin ortadan kalkması hâlinde silinmesini/yok edilmesini isteme, aktarıldığı üçüncü kişilere yukarıdaki değişikliklerin bildirilmesini isteme, işlenen verilerin münhasıran otomatik sistemler ile analiz edilmesi sonucu aleyhine bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işleme sebebiyle zarara uğraman hâlinde zararın giderilmesini talep etme haklarına sahipsin.</p>
       <p>Başvurularını <a href="mailto:info@bysirius.com">info@bysirius.com</a> adresine yazılı olarak iletebilirsin; talepler en geç 30 gün içinde ücretsiz olarak sonuçlandırılır.</p>
+      <p>Başvurunun yanıtsız kalması veya yetersiz bulunması hâlinde, KVKK m.14 uyarınca yanıtı öğrendiğin tarihten itibaren 30 gün içinde ve her hâlükârda başvuru tarihinden itibaren 60 gün içinde Kişisel Verileri Koruma Kurulu&apos;na (kvkk.gov.tr) şikâyette bulunabilirsin.</p>
     </LegalLayout>
   );
 }

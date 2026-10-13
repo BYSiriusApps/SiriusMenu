@@ -3,13 +3,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
+  THEMES, TAGS, CURRENCIES, PRICING, TIERS, normalizeTier, tierPrice, tierHasWhatsapp, type Tier, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
   type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition, type MenuLayout,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { createClient } from "@/app/lib/supabase/client";
 import { usePurchaseConsent } from "@/app/lib/PurchaseConsent";
+import ServiceCard from "./ServiceCard";
 
 type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
@@ -17,7 +18,7 @@ type RestaurantInit = {
   plan: string; tier: string; is_lifetime: boolean; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
   logo_url: string; social: SocialLinks; social_position: string; font: string; layout: string;
 };
-type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[] };
+type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; layout?: string; categories?: Category[] };
 const PENDING_MENU_KEY = "siriusmenu_pending_menu";
 const IMPORT_INTENT_KEY = "siriusmenu_import_intent";
 type ParsedCategory = { name: string; items: { name: string; desc?: string; price?: string }[] };
@@ -65,7 +66,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const { ask: askConsent, modal: consentModal } = usePurchaseConsent();
   const [editLocked, setEditLocked] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
-  const [tierChoice, setTierChoice] = useState<"starter" | "pro">(restaurant.tier === "pro" ? "pro" : "starter");
+  const [tierChoice, setTierChoice] = useState<Tier>(normalizeTier(restaurant.tier));
   const [quotaUsed, setQuotaUsed] = useState(restaurant.image_quota_used);
   const [waNumbers, setWaNumbers] = useState<WaNumber[]>([]);
   const [waInput, setWaInput] = useState("");
@@ -153,6 +154,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
         subtitle: draft!.subtitle ?? p.subtitle,
         theme: draft!.theme || p.theme,
         currency: draft!.currency || p.currency,
+        layout: draft!.layout === "coverflow" ? "coverflow" : p.layout,
         categories,
       }));
     }
@@ -440,11 +442,11 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
               <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
                 <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                   <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
-                    {(["starter", "pro"] as const).map((tr) => (
+                    {TIERS.map((tr) => (
                       <button key={tr} onClick={() => setTierChoice(tr)} style={{
                         padding: "7px 12px", fontSize: 13, cursor: "pointer", border: "none",
                         background: tierChoice === tr ? "var(--accent)" : "transparent", color: tierChoice === tr ? "#fff" : "var(--muted)", fontWeight: 600,
-                      }}>{tr === "starter" ? t("tierStarter") : t("tierPro")}</button>
+                      }}>{tr === "basic" ? t("tierBasic") : tr === "starter" ? t("tierStarter") : t("tierPro")}</button>
                     ))}
                   </div>
                   <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
@@ -453,8 +455,8 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                         padding: "7px 14px", fontSize: 13, cursor: "pointer", border: "none",
                         background: interval === iv ? "var(--accent)" : "transparent", color: interval === iv ? "#fff" : "var(--muted)", fontWeight: 600,
                       }}>{iv === "month"
-                        ? t("monthlyOption", { amount: tierChoice === "pro" ? PRICING.monthlyPro.amount : PRICING.monthly.amount })
-                        : t("yearlyOption", { amount: tierChoice === "pro" ? PRICING.yearlyPro.amount : PRICING.yearly.amount })}</button>
+                        ? t("monthlyOption", { amount: tierPrice(tierChoice, "month") })
+                        : t("yearlyOption", { amount: tierPrice(tierChoice, "year") })}</button>
                     ))}
                   </div>
                   <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
@@ -482,6 +484,8 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             </div>
           )}
 
+          <ServiceCard defaultItemCount={menu.categories.reduce((n, c) => n + c.items.length, 0)} askConsent={askConsent} />
+
           {/* Görsel kotası */}
           <div className="card" style={{ padding: 16, marginBottom: 16 }}>
             <div className="tag">{t("imageEnhancement")}</div>
@@ -505,6 +509,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <p style={{ marginTop: 6, fontSize: 12.5, color: "var(--muted)" }}>
               {t("whatsappDesc")}
             </p>
+            {!tierHasWhatsapp(restaurant.tier) && (
+              <p style={{ marginTop: 6, fontSize: 12.5, fontWeight: 600, color: "var(--accent)" }}>{t("whatsappNotInPlan")}</p>
+            )}
 
             {waNumbers.length > 0 && (
               <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
@@ -779,6 +786,12 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                       <input type="checkbox" checked={it.available === false} onChange={(e) => setItem(cat.id, it.id, "available", !e.target.checked)} />
                       {t("soldOut")}
                     </label>
+                    {it.image && (
+                      <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, color: "var(--muted)", cursor: "pointer" }}>
+                        <input type="checkbox" checked={it.aiImage === true} onChange={(e) => setItem(cat.id, it.id, "aiImage", e.target.checked)} />
+                        {t("aiImageNotice")}
+                      </label>
+                    )}
                   </div>
 
                   <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>

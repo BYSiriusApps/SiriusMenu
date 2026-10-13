@@ -1,5 +1,6 @@
 import React from "react";
 import { Coverflow } from "./Coverflow";
+import { CategoryNav } from "./CategoryNav";
 import { FONTS, SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
 
 const SOCIAL_ICON_PATHS: Record<keyof SocialLinks, React.ReactNode> = {
@@ -57,7 +58,7 @@ export function MenuView({ menu, autoplay }: { menu: MenuData; autoplay?: boolea
   );
 
   return (
-    <div style={{ background: th.bg, color: th.ink, fontFamily: "var(--font-body)", minHeight: "100%", position: "relative" }}>
+    <div data-menuview="" style={{ background: th.bg, color: th.ink, fontFamily: "var(--font-body)", minHeight: "100%", position: "relative" }}>
       {/* Başlık */}
       <div style={{ textAlign: "center", padding: "34px 22px 22px", borderBottom: `1px solid ${th.accent}33` }}>
         {menu.logo && (
@@ -69,10 +70,12 @@ export function MenuView({ menu, autoplay }: { menu: MenuData; autoplay?: boolea
         {socialPos === "top" && socialRow && <div style={{ marginTop: 14 }}>{socialRow}</div>}
       </div>
 
+      {!autoplay && <CategoryNav categories={menu.categories} th={th} />}
+
       {/* Kategoriler */}
       <div style={{ padding: floating ? "18px 20px 92px" : "18px 20px 40px" }}>
         {menu.categories.map((cat) => (
-          <div key={cat.id} data-cat="" style={{ marginTop: 22 }}>
+          <div key={cat.id} data-cat="" data-cat-id={cat.id} style={{ marginTop: 22, scrollMarginTop: 80 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <span style={{ fontFamily: headingFont, fontSize: 19, fontWeight: 600, color: th.accent }}>{cat.name}</span>
               <span style={{ flex: 1, height: 1, background: `${th.accent}30` }} />
@@ -97,6 +100,7 @@ export function MenuView({ menu, autoplay }: { menu: MenuData; autoplay?: boolea
                       <span style={{ fontFamily: headingFont, fontWeight: 600, fontSize: 15.5, color: th.accent, whiteSpace: "nowrap" }}>{money(it.price, menu.currency)}</span>
                     </div>
                     {it.desc && <div style={{ color: th.sub, fontSize: 12.5, marginTop: 3, lineHeight: 1.45 }}>{it.desc}</div>}
+                    {it.image && it.aiImage && <div style={{ color: th.sub, fontSize: 10.5, marginTop: 3, opacity: 0.85 }}>Görsel temsilidir</div>}
                     {it.tags.length > 0 && (
                       <div style={{ display: "flex", gap: 6, marginTop: 7, flexWrap: "wrap" }}>
                         {it.tags.map((tg) => {

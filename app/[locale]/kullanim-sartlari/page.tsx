@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Kullanım Şartları — SiriusMenu"
 
 export default function KullanimSartlari() {
   return (
-    <LegalLayout title="Kullanım Şartları" updated="30 Temmuz 2026">
+    <LegalLayout title="Kullanım Şartları" updated="13 Ekim 2026">
       <p>
         Bu Kullanım Şartları, <strong>BY Sirius Group AI and Technology Co. Ltd.</strong> (Companies House No:
         17142392, Londra, İngiltere, &quot;SiriusMenu&quot;) tarafından işletilen SiriusMenu platformunun kullanımına
@@ -13,7 +13,7 @@ export default function KullanimSartlari() {
       </p>
 
       <h2>1. Hizmetin Tanımı</h2>
-      <p>SiriusMenu; kafe, restoran ve benzeri işletmelerin menülerini dijital ortamda oluşturup QR kod aracılığıyla müşterilerine sunmasını sağlayan bir SaaS (yazılım hizmeti) platformudur. Hizmet, ücretsiz Deneme planı ve ücretli Pro plan olmak üzere iki şekilde sunulur.</p>
+      <p>SiriusMenu; kafe, restoran ve benzeri işletmelerin menülerini dijital ortamda oluşturup QR kod aracılığıyla müşterilerine sunmasını sağlayan bir SaaS (yazılım hizmeti) platformudur. Hizmet; ücretsiz Deneme planı, ücretli abonelik planları (Başlangıç, Profesyonel; aylık veya yıllık), tek seferlik Ömür Boyu Menü ve ek görsel paketleri olarak sunulur. Güncel kapsam ve fiyatlar panelde ve ödeme ekranında gösterilir.</p>
 
       <h2>2. Hesap Oluşturma ve Güvenlik</h2>
       <ul>
@@ -33,11 +33,14 @@ export default function KullanimSartlari() {
 
       <h2>4. Abonelik, Ücretlendirme ve Ödeme</h2>
       <ul>
-        <li>Pro plan, aylık 999 TL&apos;den başlayan (veya panelde belirtilen güncel tutar) karşılığında, Stripe altyapısı üzerinden otomatik yenilenen bir abonelik olarak sunulur.</li>
+        <li>Abonelik planları (Temel, Başlangıç ve Profesyonel), panelde ve ödeme ekranında belirtilen güncel tutarlarla (aylık 500 TL&apos;den başlayan) Stripe altyapısı üzerinden otomatik yenilenen abonelikler olarak sunulur; ilk abonelikte tek seferlik kurulum bedeli ayrıca tahsil edilir. Ömür Boyu Menü, anahtar teslim kurulum hizmeti ve görsel paketleri tek seferlik ödemedir.</li>
         <li>Ödeme bilgilerin (kart numarası vb.) bizim sunucularımızda tutulmaz; doğrudan Stripe tarafından işlenir.</li>
         <li>Aboneliğini panel üzerinden (Stripe müşteri portalı aracılığıyla) istediğin zaman iptal edebilirsin; iptal, mevcut ödenmiş dönemin sonunda yürürlüğe girer.</li>
         <li>Fiyatlar önceden haber verilerek güncellenebilir; mevcut abonelik döneminde fiyat değişikliği geriye dönük uygulanmaz.</li>
       </ul>
+
+      <h2>4A. Yapay Zekâ ve WhatsApp Özellikleri</h2>
+      <p>AI açıklama, görsel iyileştirme, fotoğraftan menü aktarma ve WhatsApp ile menü düzenleme özellikleri Google (Gemini) gibi üçüncü taraf yapay zekâ hizmetleriyle çalışır. Üretilen içerikler hatalı veya eksik olabilir; yayınlamadan önce kontrol etmek senin sorumluluğundadır (özellikle fiyat, içerik ve alerjen bilgileri). Fotoğraf yüklerken ilgili görsel üzerinde gerekli haklara sahip olduğunu beyan edersin. WhatsApp özelliği, WhatsApp&apos;ın resmî olmayan bir bağlantı yöntemiyle çalışabilir; Meta&apos;nın politikaları nedeniyle bağlı numaranın kısıtlanması riski bulunur ve bu özelliğin kesintisiz çalışacağı garanti edilmez. Görsel kotaları plana göre sınırlıdır.</p>
 
       <h2>5. Fikri Mülkiyet</h2>
       <p>SiriusMenu yazılımı, tasarımı, marka ve logosu BY Sirius Group AI and Technology Co. Ltd.&apos;ye aittir ve izinsiz kopyalanamaz, çoğaltılamaz veya tersine mühendisliğe tabi tutulamaz. Kullanıcı İçeriği üzerindeki haklar kullanıcıda kalır; sen bize yalnızca hizmeti sunabilmemiz için gerekli ölçüde (barındırma, görüntüleme) kullanım izni vermiş olursun.</p>
