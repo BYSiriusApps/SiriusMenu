@@ -45,6 +45,7 @@ async function main() {
         name: demo.menu.name,
         subtitle: demo.menu.subtitle,
         theme: demo.menu.theme,
+        layout: demo.menu.layout ?? "list",
         currency: demo.menu.currency,
         menu: demo.menu.categories,
         published: true,

@@ -7,7 +7,7 @@ export type Demo = { slug: string; tag: string; menu: MenuData };
 
 const U = (id: string) => `https://images.unsplash.com/${id}?w=400&q=70`;
 
-export const DEMOS: Demo[] = [
+const LIST_DEMOS: Demo[] = [
   {
     slug: "demo-kafe",
     tag: "Kafe",
@@ -37,7 +37,7 @@ export const DEMOS: Demo[] = [
       categories: [
         { id: 1, name: "Başlangıçlar", items: [
           { id: 11, name: "Humus", desc: "Nohut, tahin, zeytinyağı, kimyon", price: "120", tags: ["vegan"], image: U("photo-1637949385162-e416fb15b2ce") },
-          { id: 12, name: "Haydari", desc: "Süzme yoğurt, ceviz, taze nane", price: "110", tags: [], image: U("photo-1601001435957-74f0958a93df") },
+          { id: 12, name: "Haydari", desc: "Süzme yoğurt, ceviz, taze nane", price: "110", tags: [], image: U("photo-1777199264017-84af9308a41f") },
           { id: 13, name: "Sigara Böreği", desc: "El açması yufka, beyaz peynir", price: "130", tags: ["sef"], image: U("photo-1541014741259-de529411b96a") },
         ] },
         { id: 2, name: "Izgara", items: [
@@ -46,7 +46,7 @@ export const DEMOS: Demo[] = [
           { id: 23, name: "Çöp Şiş", desc: "Küçük kuşbaşı kuzu, közde", price: "340", tags: ["yeni"], image: U("photo-1529193591184-b1d58069ecdd") },
         ] },
         { id: 3, name: "Tatlı", items: [
-          { id: 31, name: "Künefe", desc: "Antep fıstığı, kaymak", price: "180", tags: ["sef"], image: U("photo-1610452271614-ec4d2f92b7b4") },
+          { id: 31, name: "Künefe", desc: "Antep fıstığı, kaymak", price: "180", tags: ["sef"], image: U("photo-1778447812923-88a9e3e6b567") },
         ] },
       ],
     },
@@ -141,3 +141,12 @@ export const DEMOS: Demo[] = [
     },
   },
 ];
+
+// Her tema için aynı içeriğin 3D vitrin (coverflow) düzenli hali: /m/demo-*-3d.
+export const DEMOS_3D: Demo[] = LIST_DEMOS.map((d) => ({
+  slug: `${d.slug}-3d`,
+  tag: `${d.tag} 3D`,
+  menu: { ...d.menu, layout: "coverflow" },
+}));
+
+export const DEMOS: Demo[] = [...LIST_DEMOS, ...DEMOS_3D];

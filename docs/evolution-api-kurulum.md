@@ -1,16 +1,42 @@
 # Evolution API kurulumu (WhatsApp gateway)
 
 SiriusMenu, WhatsApp mesajlarını almak/göndermek için kendi barındırdığın bir **Evolution API** örneğini kullanır.
-Vercel'deki uygulama sadece webhook alır ve `POST /message/sendText` çağırır; WhatsApp bağlantısını Evolution tutar.
+Vercel'deki uygulama sadece webhook alır ve mesaj gönderme API'lerini çağırır (`app/lib/whatsapp/evolution-provider.ts`);
+WhatsApp bağlantısını Evolution tutar. Tüm işletmeler **tek bir paylaşılan Sirius WhatsApp numarasına**
+yazar; hangi restoran olduğu gönderen numaranın panelde tanımlı/doğrulanmış olup olmadığına göre çözülür
+(bkz. `whatsapp_authorized_numbers` tablosu). Bu yüzden tek bir Evolution instance'ı yeterlidir.
 
-## 1. Sunucu
+## 1. Sunucu — Railway (önerilen)
 
-Bir VPS (Hetzner / DigitalOcean, ~4€/ay) ya da Railway/Coolify. Docker Compose:
+Railway'in resmi Evolution API şablonu Postgres + Redis + Evolution API'yi tek seferde kurar:
+
+1. Railway'de yeni proje: şablon galerisinden **"Evolution API"** (evoapicloud) şablonunu seç ve deploy et.
+   Bu, `Postgres`, `Redis` ve `evolution-api` servislerini otomatik oluşturur; veritabanı/redis bağlantı
+   URL'lerini Railway'in kendi reference variable mekanizmasıyla birbirine bağlar (elle yazman gerekmez).
+2. `evolution-api` servisine Railway üzerinden **public domain** ata (Settings → Networking → Generate Domain,
+   ya da kendi subdomain'in, örn. `evo.siriusmenu.com`, custom domain olarak). Railway HTTPS'i otomatik sağlar.
+3. Servisin Variables sekmesinden şunları kontrol et / ekle:
+   - `AUTHENTICATION_API_KEY` — şablon otomatik üretir, buradan kopyala.
+   - `SERVER_URL` — atadığın public domain (`https://evo.siriusmenu.com`).
+   - `WEBHOOK_GLOBAL_ENABLED=true`
+   - `WEBHOOK_GLOBAL_URL=https://APP-DOMAIN/api/whatsapp/webhook?secret=WHATSAPP_WEBHOOK_SECRET`
+   - `WEBHOOK_EVENTS_MESSAGES_UPSERT=true`
+4. Deploy sonrası aşağıdaki "2. Instance + WhatsApp bağlama" adımına geç (aynı curl komutları, sadece
+   `EVO-DOMAIN` yerine Railway domain'ini kullan).
+
+Restart/deploy sonrası instance verisi kaybolmaz: şablon Postgres + Redis kalıcı volume kullanır, Evolution
+Baileys oturumu veritabanında saklanır ve tekrar QR okutmaya gerek kalmadan bağlanır.
+
+Güncel image adı ve env değişken isimleri zaman zaman değişebiliyor (resmi org `evoapicloud/evolution-api`
+oldu, eski `atendai/evolution-api` adının yerini aldı) — kurulumdan hemen önce Railway şablonunun ve
+`docs.evolutionfoundation.com.br` sitesinin güncel halini kontrol et, buradaki adları körü körüne kopyalama.
+
+## 1b. Alternatif: kendi VPS'in (Hetzner / DigitalOcean, ~4€/ay) — Docker Compose
 
 ```yaml
 services:
   evolution-api:
-    image: atendai/evolution-api:v2.1.1
+    image: evoapicloud/evolution-api:v2.3.7   # güncel sürümü resmi dokümantasyondan kontrol et
     ports: ["8080:8080"]
     environment:
       - AUTHENTICATION_API_KEY=uzun-rastgele-bir-anahtar
@@ -66,4 +92,8 @@ WHATSAPP_WEBHOOK_SECRET=webhook-url-indeki-secret
 ## Notlar
 
 - Evolution, resmi olmayan (Baileys / WhatsApp Web) bir köprüdür. Kişisel/işletme numarası kullan, spam gönderme.
-- Resmi API'ye (Meta Cloud API) geçmek istenirse `app/lib/evolution.ts` yerine yeni bir adapter yazılır; webhook mantığı aynı kalır.
+- Resmi API'ye (Meta Cloud API) geçiş: `app/lib/whatsapp/` altında `WhatsAppProvider` arayüzü var
+  (`evolution-provider.ts`, iskelet `meta-provider.ts`). Meta bağlanınca `meta-provider.ts` doldurulur ve
+  `WHATSAPP_PROVIDER=meta_cloud` yapılır; webhook route'u ve menü mantığı değişmeden çalışır.
+- Aboneliği pasif olan işletmeler için WhatsApp otomasyonu webhook'ta otomatik durur
+  (`subscriptions.status` `trialing`/`active` değilse), menü verisi silinmez.

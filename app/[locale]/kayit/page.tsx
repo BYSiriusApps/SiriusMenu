@@ -76,7 +76,7 @@ export default function Kayit() {
         </label>
         <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12.5, color: "var(--muted)", lineHeight: 1.5 }}>
           <input type="checkbox" checked={pazarlamaIzni} onChange={(e) => setPazarlamaIzni(e.target.checked)} style={{ marginTop: 2 }} />
-          <span>{t("marketingOptIn")}</span>
+          <span>{t.rich("marketingOptIn", { l: (chunks) => <Link href="/ticari-elektronik-ileti" target="_blank" style={{ color: "var(--accent)", fontWeight: 600 }}>{chunks}</Link> })}</span>
         </label>
         {error && <p style={{ color: "#b3261e", fontSize: 13.5 }}>{error}</p>}
         <button className="btn btn-accent" disabled={loading || !kvkkOnay || !sartlarOnay} type="submit">{loading ? t("submitting") : t("submit")}</button>

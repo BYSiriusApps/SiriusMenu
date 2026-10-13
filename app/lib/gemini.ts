@@ -95,7 +95,9 @@ const BASE_PROMPT =
   "Enhance this food photo for a restaurant digital menu. Improve lighting to look bright and natural, " +
   "clean up and neutralize the background, boost color vibrancy and freshness of the food without looking artificial, " +
   "increase sharpness, remove clutter and reflections, keep the dish and plating exactly the same unless the request below " +
-  "explicitly asks to change the setting or background. Return a clean, appetizing square (1:1) image, no text, no watermark, no logo.";
+  "explicitly asks to change the setting or background. Never add, remove, or resize any food item, ingredient, garnish, or " +
+  "portion that is not in the original photo — the result must still accurately represent the real product. " +
+  "Return a clean, appetizing square (1:1) image, no text, no watermark, no logo.";
 
 // "hd": standart iyileştirmeye ek olarak azami detay/keskinlik isteyen daha güçlü prompt.
 // Not: Gemini görsel modeli gerçek 4K çözünürlük garanti etmez (native çıktı ~1-2K civarı);

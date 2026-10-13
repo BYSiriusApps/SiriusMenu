@@ -5,6 +5,7 @@ export const LEGAL_PAGES = [
   { href: "/kvkk-aydinlatma-metni", label: "KVKK Aydınlatma Metni" },
   { href: "/cerez-politikasi", label: "Çerez Politikası" },
   { href: "/kullanim-sartlari", label: "Kullanım Şartları" },
+  { href: "/ticari-elektronik-ileti", label: "Ticari Elektronik İleti" },
   { href: "/mesafeli-satis-sozlesmesi", label: "Mesafeli Satış Sözleşmesi" },
   { href: "/iade-iptal-politikasi", label: "İade & İptal Politikası" },
 ];

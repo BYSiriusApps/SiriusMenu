@@ -3,18 +3,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, backfillCodes, nextCategoryCode, nextItemCode,
-  type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition,
+  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
+  type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition, type MenuLayout,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { createClient } from "@/app/lib/supabase/client";
+import { usePurchaseConsent } from "@/app/lib/PurchaseConsent";
 
 type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
-  plan: string; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
-  logo_url: string; social: SocialLinks; social_position: string; font: string;
+  plan: string; tier: string; is_lifetime: boolean; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
+  logo_url: string; social: SocialLinks; social_position: string; font: string; layout: string;
 };
 type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[] };
 const PENDING_MENU_KEY = "siriusmenu_pending_menu";
@@ -35,6 +36,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const tThemes = useTranslations("Themes");
   const tFonts = useTranslations("Fonts");
   const tSocialPositions = useTranslations("SocialPositions");
+  const tLayouts = useTranslations("Layouts");
   const supabase = useRef(createClient()).current;
   const [menu, setMenu] = useState<MenuData>({
     name: restaurant.name, subtitle: restaurant.subtitle, theme: restaurant.theme,
@@ -42,6 +44,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     logo: restaurant.logo_url || undefined, social: restaurant.social || {},
     socialPosition: (restaurant.social_position as SocialPosition) || "top",
     font: restaurant.font || undefined,
+    layout: restaurant.layout === "coverflow" ? "coverflow" : "list",
   });
   const [socialOpen, setSocialOpen] = useState<Set<keyof SocialLinks>>(
     new Set((Object.keys(restaurant.social || {}) as (keyof SocialLinks)[]).filter((k) => restaurant.social?.[k])),
@@ -59,7 +62,10 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [saving, setSaving] = useState<"idle" | "saving" | "saved">("idle");
   const [draftJustSaved, setDraftJustSaved] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const { ask: askConsent, modal: consentModal } = usePurchaseConsent();
+  const [editLocked, setEditLocked] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
+  const [tierChoice, setTierChoice] = useState<"starter" | "pro">(restaurant.tier === "pro" ? "pro" : "starter");
   const [quotaUsed, setQuotaUsed] = useState(restaurant.image_quota_used);
   const [waNumbers, setWaNumbers] = useState<WaNumber[]>([]);
   const [waInput, setWaInput] = useState("");
@@ -70,7 +76,8 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appliedPendingRef = useRef(false);
 
-  const canPublish = ACTIVE_STATUSES.has(subscription.status);
+  const isLifetime = restaurant.is_lifetime;
+  const canPublish = isLifetime || ACTIVE_STATUSES.has(subscription.status);
   const isPro = subscription.status === "active";
   const quota = restaurant.image_quota;
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/m/${restaurant.slug}` : `https://siriusmenu.com/m/${restaurant.slug}`;
@@ -84,11 +91,20 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   const persistMenu = useCallback(async (m: MenuData) => {
     setSaving("saving");
-    await supabase.from("restaurants").update({
-      name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, menu: m.categories,
-      logo_url: m.logo || null, social: m.social || {},
-      social_position: m.socialPosition || "top", font: m.font || null,
-    }).eq("id", restaurant.id);
+    const r = await fetch("/api/menu/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, categories: m.categories,
+        logo: m.logo || null, social: m.social || {}, socialPosition: m.socialPosition || "top", font: m.font || null, layout: m.layout || "list",
+      }),
+    });
+    if (r.status === 402) {
+      setEditLocked(true);
+      setSaving("idle");
+      return;
+    }
+    setEditLocked(false);
     setSaving("saved");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant.id]);
@@ -155,6 +171,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
   const setSocial = (key: keyof SocialLinks, v: string) => setMenu((p) => ({ ...p, social: { ...p.social, [key]: v } }));
   const setSocialPosition = (pos: SocialPosition) => setMenu((p) => ({ ...p, socialPosition: pos }));
+  const setLayout = (layout: MenuLayout) => setMenu((p) => ({ ...p, layout }));
   const setFont = (key: string) => setMenu((p) => ({ ...p, font: key || undefined }));
   const toggleSocial = (key: keyof SocialLinks) => {
     setSocialOpen((prev) => {
@@ -346,8 +363,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   };
 
   const goCheckout = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval, tier: tierChoice, consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -362,8 +380,18 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     else alert(d.error || t("errPortalFailed"));
   };
   const buyImagePack = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack" }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack", consent: true }) });
+    const d = await r.json();
+    setBillingLoading(false);
+    if (d.url) window.location.href = d.url;
+    else alert(d.error || t("errCheckoutFailed"));
+  };
+  const buyLifetime = async () => {
+    if (!(await askConsent())) return;
+    setBillingLoading(true);
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "lifetime", consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -392,6 +420,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   return (
     <main style={{ minHeight: "100vh" }}>
+      {consentModal}
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "22px 22px 80px", display: "grid", gridTemplateColumns: "1fr 360px", gap: 30 }} className="build-grid">
         {/* Editör */}
         <div>
@@ -399,27 +428,59 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <div>
               <div className="tag">{t("subscription")}</div>
               <div style={{ marginTop: 4, fontSize: 14 }}>
-                {subscription.status === "active" && t("activePlan", { interval: subscription.plan_interval === "year" ? tAccount("intervalYear") : tAccount("intervalMonth") })}
-                {subscription.status === "trialing" && t("trialManage")}
-                {(subscription.status === "past_due" || subscription.status === "canceled" || subscription.status === "unpaid") && t("inactive")}
+                {isLifetime && t("lifetimeActive")}
+                {!isLifetime && subscription.status === "active" && t("activePlan", { interval: subscription.plan_interval === "year" ? tAccount("intervalYear") : tAccount("intervalMonth") })}
+                {!isLifetime && subscription.status === "trialing" && t("trialManage")}
+                {!isLifetime && (subscription.status === "past_due" || subscription.status === "canceled" || subscription.status === "unpaid") && t("inactive")}
               </div>
             </div>
             {isPro ? (
               <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goPortal}>{t("manageSubscription")}</button>
             ) : (
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
-                  {(["month", "year"] as const).map((iv) => (
-                    <button key={iv} onClick={() => setInterval_(iv)} style={{
-                      padding: "7px 14px", fontSize: 13, cursor: "pointer", border: "none",
-                      background: interval === iv ? "var(--accent)" : "transparent", color: interval === iv ? "#fff" : "var(--muted)", fontWeight: 600,
-                    }}>{iv === "month" ? t("monthlyOption", { amount: PRICING.monthly.amount }) : t("yearlyOption", { amount: PRICING.yearly.amount })}</button>
-                  ))}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+                    {(["starter", "pro"] as const).map((tr) => (
+                      <button key={tr} onClick={() => setTierChoice(tr)} style={{
+                        padding: "7px 12px", fontSize: 13, cursor: "pointer", border: "none",
+                        background: tierChoice === tr ? "var(--accent)" : "transparent", color: tierChoice === tr ? "#fff" : "var(--muted)", fontWeight: 600,
+                      }}>{tr === "starter" ? t("tierStarter") : t("tierPro")}</button>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", border: "1.5px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+                    {(["month", "year"] as const).map((iv) => (
+                      <button key={iv} onClick={() => setInterval_(iv)} style={{
+                        padding: "7px 14px", fontSize: 13, cursor: "pointer", border: "none",
+                        background: interval === iv ? "var(--accent)" : "transparent", color: interval === iv ? "#fff" : "var(--muted)", fontWeight: 600,
+                      }}>{iv === "month"
+                        ? t("monthlyOption", { amount: tierChoice === "pro" ? PRICING.monthlyPro.amount : PRICING.monthly.amount })
+                        : t("yearlyOption", { amount: tierChoice === "pro" ? PRICING.yearlyPro.amount : PRICING.yearly.amount })}</button>
+                    ))}
+                  </div>
+                  <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
                 </div>
-                <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
+                {!isLifetime && (
+                  <button className="btn-ghost btn" style={{ padding: "6px 10px", fontSize: 12.5 }} disabled={billingLoading} onClick={buyLifetime}>
+                    {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
+                  </button>
+                )}
               </div>
             )}
           </div>
+
+          {editLocked && (
+            <div className="card" style={{ padding: 16, marginBottom: 16, background: "var(--accent-10, rgba(224,137,27,0.08))", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+              <div style={{ fontSize: 14 }}>{t("editLocked")}</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={buyLifetime}>
+                  {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
+                </button>
+                <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>
+                  {t("upgrade")}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Görsel kotası */}
           <div className="card" style={{ padding: 16, marginBottom: 16 }}>
@@ -565,7 +626,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                     fontWeight: previewDemo?.slug === d.slug ? 600 : 400, color: "inherit",
                   }}>{d.tag} · {tThemes(d.menu.theme)}</button>
                   <button
-                    onClick={() => { setField("theme", d.menu.theme); setPreviewDemo(null); }}
+                    onClick={() => { setField("theme", d.menu.theme); setLayout(d.menu.layout || "list"); setPreviewDemo(null); }}
                     title={t("useThemeTitle")}
                     className="btn-ghost btn"
                     style={{ padding: "6px 10px", fontSize: 11.5 }}
@@ -590,6 +651,20 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                   border: menu.theme === th.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.theme === th.key ? "var(--accent-soft)" : "var(--paper)",
                 }}>{tThemes(th.key)}</button>
               ))}
+            </div>
+
+            <div className="tag" style={{ marginTop: 18 }}>{t("layout")}</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>{t("layoutDesc")}</p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              {MENU_LAYOUTS.map((l) => {
+                const on = (menu.layout || "list") === l;
+                return (
+                  <button key={l} onClick={() => { setLayout(l); setPreviewDemo(null); }} style={{
+                    padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: on ? 600 : 400,
+                    border: on ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: on ? "var(--accent-soft)" : "var(--paper)",
+                  }}>{tLayouts(l)}</button>
+                );
+              })}
             </div>
 
             <div className="tag" style={{ marginTop: 18 }}>{t("font")}</div>

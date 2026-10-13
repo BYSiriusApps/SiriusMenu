@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Gizlilik Politikası — SiriusMenu"
 
 export default function GizlilikPolitikasi() {
   return (
-    <LegalLayout title="Gizlilik Politikası" updated="21 Eylül 2026">
+    <LegalLayout title="Gizlilik Politikası" updated="1 Ekim 2026">
       <h2>1. Veri Sorumlusu</h2>
       <p>
         Bu gizlilik politikası, <strong>SiriusMenu</strong> (QR menü platformu) hizmetini yürüten{" "}
@@ -51,7 +51,10 @@ export default function GizlilikPolitikasi() {
       <p>Bu sağlayıcılar verilerini yalnızca bizim adımıza, belirtilen amaçlarla işler; kendi pazarlama amaçları için kullanamaz.</p>
 
       <h2>5. Verileri Ne Kadar Süre Saklıyoruz</h2>
-      <p>Hesabın aktif olduğu sürece verilerin saklanır. Hesabını sildiğinde işletme ve menü verilerin makul bir süre içinde silinir; yasal saklama yükümlülüğü bulunan kayıtlar (örn. fatura/ödeme kayıtları) ilgili mevzuatın öngördüğü süre boyunca Stripe nezdinde saklanabilir.</p>
+      <p>Hesabın aktif olduğu sürece verilerin saklanır. Hesabını sildiğinde işletme ve menü verilerin 30 gün içinde silinir veya anonim hâle getirilir; yasal saklama yükümlülüğü bulunan kayıtlar (örn. fatura/ödeme kayıtları, satın alma sözleşme onay kayıtları) ilgili mevzuatın öngördüğü süre (azami 10 yıl) boyunca saklanır.</p>
+
+      <h3>Verilerin saklandığı yerler ve yurt dışına aktarım</h3>
+      <p>Verilerin Türkiye dışındaki (AB, Birleşik Krallık ve/veya ABD) veri merkezlerinde, yukarıdaki hizmet sağlayıcılar tarafından saklanır ve işlenir: Supabase (hesap, menü, görseller), Vercel (uygulama), Stripe (ödeme), Google (Gemini, yalnızca ilgili özellikler kullanıldığında) ve Evolution API (WhatsApp özelliği kullanıldığında). Bu aktarım KVKK m.9 kapsamındaki güvencelerle yapılır. Kaynak kod GitHub&apos;da tutulur; kullanıcı kişisel verisi GitHub&apos;a yazılmaz. Ayrıntı için KVKK Aydınlatma Metni&apos;ne bak.</p>
 
       <h2>6. Haklarınız</h2>
       <p>KVKK m.11 kapsamında; verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, işlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme, yurt içi/dışı aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, silinmesini/yok edilmesini isteme ve itiraz hakların bulunmaktadır.</p>

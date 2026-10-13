@@ -1,6 +1,6 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { isSupabaseConfigured } from "@/app/lib/supabase/config";
-import { DEFAULT_MENU, type Category, type SocialLinks, type SocialPosition } from "@/app/lib/menu";
+import { DEFAULT_MENU, type Category, type MenuLayout, type SocialLinks, type SocialPosition } from "@/app/lib/menu";
 import { MenuView } from "@/app/lib/MenuView";
 
 export const revalidate = 0;
@@ -66,6 +66,7 @@ export default async function PublicMenu({ params, searchParams }: { params: Pro
           social: (restaurant.social as SocialLinks | null) ?? {},
           socialPosition: (restaurant.social_position as SocialPosition | null) ?? "top",
           font: restaurant.font || undefined,
+          layout: (restaurant.layout as MenuLayout | null) === "coverflow" ? "coverflow" : "list",
         }}
       />
     </main>
