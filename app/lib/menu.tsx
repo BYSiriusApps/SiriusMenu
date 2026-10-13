@@ -49,6 +49,9 @@ export const FONTS: FontOption[] = [
   { key: "poppins", cssVar: "var(--m-poppins)" },
 ];
 
+export type MenuLayout = "list" | "coverflow";
+export const MENU_LAYOUTS: MenuLayout[] = ["list", "coverflow"];
+
 export type MenuData = {
   name: string; subtitle: string; theme: string; currency: string; categories: Category[];
   /** İşletmenin kendi logosu (SiriusMenu marka yazısından ayrı, isteğe bağlı). */
@@ -59,6 +62,8 @@ export type MenuData = {
   socialPosition?: SocialPosition;
   /** İsteğe bağlı: FONTS içindeki bir anahtar. Boşsa temanın varsayılan fontu kullanılır. */
   font?: string;
+  /** İsteğe bağlı: menü düzeni. Boşsa "list" (düz liste); "coverflow" = 3D kaydırmalı vitrin. */
+  layout?: MenuLayout;
 };
 
 /**

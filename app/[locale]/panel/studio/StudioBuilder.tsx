@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { PRICING, type Category, type Item } from "@/app/lib/menu";
 import { createClient } from "@/app/lib/supabase/client";
+import { usePurchaseConsent } from "@/app/lib/PurchaseConsent";
 
 const BUCKET = "menu-photos";
 
@@ -17,6 +18,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [quotaUsed, setQuotaUsed] = useState(imageQuotaUsed);
   const [billingLoading, setBillingLoading] = useState(false);
+  const { ask: askConsent, modal: consentModal } = usePurchaseConsent();
   const [prompts, setPrompts] = useState<Record<string, string>>({});
 
   const items = categories.flatMap((c) => c.items.map((it) => ({ cat: c, item: it })));
@@ -79,8 +81,9 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
   };
 
   const buyImagePack = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack" }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack", consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -88,6 +91,7 @@ export function StudioBuilder({ restaurantId, initialCategories, imageQuota, ima
 
   return (
     <main style={{ maxWidth: 960, margin: "0 auto", padding: "22px 22px 80px" }}>
+      {consentModal}
       <div style={{ marginBottom: 18 }}>
         <div className="tag">{tNav("studio")}</div>
         <h1 className="font-display" style={{ fontSize: 24, marginTop: 6 }}>{t("title")}</h1>

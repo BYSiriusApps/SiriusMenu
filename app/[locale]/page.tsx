@@ -2,7 +2,10 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { DEFAULT_MENU, THEMES, PRICING } from "@/app/lib/menu";
-import { DEMOS } from "@/app/lib/demos";
+import { DEMOS, DEMOS_3D } from "@/app/lib/demos";
+import { ShowcaseCarousel } from "@/app/components/ShowcaseCarousel";
+import { AutoScrollPhone } from "@/app/components/AutoScrollPhone";
+import { ScrollFx } from "@/app/components/ScrollFx";
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
 import { WhatsAppButton } from "@/app/components/WhatsAppButton";
 
@@ -30,6 +33,7 @@ export default async function Landing() {
 
   return (
     <main>
+      <ScrollFx />
       <WhatsAppButton message={t("whatsappButton.message")} label={t("whatsappButton.label")} />
       {/* NAV */}
       <nav className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--bg)]/85 backdrop-blur">
@@ -71,20 +75,28 @@ export default async function Landing() {
           </p>
         </div>
         <div className="flex justify-center">
-          <Phone><MenuView menu={DEFAULT_MENU} /></Phone>
+          <AutoScrollPhone menu={DEFAULT_MENU} loop />
         </div>
       </section>
 
       {/* CONTEXT STRIP */}
-      <section className="border-y border-[var(--line)] bg-white/60">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 py-5 text-sm font-medium text-[var(--muted)]">
-          <span className="text-[11px] uppercase tracking-widest">{t("contextStrip.label")}</span>
-          {contextItems.map((item, i) => (
-            <span key={item} className="contents">
-              {i > 0 && <span aria-hidden="true">·</span>}
-              <span>{item}</span>
-            </span>
-          ))}
+      <section data-fx-whole className="border-y border-[var(--line)] bg-white/60">
+        <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-5">
+          <span className="shrink-0 text-[11px] font-medium uppercase tracking-widest text-[var(--muted)]">{t("contextStrip.label")}</span>
+          <div className="marquee min-w-0 flex-1" aria-label={contextItems.join(", ")}>
+            <div className="marquee-track" aria-hidden="true">
+              {[0, 1, 2, 3].map((k) => (
+                <div key={k} className="marquee-group">
+                  {contextItems.map((item) => (
+                    <span key={item} className="flex items-center gap-8 text-sm font-medium text-[var(--muted)]">
+                      <span>{item}</span>
+                      <span>·</span>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -99,15 +111,27 @@ export default async function Landing() {
             {t("showcase.subtitle")}
           </p>
         </div>
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {DEMOS.map((d) => (
+        {/* Düz liste: 6 tema */}
+        <h3 className="mt-14 text-center font-display text-2xl font-bold">{t("showcase.modeList")}</h3>
+        <div className="mt-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {DEMOS.filter((d) => d.menu.layout !== "coverflow").map((d) => (
             <div key={d.slug} className="flex flex-col items-center">
-              <Phone><MenuView menu={d.menu} /></Phone>
+              <AutoScrollPhone menu={d.menu} loop />
               <p className="mt-4 font-display text-lg font-bold">{d.menu.name}</p>
               <p className="text-sm text-[var(--muted)]">{d.tag} · {tThemes(d.menu.theme)} {t("showcase.themeSuffix")}</p>
               <Link href={`/m/${d.slug}`} className={`btn btn-ghost mt-3 !px-4 !py-2 text-sm ${ring}`}>{t("showcase.liveMenu")}</Link>
             </div>
           ))}
+        </div>
+
+        {/* 3D vitrin: 6 tema */}
+        <h3 className="mt-20 text-center font-display text-2xl font-bold">{t("showcase.mode3d")}</h3>
+        <div className="mt-6">
+          <ShowcaseCarousel
+            demos={DEMOS_3D}
+            themeNames={Object.fromEntries(THEMES.map((th) => [th.key, tThemes(th.key)]))}
+            labels={{ liveMenu: t("showcase.liveMenu"), themeSuffix: t("showcase.themeSuffix"), prev: t("showcase.prev"), next: t("showcase.next") }}
+          />
         </div>
         <div className="mt-10 text-center">
           <Link href="/ornek" className={`btn btn-accent ${ring}`}>{t("showcase.allExamples")}</Link>

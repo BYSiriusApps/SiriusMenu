@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "../../../lib/stripe";
-import { createClient } from "../../../lib/supabase/server";
+import { createClient, createServiceClient } from "../../../lib/supabase/server";
+import { LEGAL_DOC_VERSION } from "../../../lib/legal/versions";
 import { PRICING, type Category } from "../../../lib/menu";
 
 // Tek seferlik ürün -> Stripe price env eşlemesi
@@ -22,7 +23,12 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Giriş yapmalısın" }, { status: 401 });
 
-  const { interval, product, tier } = await req.json().catch(() => ({}));
+  const { interval, product, tier, consent } = await req.json().catch(() => ({}));
+
+  // Mesafeli satış: ödeme öncesi elektronik sözleşme onayı zorunlu.
+  if (consent !== true) {
+    return NextResponse.json({ error: "Satın alma sözleşmelerini onaylamalısın" }, { status: 400 });
+  }
 
   const { data: restaurant } = await supabase
     .from("restaurants")
@@ -30,6 +36,21 @@ export async function POST(req: Request) {
     .eq("user_id", user.id)
     .single();
   if (!restaurant) return NextResponse.json({ error: "Restoran bulunamadı" }, { status: 404 });
+
+  // Onayın kanıtı: sürüm, zaman, IP ve tarayıcı bilgisiyle kalıcı kayıt.
+  await createServiceClient().from("purchase_consents").insert({
+    restaurant_id: restaurant.id,
+    user_id: user.id,
+    product: product ?? "subscription",
+    tier: product ? null : tier === "pro" ? "pro" : "starter",
+    plan_interval: product ? null : interval === "year" ? "year" : "month",
+    doc_version: LEGAL_DOC_VERSION,
+    accepted_prelim: true,
+    accepted_contract: true,
+    accepted_waiver: true,
+    ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
+    user_agent: req.headers.get("user-agent"),
+  });
 
   const { data: sub } = await supabase
     .from("subscriptions")

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, getRequestUser } from "../../../lib/supabase/server";
-import type { Category, SocialLinks, SocialPosition } from "../../../lib/menu";
+import type { Category, MenuLayout, SocialLinks, SocialPosition } from "../../../lib/menu";
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
 
@@ -39,6 +39,7 @@ export async function POST(req: Request) {
   const data = body as {
     name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[];
     logo?: string | null; social?: SocialLinks; socialPosition?: SocialPosition; font?: string | null;
+    layout?: MenuLayout;
   };
 
   // Yalnızca isteğin gerçekten içerdiği alanlar güncellenir — Stüdyo gibi sadece
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
   if ("social" in data) patch.social = data.social || {};
   if ("socialPosition" in data) patch.social_position = data.socialPosition || "top";
   if ("font" in data) patch.font = data.font || null;
+  if ("layout" in data) patch.layout = data.layout === "coverflow" ? "coverflow" : "list";
 
   if (Object.keys(patch).length === 0) return NextResponse.json({ error: "Değişiklik yok" }, { status: 400 });
 

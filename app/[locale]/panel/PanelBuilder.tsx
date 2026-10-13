@@ -3,18 +3,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, backfillCodes, nextCategoryCode, nextItemCode,
-  type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition,
+  THEMES, TAGS, CURRENCIES, PRICING, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
+  type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition, type MenuLayout,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
 import { MenuView, Phone } from "@/app/lib/MenuView";
 import { createClient } from "@/app/lib/supabase/client";
+import { usePurchaseConsent } from "@/app/lib/PurchaseConsent";
 
 type RestaurantInit = {
   id: string; slug: string; name: string; subtitle: string; theme: string; currency: string;
   categories: Category[]; published: boolean;
   plan: string; tier: string; is_lifetime: boolean; image_quota: number; image_quota_used: number; qr_token: string; hasCustomMenu: boolean;
-  logo_url: string; social: SocialLinks; social_position: string; font: string;
+  logo_url: string; social: SocialLinks; social_position: string; font: string; layout: string;
 };
 type PendingDraft = { name?: string; subtitle?: string; theme?: string; currency?: string; categories?: Category[] };
 const PENDING_MENU_KEY = "siriusmenu_pending_menu";
@@ -35,6 +36,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const tThemes = useTranslations("Themes");
   const tFonts = useTranslations("Fonts");
   const tSocialPositions = useTranslations("SocialPositions");
+  const tLayouts = useTranslations("Layouts");
   const supabase = useRef(createClient()).current;
   const [menu, setMenu] = useState<MenuData>({
     name: restaurant.name, subtitle: restaurant.subtitle, theme: restaurant.theme,
@@ -42,6 +44,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     logo: restaurant.logo_url || undefined, social: restaurant.social || {},
     socialPosition: (restaurant.social_position as SocialPosition) || "top",
     font: restaurant.font || undefined,
+    layout: restaurant.layout === "coverflow" ? "coverflow" : "list",
   });
   const [socialOpen, setSocialOpen] = useState<Set<keyof SocialLinks>>(
     new Set((Object.keys(restaurant.social || {}) as (keyof SocialLinks)[]).filter((k) => restaurant.social?.[k])),
@@ -59,6 +62,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const [saving, setSaving] = useState<"idle" | "saving" | "saved">("idle");
   const [draftJustSaved, setDraftJustSaved] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const { ask: askConsent, modal: consentModal } = usePurchaseConsent();
   const [editLocked, setEditLocked] = useState(false);
   const [interval, setInterval_] = useState<"month" | "year">(subscription.plan_interval === "year" ? "year" : "month");
   const [tierChoice, setTierChoice] = useState<"starter" | "pro">(restaurant.tier === "pro" ? "pro" : "starter");
@@ -92,7 +96,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: m.name, subtitle: m.subtitle, theme: m.theme, currency: m.currency, categories: m.categories,
-        logo: m.logo || null, social: m.social || {}, socialPosition: m.socialPosition || "top", font: m.font || null,
+        logo: m.logo || null, social: m.social || {}, socialPosition: m.socialPosition || "top", font: m.font || null, layout: m.layout || "list",
       }),
     });
     if (r.status === 402) {
@@ -167,6 +171,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   const setField = (k: keyof MenuData, v: string) => setMenu((p) => ({ ...p, [k]: v }));
   const setSocial = (key: keyof SocialLinks, v: string) => setMenu((p) => ({ ...p, social: { ...p.social, [key]: v } }));
   const setSocialPosition = (pos: SocialPosition) => setMenu((p) => ({ ...p, socialPosition: pos }));
+  const setLayout = (layout: MenuLayout) => setMenu((p) => ({ ...p, layout }));
   const setFont = (key: string) => setMenu((p) => ({ ...p, font: key || undefined }));
   const toggleSocial = (key: keyof SocialLinks) => {
     setSocialOpen((prev) => {
@@ -358,8 +363,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
   };
 
   const goCheckout = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval, tier: tierChoice }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interval, tier: tierChoice, consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -374,16 +380,18 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     else alert(d.error || t("errPortalFailed"));
   };
   const buyImagePack = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack" }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "image_pack", consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
     else alert(d.error || t("errCheckoutFailed"));
   };
   const buyLifetime = async () => {
+    if (!(await askConsent())) return;
     setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "lifetime" }) });
+    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "lifetime", consent: true }) });
     const d = await r.json();
     setBillingLoading(false);
     if (d.url) window.location.href = d.url;
@@ -412,6 +420,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
 
   return (
     <main style={{ minHeight: "100vh" }}>
+      {consentModal}
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "22px 22px 80px", display: "grid", gridTemplateColumns: "1fr 360px", gap: 30 }} className="build-grid">
         {/* Editör */}
         <div>
@@ -617,7 +626,7 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                     fontWeight: previewDemo?.slug === d.slug ? 600 : 400, color: "inherit",
                   }}>{d.tag} · {tThemes(d.menu.theme)}</button>
                   <button
-                    onClick={() => { setField("theme", d.menu.theme); setPreviewDemo(null); }}
+                    onClick={() => { setField("theme", d.menu.theme); setLayout(d.menu.layout || "list"); setPreviewDemo(null); }}
                     title={t("useThemeTitle")}
                     className="btn-ghost btn"
                     style={{ padding: "6px 10px", fontSize: 11.5 }}
@@ -642,6 +651,20 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                   border: menu.theme === th.key ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: menu.theme === th.key ? "var(--accent-soft)" : "var(--paper)",
                 }}>{tThemes(th.key)}</button>
               ))}
+            </div>
+
+            <div className="tag" style={{ marginTop: 18 }}>{t("layout")}</div>
+            <p style={{ marginTop: 4, fontSize: 12.5, color: "var(--muted)" }}>{t("layoutDesc")}</p>
+            <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+              {MENU_LAYOUTS.map((l) => {
+                const on = (menu.layout || "list") === l;
+                return (
+                  <button key={l} onClick={() => { setLayout(l); setPreviewDemo(null); }} style={{
+                    padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 13.5, fontWeight: on ? 600 : 400,
+                    border: on ? "2px solid var(--accent)" : "1.5px solid var(--line)", background: on ? "var(--accent-soft)" : "var(--paper)",
+                  }}>{tLayouts(l)}</button>
+                );
+              })}
             </div>
 
             <div className="tag" style={{ marginTop: 18 }}>{t("font")}</div>

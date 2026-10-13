@@ -1,4 +1,5 @@
 import React from "react";
+import { Coverflow } from "./Coverflow";
 import { FONTS, SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
 
 const SOCIAL_ICON_PATHS: Record<keyof SocialLinks, React.ReactNode> = {
@@ -38,7 +39,7 @@ function SocialIcon({ platform }: { platform: keyof SocialLinks }) {
 }
 
 /** Müşteri-görünümü dijital menü (temaya göre). */
-export function MenuView({ menu }: { menu: MenuData }) {
+export function MenuView({ menu, autoplay }: { menu: MenuData; autoplay?: boolean }) {
   const th = THEMES.find((t) => t.key === menu.theme) ?? THEMES[0];
   const headingFont = FONTS.find((f) => f.key === menu.font)?.cssVar ?? th.font;
   const socialEntries = SOCIAL_PLATFORMS.filter((p) => menu.social?.[p.key]);
@@ -71,12 +72,14 @@ export function MenuView({ menu }: { menu: MenuData }) {
       {/* Kategoriler */}
       <div style={{ padding: floating ? "18px 20px 92px" : "18px 20px 40px" }}>
         {menu.categories.map((cat) => (
-          <div key={cat.id} style={{ marginTop: 22 }}>
+          <div key={cat.id} data-cat="" style={{ marginTop: 22 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <span style={{ fontFamily: headingFont, fontSize: 19, fontWeight: 600, color: th.accent }}>{cat.name}</span>
               <span style={{ flex: 1, height: 1, background: `${th.accent}30` }} />
             </div>
-            {cat.items.map((it) => {
+            {menu.layout === "coverflow" ? (
+              <Coverflow cat={cat} th={th} headingFont={headingFont} currency={menu.currency} autoplay={autoplay} />
+            ) : cat.items.map((it) => {
               const sold = it.available === false;
               return (
               <div key={it.id} style={{ background: th.card, borderRadius: 12, padding: it.image ? "0" : "13px 15px", marginBottom: 9, boxShadow: th.dark ? "none" : "0 1px 3px rgba(30,20,10,.04)", overflow: "hidden", opacity: sold ? 0.55 : 1 }}>
@@ -149,7 +152,7 @@ export function MenuView({ menu }: { menu: MenuData }) {
 export function Phone({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ width: 300, borderRadius: 34, background: "#111", padding: 9, boxShadow: "0 24px 60px -28px rgba(20,15,5,.5)" }}>
-      <div style={{ borderRadius: 26, overflow: "hidden", height: 600, overflowY: "auto", background: "#fff", position: "relative", transform: "translateZ(0)" }}>
+      <div data-phone-scroll="" style={{ borderRadius: 26, overflow: "hidden", height: 600, overflowY: "auto", background: "#fff", position: "relative", transform: "translateZ(0)" }}>
         <div style={{ position: "sticky", top: 0, height: 26, background: "transparent", display: "flex", justifyContent: "center", zIndex: 2, pointerEvents: "none" }}>
           <div style={{ width: 110, height: 20, background: "#111", borderRadius: "0 0 14px 14px" }} />
         </div>

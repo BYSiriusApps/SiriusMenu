@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "KVKK Aydınlatma Metni — SiriusMen
 
 export default function KvkkAydinlatmaMetni() {
   return (
-    <LegalLayout title="KVKK Aydınlatma Metni" updated="21 Eylül 2026">
+    <LegalLayout title="KVKK Aydınlatma Metni" updated="1 Ekim 2026">
       <p>
         Bu aydınlatma metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu (&quot;KVKK&quot;) m.10 uyarınca, veri
         sorumlusu sıfatıyla <strong>BY Sirius Group AI and Technology Co. Ltd.</strong> (Companies House No: 17142392,
@@ -25,7 +25,7 @@ export default function KvkkAydinlatmaMetni() {
         </thead>
         <tbody>
           <tr><td>Kimlik ve iletişim</td><td>E-posta adresi</td></tr>
-          <tr><td>Müşteri işlem</td><td>Abonelik durumu, Stripe müşteri/abonelik kimliği</td></tr>
+          <tr><td>Müşteri işlem</td><td>Abonelik durumu, Stripe müşteri/abonelik kimliği, satın alma sözleşme onay kaydı (zaman, IP, tarayıcı bilgisi)</td></tr>
           <tr><td>İşlem güvenliği</td><td>Şifre (hash), oturum çerezi, IP adresi</td></tr>
           <tr><td>Mesleki/işletme verisi</td><td>Restoran/kafe adı, logo, menü içeriği (kullanıcı tarafından girilir)</td></tr>
           <tr><td>Görsel veri</td><td>Ürün fotoğrafları (yükleme/AI iyileştirme ve fotoğraftan menü aktarma özellikleri kullanıldığında)</td></tr>
@@ -46,6 +46,12 @@ export default function KvkkAydinlatmaMetni() {
 
       <h2>4. Kişisel Verilerin Aktarılabileceği Taraflar ve Amaçları</h2>
       <p>Verilerin, yukarıdaki amaçlarla sınırlı olmak üzere hizmet sağlayıcılarımız Supabase (veritabanı/kimlik doğrulama), Stripe (ödeme işlemcisi) ve Vercel (barındırma) ile; &quot;AI açıklama&quot; özelliği kullanıldığında ise yalnızca ilgili ürün adı bakımından Google (Gemini API) ile paylaşılabilir. Ürün fotoğrafı yükleme/iyileştirme ve fotoğraftan menü aktarma özellikleri kullanıldığında ilgili görsel/metin veriler de aynı şekilde Google (Gemini API) ile; WhatsApp üzerinden menü güncelleme özelliği kullanıldığında ise WhatsApp mesaj içeriği ve telefon numarası, mesajı işleyen Evolution API (WhatsApp ağ geçidi) altyapısı ile paylaşılır. Bu aktarımlar KVKK m.8 ve m.9 kapsamında, hizmetin ifası için gerekli olan asgari veriyle sınırlıdır.</p>
+
+      <h3>Yurt dışına aktarım ve verilerin saklandığı yerler</h3>
+      <p>Verilerin; Supabase (veritabanı, kimlik doğrulama, dosya depolama), Vercel (uygulama barındırma), Stripe (ödeme), Google (Gemini API) ve Evolution API/WhatsApp ağ geçidi altyapılarında, Türkiye dışındaki (Avrupa Birliği, Birleşik Krallık ve/veya ABD) veri merkezlerinde işlenmesi ve saklanması yurt dışına aktarım niteliğindedir. Bu aktarım KVKK m.9 uyarınca; Kurul&apos;un yeterlilik kararı, standart sözleşme veya diğer uygun güvencelerden biri kapsamında, hizmet sağlayıcılarla yapılan veri işleme sözleşmeleri çerçevesinde gerçekleştirilir. Kaynak kod GitHub üzerinde tutulur; kişisel veri GitHub&apos;a aktarılmaz.</p>
+
+      <h3>Saklama süresi</h3>
+      <p>Hesap ve menü verilerin hesabın aktif olduğu sürece saklanır; hesabın silinmesinden itibaren 30 gün içinde silinir veya anonim hâle getirilir. Fatura/ödeme kayıtları ve satın alma sözleşme onay kayıtları, ilgili mevzuatın öngördüğü süre (azami 10 yıl) boyunca saklanır.</p>
 
       <h2>5. Kişisel Veri Toplamanın Yöntemi ve Hukuki Sebebi</h2>
       <p>Kişisel verilerin, SiriusMenu web/panel uygulaması üzerinden doğrudan senin tarafından girilmesi suretiyle, elektronik ortamda toplanır. Hukuki sebepleri: KVKK m.5/2-c (sözleşmenin kurulması/ifasıyla doğrudan ilgili olması), m.5/2-ç (hukuki yükümlülüğün yerine getirilmesi) ve m.5/2-f (meşru menfaat) hükümleridir.</p>
