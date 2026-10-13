@@ -5,25 +5,28 @@ export const metadata: Metadata = { title: "İade & İptal Politikası — Siriu
 
 export default function IadeIptalPolitikasi() {
   return (
-    <LegalLayout title="İade & İptal Politikası" updated="30 Temmuz 2026">
+    <LegalLayout title="İade & İptal Politikası" updated="13 Ekim 2026">
       <h2>1. Deneme Planı</h2>
       <p>Deneme planı tamamen ücretsizdir; kredi kartı bilgisi istenmez. Menünü oluşturup önizleyebilir, QR kodunu indirebilirsin. Ücretsiz plandan herhangi bir ücret tahsil edilmediği için iade söz konusu değildir.</p>
 
-      <h2>2. Pro Plan İptali</h2>
+      <h2>2. Abonelik İptali (Temel, Başlangıç, Profesyonel)</h2>
       <ul>
-        <li>Pro aboneliğini panel üzerinden (Stripe müşteri portalı) istediğin an, herhangi bir gerekçe göstermeden iptal edebilirsin.</li>
-        <li>İptal ettiğinde, halihazırda ödediğin dönemin sonuna kadar Pro özelliklerini kullanmaya devam edersin; sonraki dönem için tekrar ücret tahsil edilmez.</li>
+        <li>Aboneliğini panel üzerinden (Stripe müşteri portalı) istediğin an, herhangi bir gerekçe göstermeden iptal edebilirsin.</li>
+        <li>İptal ettiğinde, halihazırda ödediğin dönemin sonuna kadar ücretli özellikleri kullanmaya devam edersin; sonraki dönem için tekrar ücret tahsil edilmez.</li>
         <li>İptal sonrası hesabın otomatik olarak Deneme plan koşullarına döner; menü verilerin silinmez.</li>
       </ul>
 
       <h2>3. Ücret İadesi</h2>
       <p>
-        SiriusMenu Pro, elektronik ortamda anında ifa edilen bir dijital hizmettir ve ödeme onaylandığı anda
-        etkinleştirilir. Bu nedenle, <strong>kullanılmış olan mevcut abonelik dönemi için ücret iadesi yapılmaz</strong>{" "}
+        Abonelikler, Ömür Boyu Menü ve görsel paketleri elektronik ortamda anında ifa edilen dijital hizmetlerdir ve
+        ödeme onaylandığı anda etkinleştirilir. Bu nedenle, <strong>kullanılmış olan mevcut abonelik dönemi için ücret iadesi yapılmaz</strong>{" "}
         (bkz. Mesafeli Satış Sözleşmesi m.5 — cayma hakkı istisnası). Yanlışlıkla yapılan çift tahsilat veya teknik
         bir hata sonucu oluşan hatalı ödemeler, tarafımıza bildirilmesi hâlinde incelenir ve haklı bulunması durumunda
         iade edilir.
       </p>
+
+      <h3>Anahtar teslim kurulum hizmeti</h3>
+      <p>Bu hizmet anında ifa edilmez. Çalışma başlamadan önce iptal edersen bedel tam iade edilir; çalışma başladıktan sonra yapılan işin oranı düşülerek kalan bedel iade edilir. Teslim edilen içeriğin tamamlanmış kısmı için iade yapılmaz.</p>
 
       <h2>4. Hizmet Kaynaklı Sorunlar</h2>
       <p>SiriusMenu&apos;den kaynaklanan uzun süreli bir hizmet kesintisi veya ciddi bir teknik arıza yaşanması hâlinde, etkilenen süreye orantılı bir ücret iadesi veya sonraki döneme mahsup talebini değerlendiririz. Bu tür durumlar için <a href="mailto:info@bysirius.com">info@bysirius.com</a> adresine yazabilirsin.</p>

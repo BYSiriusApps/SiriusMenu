@@ -3,7 +3,8 @@ import Stripe from "stripe";
 import { stripe } from "../../../lib/stripe";
 import { createClient, createServiceClient } from "../../../lib/supabase/server";
 import { LEGAL_DOC_VERSION } from "../../../lib/legal/versions";
-import { PRICING, type Category } from "../../../lib/menu";
+import { sendPurchaseConsentMail } from "../../../lib/mailer";
+import { PRICING, SERVICE_NEEDS_AI_NOTICE, SERVICE_SCENARIOS, normalizeTier, serviceQuote, type Category } from "../../../lib/menu";
 
 // Tek seferlik ürün -> Stripe price env eşlemesi
 const ONE_OFF: Record<string, string | undefined> = {
@@ -14,6 +15,7 @@ const ONE_OFF: Record<string, string | undefined> = {
 
 // Abonelik seviyesi + dönem -> Stripe price env eşlemesi
 const RECURRING: Record<string, Record<string, string | undefined>> = {
+  basic: { month: process.env.STRIPE_PRICE_ID_MONTHLY_BASIC, year: process.env.STRIPE_PRICE_ID_YEARLY_BASIC },
   starter: { month: process.env.STRIPE_PRICE_ID_MONTHLY, year: process.env.STRIPE_PRICE_ID_YEARLY },
   pro: { month: process.env.STRIPE_PRICE_ID_MONTHLY_PRO, year: process.env.STRIPE_PRICE_ID_YEARLY_PRO },
 };
@@ -23,7 +25,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Giriş yapmalısın" }, { status: 401 });
 
-  const { interval, product, tier, consent } = await req.json().catch(() => ({}));
+  const body = await req.json().catch(() => ({}));
+  const { interval, product, tier, consent } = body;
 
   // Mesafeli satış: ödeme öncesi elektronik sözleşme onayı zorunlu.
   if (consent !== true) {
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
     restaurant_id: restaurant.id,
     user_id: user.id,
     product: product ?? "subscription",
-    tier: product ? null : tier === "pro" ? "pro" : "starter",
+    tier: product ? null : normalizeTier(tier),
     plan_interval: product ? null : interval === "year" ? "year" : "month",
     doc_version: LEGAL_DOC_VERSION,
     accepted_prelim: true,
@@ -51,6 +54,15 @@ export async function POST(req: Request) {
     ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
     user_agent: req.headers.get("user-agent"),
   });
+  if (user.email) {
+    await sendPurchaseConsentMail({
+      to: user.email,
+      origin: new URL(req.url).origin,
+      productLabel: [product ?? "subscription", !product && tier ? tier : null, !product && interval ? interval : null].filter(Boolean).join(" / "),
+      docVersion: LEGAL_DOC_VERSION,
+      at: new Date(),
+    });
+  }
 
   const { data: sub } = await supabase
     .from("subscriptions")
@@ -65,6 +77,37 @@ export async function POST(req: Request) {
     client_reference_id: restaurant.id,
     metadata: { restaurant_id: restaurant.id },
   } satisfies Partial<Stripe.Checkout.SessionCreateParams>;
+
+  // Anahtar teslim kurulum hizmeti. Tutar her zaman sunucuda serviceQuote() ile hesaplanır
+  // (istemciden gelen fiyat kullanılmaz); sabit Stripe price'ı gerekmez, price_data kullanılır.
+  if (product === "service") {
+    const scenario = SERVICE_SCENARIOS.find((s) => s === body.scenario);
+    const itemCount = Math.floor(Number(body.itemCount));
+    if (!scenario || !Number.isFinite(itemCount) || itemCount < 1 || itemCount > 1000) {
+      return NextResponse.json({ error: "Geçersiz hizmet seçimi" }, { status: 400 });
+    }
+    // Telif/hak beyanı her senaryoda, "görsel temsilidir" onayı üretilmiş görsel içeren senaryolarda zorunlu.
+    if (body.ack?.rights !== true || (SERVICE_NEEDS_AI_NOTICE[scenario] && body.ack?.ai !== true)) {
+      return NextResponse.json({ error: "Hizmet onaylarını işaretlemelisin" }, { status: 400 });
+    }
+    const amount = serviceQuote(scenario, itemCount);
+    const session = await stripe.checkout.sessions.create({
+      ...common,
+      mode: "payment",
+      line_items: [{
+        quantity: 1,
+        price_data: {
+          currency: "try",
+          unit_amount: amount * 100,
+          product_data: { name: `Anahtar teslim kurulum (${scenario}, ${itemCount} ürün)` },
+        },
+      }],
+      metadata: { restaurant_id: restaurant.id, product: "service", scenario, item_count: String(itemCount), ack_ai: String(body.ack?.ai === true) },
+      success_url: `${origin}/panel?purchase=success`,
+      cancel_url: `${origin}/panel?purchase=cancel`,
+    });
+    return NextResponse.json({ url: session.url });
+  }
 
   // Tek Seferlik (Ömür Boyu Menü) — ürün sayısına göre ek blok fiyatı eklenir
   if (product === "lifetime") {
@@ -107,8 +150,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: session.url });
   }
 
-  // Abonelik (Başlangıç/Profesyonel × aylık/yıllık) + ilk kez ise kurulum ücreti
-  const planTier = tier === "pro" ? "pro" : "starter";
+  // Abonelik (Temel/Başlangıç/Profesyonel × aylık/yıllık) + ilk kez ise kurulum ücreti
+  const planTier = normalizeTier(tier);
   const planInterval = interval === "year" ? "year" : "month";
   const recurring = RECURRING[planTier][planInterval];
   if (!recurring) return NextResponse.json({ error: "Fiyat tanımlı değil" }, { status: 500 });

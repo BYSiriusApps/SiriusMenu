@@ -68,8 +68,11 @@ export function Coverflow({ cat, th, headingFont, currency, autoplay }: { cat: C
               }}
             >
               {x.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={x.image} alt={x.name} loading="lazy" draggable={false} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: x.available === false ? "grayscale(1)" : "none", pointerEvents: "none" }} />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={x.image} alt={x.name} loading="lazy" draggable={false} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: x.available === false ? "grayscale(1)" : "none", pointerEvents: "none" }} />
+                  {x.aiImage && <span style={{ position: "absolute", left: 6, bottom: 6, fontSize: 9.5, color: "#fff", background: "rgba(0,0,0,.5)", padding: "1px 6px", borderRadius: 999 }}>Görsel temsilidir</span>}
+                </>
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center", background: `linear-gradient(160deg, ${th.accent}33, ${th.card})`, fontFamily: headingFont, fontSize: 54, color: th.accent }}>
                   {x.name.charAt(0).toUpperCase()}

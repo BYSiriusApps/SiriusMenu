@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Çerez Politikası — SiriusMenu" }
 
 export default function CerezPolitikasi() {
   return (
-    <LegalLayout title="Çerez Politikası" updated="30 Temmuz 2026">
+    <LegalLayout title="Çerez Politikası" updated="13 Ekim 2026">
       <h2>1. Çerez Nedir</h2>
       <p>Çerezler, bir web sitesini ziyaret ettiğinde tarayıcına kaydedilen küçük metin dosyalarıdır. SiriusMenu, hizmetin çalışması için gerekli olan sınırlı sayıda çerez kullanır.</p>
 
@@ -18,6 +18,8 @@ export default function CerezPolitikasi() {
         </tbody>
       </table>
       <p>Bu çerezlerin dışında, şu an itibarıyla reklam veya üçüncü taraf takip (analytics) amaçlı çerez kullanılmamaktadır. Bu durum değişirse bu sayfa güncellenecektir.</p>
+
+      <p>Çerez bildirimindeki Kabul/Reddet tercihin, cihazının yerel depolamasında (<code>sirius_cookie_consent</code>) yalnızca tercihini hatırlamak için saklanır; bu bilgi sunucumuza gönderilmez. Şu an yalnızca zorunlu çerezler kullanıldığından, tercihin hizmetin işleyişini değiştirmez. İleride analitik veya reklam çerezi eklenirse, bunlar ancak onayınla ve bu sayfa güncellendikten sonra devreye alınır. Tercihini silmek için tarayıcının site verilerini temizleyebilirsin.</p>
 
       <h2>3. Zorunlu Çerezler</h2>
       <p>Oturum çerezi, hizmetin temel işlevi (giriş yapma, panele erişim) için zorunludur; tarayıcı ayarlarından engellenirse panel ve giriş özellikleri çalışmaz. Menünün herkese açık görüntülenme sayfası (/m/[slug]) çerez gerektirmez.</p>

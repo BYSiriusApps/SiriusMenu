@@ -14,6 +14,7 @@ export function AccountSettings({ email, restaurantName, subscriptionStatus, pla
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [busy, setBusy] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
   const planLabel =
@@ -33,6 +34,16 @@ export function AccountSettings({ email, restaurantName, subscriptionStatus, pla
     setPassword("");
     setPassword2("");
     setMsg({ type: "ok", text: t("okUpdated") });
+  };
+
+  const deleteAccount = async () => {
+    if (!window.confirm(t("deleteConfirm"))) return;
+    setDeleting(true);
+    const r = await fetch("/api/account/delete", { method: "POST" });
+    if (r.ok) { window.location.href = "/"; return; }
+    const d = await r.json().catch(() => ({}));
+    setDeleting(false);
+    setMsg({ type: "err", text: d.error || t("deleteFailed") });
   };
 
   return (
@@ -78,6 +89,12 @@ export function AccountSettings({ email, restaurantName, subscriptionStatus, pla
         <div className="tag">{t("language")}</div>
         <p style={{ marginTop: 8, marginBottom: 12, fontSize: 13.5, color: "var(--muted)" }}>{t("languageDesc")}</p>
         <LanguageSwitcher />
+      </div>
+
+      <div className="card" style={{ padding: 20, marginBottom: 16 }}>
+        <div className="tag">{t("deleteTitle")}</div>
+        <p style={{ marginTop: 8, marginBottom: 12, fontSize: 13.5, color: "var(--muted)" }}>{t("deleteDesc")}</p>
+        <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5, color: "#b3261e" }} disabled={deleting} onClick={deleteAccount}>{deleting ? t("deleting") : t("deleteButton")}</button>
       </div>
 
       <div className="card" style={{ padding: 20 }}>

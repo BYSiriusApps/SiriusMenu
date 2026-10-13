@@ -1,5 +1,5 @@
 # SiriusMenu — kişiselleştirme rehberi
-Sor: 1) Marka adı (vars. SiriusMenu). 2) Aksan renk (vars. amber #e0891b) → globals.css `--accent`. 3) Fiyatlar (`app/lib/menu.tsx` `PRICING`: kurulum 2500, aylık taban 999, yıllık 9990, görsel kotaları/paketleri; landing + panel bunu kullanır — taban fiyat 999 TL/ay'ın altına inilmez). 4) Menü temaları / etiketler / para birimleri (isteğe bağlı; app/lib/menu.tsx `THEMES`, `TAGS`, `CURRENCIES`).
+Sor: 1) Marka adı (vars. SiriusMenu). 2) Aksan renk (vars. amber #e0891b) → globals.css `--accent`. 3) Fiyatlar (`app/lib/menu.tsx` `PRICING`: kurulum 2500; Temel (sadece QR menü) 500/ay 5000/yıl; Başlangıç 999/ay 9990/yıl; Profesyonel 1499/ay 14990/yıl; ömür boyu menü; anahtar teslim kurulum `PRICING.service`; görsel kotaları/paketleri; landing + panel + ödeme + yasal metinler bunu kullanır — Temel plan 500 TL/ay'ın, Başlangıç 999 TL/ay'ın altına inilmez; WhatsApp ile güncelleme ve AI görsel kotası Temel planda yoktur). 4) Menü temaları / etiketler / para birimleri (isteğe bağlı; app/lib/menu.tsx `THEMES`, `TAGS`, `CURRENCIES`).
 
 ## Faz-C özellikleri (görsel + WhatsApp + fiyatlama)
 - Ürün fotoğrafı: `Item.image` (menu.tsx), `MenuView` render eder, panelde yükleme + `/api/images/enhance` (Gemini). Kota: `restaurants.image_quota(_used)`.
@@ -20,3 +20,12 @@ Kurallar: em dash yok; tek aksan (amber); "baskı yok / anlık güncelleme" vaad
 - Aynı görseli `app/icon.png` olarak da kaydet; Next.js bunu otomatik favicon yapar.
 - Logo yoksa: "Sorun değil, temiz marka adı yazısı yeter; logon hazır olunca dosyayı bırak" de.
 - Logoyu yerleştirdikten sonra kullanıcıya ekranda nasıl göründüğünü kontrol ettir.
+
+## Her revizyonda zorunlu kalite kontrolü (kullanıcı kuralı, 2026-10-13)
+Hiçbir revizyon bu liste yapılmadan bitmiş sayılmaz:
+- **Butonlar/akışlar:** dokunduğun veya etkilenen her buton, form ve bağlantı gerçekten çalışıyor mu (panel, landing, ödeme, giriş, yasal sayfalar)? Ölü bağlantı, kopuk akış, eksik `onClick`/route olmamalı.
+- **Bilgi tutarlılığı:** fiyat, plan adı, kota, özellik listesi ve vaatler `PRICING` + `messages/tr.json` + `messages/en.json` + landing + panel + `/api/stripe/*` + `app/[locale]/mesafeli-satis-sozlesmesi`, `kullanim-sartlari`, `iade-iptal-politikasi`, `kvkk-aydinlatma-metni` + `docs/` + `.env.example` içinde birbiriyle birebir uyumlu olmalı. Bir yeri değiştirirsen hepsini `Grep` ile tara ve düzelt. Sözleşme metni değişirse `app/lib/legal/versions.ts` `LEGAL_DOC_VERSION` artırılır.
+- **Güvenlik:** tutar/kota/yetki kararı sunucuda verilir (istemciden gelen fiyat/plan alanına güvenme); yeni API route'u oturum + sahiplik kontrolü yapar; sırlar (`.env.local`) commit edilmez ve çıktıya basılmaz; kullanıcı girdisi doğrulanır; yeni tablolarda RLS açık olur.
+- **Çeviri:** her yeni metin hem `tr.json` hem `en.json`'a eklenir; anahtarlar iki dosyada da aynı olmalı.
+- **Doğrulama:** `npx tsc --noEmit` ve `npm run build` (varsa `npm run lint`) hatasız geçmeden commit/merge yapılmaz; sonuç kullanıcıya dürüstçe raporlanır (çalıştırılamayan test 'yapıldı' diye söylenmez).
+- **Migration:** yeni migration eklendiğinde `docs/yapilacaklar.md`'ye uygulanması gerektiği yazılır ve kullanıcıya haber verilir.

@@ -21,26 +21,31 @@ function GirisForm() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
-    if (error) return setError(t("errInvalid"));
-    router.push(params.get("next") || "/panel");
+    if (error) return setError(/not confirmed/i.test(error.message) ? t("errUnconfirmed") : t("errInvalid"));
+    const next = params.get("next");
+    router.push(next && next.startsWith("/") && !next.startsWith("//") ? next : "/panel");
     router.refresh();
   };
 
   return (
-    <form onSubmit={submit} className="card" style={{ padding: 28, width: 380, display: "grid", gap: 14 }}>
+    <form onSubmit={submit} className="card" style={{ padding: 28, width: 380, maxWidth: "100%", display: "grid", gap: 14 }}>
       <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
       <h1 className="font-display" style={{ fontSize: 22, fontWeight: 700 }}>{t("title")}</h1>
+      {params.get("error") === "confirm" && <p role="alert" style={{ fontSize: 13.5, color: "#b3261e" }}>{t("errConfirmLink")}</p>}
       {params.get("expired") && <p style={{ fontSize: 13.5, color: "var(--muted)" }}>{t("expired")}</p>}
       <label><span>{t("email")}</span>
-        <input className="field" style={{ marginTop: 5 }} type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className="field" style={{ marginTop: 5 }} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <label><span>{t("password")}</span>
-        <input className="field" style={{ marginTop: 5 }} type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input className="field" style={{ marginTop: 5 }} type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
-      {error && <p style={{ color: "#b3261e", fontSize: 13.5 }}>{error}</p>}
+      {error && <p role="alert" style={{ color: "#b3261e", fontSize: 13.5 }}>{error}</p>}
       <button className="btn btn-accent" disabled={loading} type="submit">{loading ? t("submitting") : t("submit")}</button>
+      <p style={{ fontSize: 13.5, textAlign: "center" }}>
+        <Link href="/sifre-sifirla" style={{ color: "var(--accent)", fontWeight: 600 }}>{t("forgot")}</Link>
+      </p>
       <p style={{ fontSize: 13.5, color: "var(--muted)", textAlign: "center" }}>
         {t("noAccount")} <Link href="/kayit" style={{ color: "var(--accent)", fontWeight: 600 }}>{t("createAccount")}</Link>
       </p>

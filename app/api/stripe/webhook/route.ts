@@ -2,12 +2,13 @@ import { NextResponse, after } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "../../../lib/stripe";
 import { createServiceClient } from "../../../lib/supabase/server";
-import { PRICING } from "../../../lib/menu";
+import { PRICING, normalizeTier } from "../../../lib/menu";
 import { processImageQueue } from "../../../lib/image-queue";
 
 export const maxDuration = 60;
 
 const QUOTA_BY_TIER_INTERVAL: Record<string, Record<string, number>> = {
+  basic: { month: PRICING.monthlyBasic.imageQuota, year: PRICING.yearlyBasic.imageQuota },
   starter: { month: PRICING.monthly.imageQuota, year: PRICING.yearly.imageQuota },
   pro: { month: PRICING.monthlyPro.imageQuota, year: PRICING.yearlyPro.imageQuota },
 };
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
     const periodEndUnix = subscription.items.data[0]?.current_period_end;
     const periodEndIso = periodEndUnix ? new Date(periodEndUnix * 1000).toISOString() : null;
     const interval = subscription.metadata?.plan_interval || subscription.items.data[0]?.price?.recurring?.interval || "month";
-    const tier = subscription.metadata?.tier === "pro" ? "pro" : "starter";
+    const tier = normalizeTier(subscription.metadata?.tier);
 
     await supabase.from("subscriptions").update({
       stripe_customer_id: typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id,
@@ -91,6 +92,17 @@ export async function POST(req: Request) {
             .eq("restaurant_id", rid).eq("kind", "bulk").eq("status", "uploaded");
           // Günlük cron yalnızca yedek; ödeme sonrası kuyruğu hemen boşaltmayı dene.
           after(() => processImageQueue());
+        }
+        if (product === "service") {
+          // stripe_session_id unique: webhook tekrar gelirse çift kayıt oluşmaz.
+          await supabase.from("service_orders").upsert({
+            restaurant_id: rid,
+            scenario: session.metadata?.scenario ?? "migrate",
+            item_count: Number(session.metadata?.item_count) || 1,
+            amount: session.amount_total ?? null,
+            ack_ai: session.metadata?.ack_ai === "true",
+            stripe_session_id: session.id,
+          }, { onConflict: "stripe_session_id", ignoreDuplicates: true });
         }
         if (product === "lifetime") {
           await supabase.from("restaurants").update({ is_lifetime: true }).eq("id", rid);

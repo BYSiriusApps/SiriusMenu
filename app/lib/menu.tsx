@@ -7,7 +7,9 @@ export const TAGS: { key: Tag; label: string; emoji: string }[] = [
   { key: "glutensiz", label: "Glutensiz", emoji: "🌾" },
 ];
 
-export type Item = { id: number; name: string; desc: string; price: string; tags: Tag[]; image?: string; available?: boolean; code?: string };
+export type Item = { id: number; name: string; desc: string; price: string; tags: Tag[]; image?: string; available?: boolean; code?: string;
+  /** Görsel yapay zekâ ile üretildi / temsilidir: menüde "Görsel temsilidir" etiketi gösterilir. */
+  aiImage?: boolean };
 export type Category = { id: number; name: string; items: Item[]; code?: string };
 
 /** İşletmenin kendi sosyal medya / web sitesi bilgileri — hepsi isteğe bağlı. */
@@ -114,6 +116,9 @@ export const CURRENCIES = ["₺", "$", "€"];
 /** Fiyatlama (taslak; Stripe price'larıyla eşleşir). Landing + panel ortak kullanır. */
 export const PRICING = {
   setup: { amount: 2500, label: "Kurulum (tek seferlik)" },
+  // Temel: yalnızca QR menü + panel düzenleme. WhatsApp ile güncelleme ve aylık AI görsel kotası YOK (kota 0, ek paket alınabilir).
+  monthlyBasic: { amount: 500, interval: "month" as const, imageQuota: 0, label: "Aylık (Temel)" },
+  yearlyBasic: { amount: 5000, interval: "year" as const, imageQuota: 0, label: "Yıllık (Temel)" },
   monthly: { amount: 999, interval: "month" as const, imageQuota: 30, label: "Aylık (Başlangıç)" },
   yearly: { amount: 9990, interval: "year" as const, imageQuota: 40, label: "Yıllık (Başlangıç)" },
   monthlyPro: { amount: 1499, interval: "month" as const, imageQuota: 60, label: "Aylık (Profesyonel)" },
@@ -125,9 +130,65 @@ export const PRICING = {
   // Tek seferlik, abonelik gerektirmeyen kalıcı düzenleme hakkı. WhatsApp otomasyonu ve AI
   // görsel kotası dahil değil (bunlar sürekli maliyet taşıyor) — ayrıca satın alınabilir.
   lifetime: { amount: 12000, items: 50, extraBlockAmount: 4000, extraBlockItems: 50, label: "Tek Seferlik (Ömür Boyu Menü)" },
-  // Menüyü uçtan uca SiriusMenu'nün kurduğu, müşterinin veri girişi yapmadığı yönetilen hizmet.
-  fullService: { amount: 9900, items: 50, extraBlockAmount: 3000, extraBlockItems: 50, label: "Anahtar Teslim Kurulum" },
+  // Menüyü SiriusMenu'nün kurduğu yönetilen hizmet (tek seferlik, aboneliğin/ömür boyu paketin ÜSTÜNE).
+  // Fiyat = ürün sayısına göre kademeli taban + senaryoya göre ürün başı ek iş. Bkz. serviceQuote().
+  service: {
+    tiers: [
+      { upTo: 50, amount: 3500 },
+      { upTo: 100, amount: 5500 },
+      { upTo: 150, amount: 7500 },
+    ],
+    extraBlockAmount: 2000, // 150 ürünün üstünde her başlayan 50'lik blok
+    extraBlockItems: 50,
+    perItem: { enhance: 20, generate: 45, write: 35 },
+  },
 };
+
+/** Abonelik seviyeleri. Bilinmeyen/boş değer "starter" sayılır (eski kayıtlar). */
+export type Tier = "basic" | "starter" | "pro";
+export const TIERS: Tier[] = ["basic", "starter", "pro"];
+export function normalizeTier(v: unknown): Tier {
+  return v === "basic" || v === "pro" ? v : "starter";
+}
+/** Abonelik fiyatı (TL) — landing, panel ve ödeme aynı kaynaktan okur. */
+export function tierPrice(tier: Tier, interval: "month" | "year"): number {
+  const P = PRICING;
+  const t = { basic: [P.monthlyBasic, P.yearlyBasic], starter: [P.monthly, P.yearly], pro: [P.monthlyPro, P.yearlyPro] }[tier];
+  return (interval === "year" ? t[1] : t[0]).amount;
+}
+/** WhatsApp ile menü güncelleme Temel planda yoktur. */
+export const tierHasWhatsapp = (tier: unknown): boolean => normalizeTier(tier) !== "basic";
+
+/**
+ * Anahtar teslim kurulum senaryoları (müşterinin elindekine göre iş yükü farklıdır):
+ * migrate = menü + fotoğraf hazır, sadece dijitale taşınır; enhance = fotoğraflar var, iyileştirilir;
+ * generate = menü metni var, fotoğraf yok, görseller üretilir; scratch = müşteri yalnızca bilgi verir,
+ * ürün listesi/açıklama/görsel baştan hazırlanır.
+ */
+export type ServiceScenario = "migrate" | "enhance" | "generate" | "scratch";
+export const SERVICE_SCENARIOS: ServiceScenario[] = ["migrate", "enhance", "generate", "scratch"];
+/** Üretilmiş (yapay zekâ) görsel içeren senaryolar: "görsel temsilidir" onayı ve etiketi gerekir. */
+export const SERVICE_NEEDS_AI_NOTICE: Record<ServiceScenario, boolean> = { migrate: false, enhance: false, generate: true, scratch: true };
+
+export function serviceBase(itemCount: number): number {
+  const n = Math.max(1, Math.floor(itemCount));
+  const { tiers, extraBlockAmount, extraBlockItems } = PRICING.service;
+  const tier = tiers.find((t) => n <= t.upTo);
+  if (tier) return tier.amount;
+  const last = tiers[tiers.length - 1];
+  return last.amount + Math.ceil((n - last.upTo) / extraBlockItems) * extraBlockAmount;
+}
+
+/** Hizmet fiyatı (TL, tam sayı). Sunucu ve arayüz aynı fonksiyonu kullanır; ödeme tutarı sunucuda hesaplanır. */
+export function serviceQuote(scenario: ServiceScenario, itemCount: number): number {
+  const n = Math.max(1, Math.floor(itemCount));
+  const p = PRICING.service.perItem;
+  const extra = scenario === "enhance" ? p.enhance * n
+    : scenario === "generate" ? p.generate * n
+    : scenario === "scratch" ? (p.write + p.generate) * n
+    : 0;
+  return serviceBase(n) + extra;
+}
 
 export const DEFAULT_MENU: MenuData = {
   name: "Kahve Durağı",

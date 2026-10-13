@@ -23,6 +23,8 @@ create index if not exists purchase_consents_restaurant_idx on public.purchase_c
 
 alter table public.purchase_consents enable row level security;
 
+drop policy if exists "purchase_consents: owner read" on public.purchase_consents;
+
 create policy "purchase_consents: owner read"
   on public.purchase_consents for select
   using (user_id = auth.uid());

@@ -351,6 +351,12 @@ export default async function Landing() {
             bulk100: PRICING.bulk100.amount,
           })}
         </p>
+        <p className="mx-auto mt-3 max-w-3xl text-center text-sm text-[var(--muted)]">
+          {t("pricing.basicNote", { monthly: PRICING.monthlyBasic.amount, yearly: PRICING.yearlyBasic.amount.toLocaleString("tr-TR") })}
+        </p>
+        <p className="mx-auto mt-3 max-w-3xl text-center text-sm text-[var(--muted)]">
+          {t("pricing.serviceNote", { from: PRICING.service.tiers[0].amount.toLocaleString("tr-TR") })}
+        </p>
       </section>
 
       {/* SSS */}
@@ -400,6 +406,7 @@ export default async function Landing() {
           <Link href="/kullanim-sartlari" className="transition hover:text-[var(--ink)]">{t("footer.links.terms")}</Link>
           <Link href="/mesafeli-satis-sozlesmesi" className="transition hover:text-[var(--ink)]">{t("footer.links.distanceSales")}</Link>
           <Link href="/iade-iptal-politikasi" className="transition hover:text-[var(--ink)]">{t("footer.links.refund")}</Link>
+          <Link href="/ticari-elektronik-ileti" className="transition hover:text-[var(--ink)]">{t("footer.links.commercial")}</Link>
         </div>
         <div className="mx-auto mt-6 flex max-w-6xl flex-col items-center gap-2 border-t border-[var(--line)] px-6 pt-6 text-sm text-[var(--muted)] md:flex-row md:justify-center md:gap-6">
           <span className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("footer.contact.title")}</span>
