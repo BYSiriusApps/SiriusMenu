@@ -150,7 +150,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: session.url });
   }
 
-  // Abonelik (Temel/Başlangıç/Profesyonel × aylık/yıllık) + ilk kez ise kurulum ücreti
+  // Abonelik (Temel/Full/Profesyonel × aylık/yıllık) + ilk kez ise kurulum ücreti
   const planTier = normalizeTier(tier);
   const planInterval = interval === "year" ? "year" : "month";
   const recurring = RECURRING[planTier][planInterval];

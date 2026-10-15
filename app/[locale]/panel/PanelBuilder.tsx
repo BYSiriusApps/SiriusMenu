@@ -461,6 +461,9 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                   </div>
                   <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>{t("upgrade")}</button>
                 </div>
+                <p style={{ maxWidth: 420, textAlign: "right", fontSize: 12, color: "var(--muted)" }}>
+                  {t(`tierDesc_${tierChoice}`, { quota: tierChoice === "pro" ? (interval === "year" ? PRICING.yearlyPro.imageQuota : PRICING.monthlyPro.imageQuota) : (interval === "year" ? PRICING.yearly.imageQuota : PRICING.monthly.imageQuota) })}
+                </p>
                 {!isLifetime && (
                   <button className="btn-ghost btn" style={{ padding: "6px 10px", fontSize: 12.5 }} disabled={billingLoading} onClick={buyLifetime}>
                     {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}

@@ -33,7 +33,7 @@ export default function KullanimSartlari() {
 
       <h2>4. Abonelik, Ücretlendirme ve Ödeme</h2>
       <ul>
-        <li>Abonelik planları (Temel, Başlangıç ve Profesyonel), panelde ve ödeme ekranında belirtilen güncel tutarlarla (aylık 500 TL&apos;den başlayan) Stripe altyapısı üzerinden otomatik yenilenen abonelikler olarak sunulur; ilk abonelikte tek seferlik kurulum bedeli ayrıca tahsil edilir. Ömür Boyu Menü, anahtar teslim kurulum hizmeti ve görsel paketleri tek seferlik ödemedir.</li>
+        <li>Abonelik planları (Temel, Full ve Profesyonel), panelde ve ödeme ekranında belirtilen güncel tutarlarla (aylık 499 TL&apos;den başlayan) Stripe altyapısı üzerinden otomatik yenilenen abonelikler olarak sunulur; ilk abonelikte tek seferlik kurulum bedeli ayrıca tahsil edilir. Ömür Boyu Menü, anahtar teslim kurulum hizmeti ve görsel paketleri tek seferlik ödemedir.</li>
         <li>Ödeme bilgilerin (kart numarası vb.) bizim sunucularımızda tutulmaz; doğrudan Stripe tarafından işlenir.</li>
         <li>Aboneliğini panel üzerinden (Stripe müşteri portalı aracılığıyla) istediğin zaman iptal edebilirsin; iptal, mevcut ödenmiş dönemin sonunda yürürlüğe girer.</li>
         <li>Fiyatlar önceden haber verilerek güncellenebilir; mevcut abonelik döneminde fiyat değişikliği geriye dönük uygulanmaz.</li>

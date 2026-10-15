@@ -93,7 +93,7 @@ Kurulum bizde yarım gün: menü girişi + tema + ilk fotoğraf turu + WhatsApp 
 | WhatsApp AI güncelleme | — | ✓ | ✓ |
 | AI fotoğraf iyileştirme / ay | — | 30 | 40 |
 | Kota aşımı | — | 25 TL/görsel · 20'li 400 TL | aynı |
-| Toplu iyileştirme | — | 50 foto 999 TL · 100 foto 1.799 TL | aynı |
+| Toplu iyileştirme | — | 50 foto 999 TL · 100 foto 1.999 TL | aynı |
 
 ---
 

@@ -9,7 +9,7 @@ export default function IadeIptalPolitikasi() {
       <h2>1. Deneme Planı</h2>
       <p>Deneme planı tamamen ücretsizdir; kredi kartı bilgisi istenmez. Menünü oluşturup önizleyebilir, QR kodunu indirebilirsin. Ücretsiz plandan herhangi bir ücret tahsil edilmediği için iade söz konusu değildir.</p>
 
-      <h2>2. Abonelik İptali (Temel, Başlangıç, Profesyonel)</h2>
+      <h2>2. Abonelik İptali (Temel, Full, Profesyonel)</h2>
       <ul>
         <li>Aboneliğini panel üzerinden (Stripe müşteri portalı) istediğin an, herhangi bir gerekçe göstermeden iptal edebilirsin.</li>
         <li>İptal ettiğinde, halihazırda ödediğin dönemin sonuna kadar ücretli özellikleri kullanmaya devam edersin; sonraki dönem için tekrar ücret tahsil edilmez.</li>

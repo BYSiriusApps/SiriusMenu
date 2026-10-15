@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MenuView, Phone } from "@/app/lib/MenuView";
-import { DEFAULT_MENU, THEMES, PRICING } from "@/app/lib/menu";
+import { DEFAULT_MENU, THEMES, PRICING, tierPrice } from "@/app/lib/menu";
 import { DEMOS, DEMOS_3D } from "@/app/lib/demos";
 import { ShowcaseCarousel } from "@/app/components/ShowcaseCarousel";
 import { AutoScrollPhone } from "@/app/components/AutoScrollPhone";
@@ -296,52 +296,84 @@ export default async function Landing() {
       </section>
 
       {/* FİYAT */}
-      <section id="fiyat" className="mx-auto max-w-5xl px-6 py-20">
+      <section id="fiyat" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("pricing.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("pricing.title")}</h2>
         </div>
-        <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-3">
-          <div className="card p-8">
+        <div className="mx-auto mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="card p-7">
             <h3 className="font-semibold">{t("pricing.trial.title")}</h3>
-            <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>{t("pricing.trial.price")}</p>
+            <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>{t("pricing.trial.price")}</p>
             <p className="mt-2 text-sm text-[var(--muted)]">{t("pricing.trial.desc")}</p>
-            <ul className="mt-5 space-y-2.5 text-[var(--muted)]">
+            <ul className="mt-5 space-y-2.5 text-sm text-[var(--muted)]">
               <li>✓ {t("pricing.trial.feature1")}</li>
               <li>✓ {t("pricing.trial.feature2")}</li>
               <li className="opacity-60">✗ {t("pricing.trial.feature3")}</li>
             </ul>
             <Link href="/app" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.trial.cta")}</Link>
           </div>
-          <div className="card relative border-2 border-[var(--accent)] p-8 shadow-[0_24px_60px_-40px_rgba(224,137,27,.6)]">
-            <span className="absolute -top-3 right-6 rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-bold text-white">{t("pricing.monthly.badge")}</span>
-            <h3 className="font-semibold">{t("pricing.monthly.title")}</h3>
-            <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
-              {PRICING.monthly.amount}<span className="text-base font-normal text-[var(--muted)]"> {t("pricing.monthly.perMonth")}</span>
+          {([
+            { key: "basic", tier: "basic", highlight: false, features: ["feature1", "feature2", "feature3"], missing: ["missing1", "missing2"] },
+            { key: "full", tier: "starter", highlight: true, features: ["feature1", "feature2", "feature3", "feature4"], missing: [] },
+            { key: "pro", tier: "pro", highlight: false, features: ["feature1", "feature2"], missing: [] },
+          ] as const).map((plan) => (
+            <div key={plan.key} className={`card relative p-7 ${plan.highlight ? "border-2 border-[var(--accent)] shadow-[0_24px_60px_-40px_rgba(224,137,27,.6)]" : ""}`}>
+              {plan.highlight && <span className="absolute -top-3 right-6 rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-bold text-white">{t("pricing.full.badge")}</span>}
+              <h3 className="font-semibold">{t(`pricing.${plan.key}.title`)}</h3>
+              <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
+                {tierPrice(plan.tier, "month").toLocaleString("tr-TR")}<span className="text-base font-normal text-[var(--muted)]"> {t("pricing.perMonth")}</span>
+              </p>
+              <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.orYearly", { amount: tierPrice(plan.tier, "year").toLocaleString("tr-TR") })}</p>
+              <p className="mt-2 text-sm text-[var(--muted)]">{t(`pricing.${plan.key}.desc`)}</p>
+              <ul className="mt-5 space-y-2.5 text-sm text-[var(--ink)]">
+                {plan.features.map((f) => (
+                  <li key={f}>✓ {t(`pricing.${plan.key}.${f}`, { quota: plan.tier === "pro" ? PRICING.monthlyPro.imageQuota : PRICING.monthly.imageQuota, yearlyQuota: plan.tier === "pro" ? PRICING.yearlyPro.imageQuota : PRICING.yearly.imageQuota })}</li>
+                ))}
+                {plan.missing.map((f) => (
+                  <li key={f} className="text-[var(--muted)] opacity-60">✗ {t(`pricing.${plan.key}.${f}`)}</li>
+                ))}
+              </ul>
+              <p className="mt-4 text-xs text-[var(--muted)]">{t("pricing.setupNote", { amount: PRICING.setup.amount.toLocaleString("tr-TR") })}</p>
+              <Link href="/kayit" className={`btn ${plan.highlight ? "btn-accent" : "btn-ghost"} mt-5 w-full ${ring}`}>{t(`pricing.${plan.key}.cta`)}</Link>
+            </div>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-6 grid gap-6 md:grid-cols-2">
+          <div className="card p-7">
+            <h3 className="font-semibold">{t("pricing.lifetime.title")}</h3>
+            <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {t("pricing.lifetime.price", { amount: PRICING.lifetime.amount.toLocaleString("tr-TR") })}
             </p>
-            <p className="mt-2 text-sm text-[var(--muted)]">{t("pricing.monthly.setupNote", { amount: PRICING.setup.amount })}</p>
-            <ul className="mt-5 space-y-2.5 text-[var(--ink)]">
-              <li>✓ {t("pricing.monthly.feature1")}</li>
-              <li>✓ {t("pricing.monthly.feature2")}</li>
-              <li>✓ {t("pricing.monthly.feature3", { quota: PRICING.monthly.imageQuota })}</li>
-              <li>✓ {t("pricing.monthly.feature4")}</li>
+            <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.lifetime.priceNote")}</p>
+            <ul className="mt-5 space-y-2.5 text-sm text-[var(--ink)]">
+              <li>✓ {t("pricing.lifetime.feature1", { items: PRICING.lifetime.items })}</li>
+              <li>✓ {t("pricing.lifetime.feature2", { block: PRICING.lifetime.extraBlockItems, extra: PRICING.lifetime.extraBlockAmount.toLocaleString("tr-TR") })}</li>
+              <li className="text-[var(--muted)] opacity-60">✗ {t("pricing.lifetime.feature3")}</li>
             </ul>
-            <Link href="/kayit" className={`btn btn-accent mt-6 w-full ${ring}`}>{t("pricing.monthly.cta")}</Link>
+            <Link href="/kayit" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.lifetime.cta")}</Link>
           </div>
-          <div className="card p-8">
-            <h3 className="font-semibold">{t("pricing.yearly.title")}</h3>
-            <p className="mt-2 font-display text-4xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
-              {PRICING.yearly.amount}<span className="text-base font-normal text-[var(--muted)]"> {t("pricing.yearly.perYear")}</span>
+          <div className="card p-7">
+            <h3 className="font-semibold">{t("pricing.service.title")}</h3>
+            <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {t("pricing.service.price", { from: PRICING.service.tiers[0].amount.toLocaleString("tr-TR") })}
             </p>
-            <p className="mt-2 text-sm text-[var(--muted)]">{t("pricing.yearly.setupNote", { amount: PRICING.setup.amount })}</p>
-            <ul className="mt-5 space-y-2.5 text-[var(--ink)]">
-              <li>✓ {t("pricing.yearly.feature1")}</li>
-              <li>✓ {t("pricing.yearly.feature2", { quota: PRICING.yearly.imageQuota })}</li>
-              <li>✓ {t("pricing.yearly.feature3")}</li>
+            <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.service.priceNote")}</p>
+            <ul className="mt-5 space-y-2.5 text-sm text-[var(--ink)]">
+              <li>✓ {t("pricing.service.feature1", {
+                t1: PRICING.service.tiers[0].amount.toLocaleString("tr-TR"),
+                t2: PRICING.service.tiers[1].amount.toLocaleString("tr-TR"),
+                t3: PRICING.service.tiers[2].amount.toLocaleString("tr-TR"),
+              })}</li>
+              <li>✓ {t("pricing.service.feature2", { extra: PRICING.service.extraBlockAmount.toLocaleString("tr-TR") })}</li>
+              <li>✓ {t("pricing.service.feature3", { enhance: PRICING.service.perItem.enhance, generate: PRICING.service.perItem.generate, write: PRICING.service.perItem.write })}</li>
+              <li>✓ {t("pricing.service.feature4")}</li>
             </ul>
-            <Link href="/kayit" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.yearly.cta")}</Link>
+            <Link href="/kayit" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.service.cta")}</Link>
           </div>
         </div>
+
         <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-[var(--muted)]">
           {t("pricing.footnote", {
             overage: PRICING.overagePerImage,
@@ -350,12 +382,6 @@ export default async function Landing() {
             bulk50: PRICING.bulk50.amount,
             bulk100: PRICING.bulk100.amount,
           })}
-        </p>
-        <p className="mx-auto mt-3 max-w-3xl text-center text-sm text-[var(--muted)]">
-          {t("pricing.basicNote", { monthly: PRICING.monthlyBasic.amount, yearly: PRICING.yearlyBasic.amount.toLocaleString("tr-TR") })}
-        </p>
-        <p className="mx-auto mt-3 max-w-3xl text-center text-sm text-[var(--muted)]">
-          {t("pricing.serviceNote", { from: PRICING.service.tiers[0].amount.toLocaleString("tr-TR") })}
         </p>
       </section>
 

@@ -175,6 +175,9 @@
     "pricing": {
       "eyebrow": "Fiyat",
       "title": "Basit ve net",
+      "perMonth": "TL/ay",
+      "orYearly": "veya {amount} TL/yıl (~2 ay bedava)",
+      "setupNote": "İlk abonelikte tek seferlik {amount} TL kurulum bedeli",
       "trial": {
         "title": "Deneme",
         "price": "Ücretsiz",
@@ -184,28 +187,52 @@
         "feature3": "Fotoğraf, WhatsApp, yayın",
         "cta": "Başla"
       },
-      "monthly": {
-        "badge": "İŞLETME",
-        "title": "Aylık",
-        "perMonth": "TL/ay",
-        "setupNote": "+ tek seferlik {amount} TL kurulum",
-        "feature1": "Geniş menülere uygun (200+ ürün), tüm temalar, logo",
+      "basic": {
+        "title": "Temel",
+        "desc": "Sadece QR menü yeterliyse.",
+        "feature1": "QR menü yayını, sabit QR adresi",
+        "feature2": "Tüm temalar, logo, anlık güncelleme",
+        "feature3": "Fotoğraftan ve dosyadan menü aktarma",
+        "missing1": "WhatsApp ile menü güncelleme",
+        "missing2": "Aylık AI fotoğraf kotası (ek paketle kullanılır)",
+        "cta": "Temel ile başla"
+      },
+      "full": {
+        "badge": "EN ÇOK TERCİH",
+        "title": "Full",
+        "desc": "WhatsApp'tan yaz, menü güncellensin.",
+        "feature1": "Temel planın tüm özellikleri",
         "feature2": "WhatsApp AI ile menü güncelleme",
-        "feature3": "Ayda {quota} AI fotoğraf iyileştirme",
-        "feature4": "Anlık güncelleme, QR sabit",
-        "cta": "Menünü yayınla"
+        "feature3": "Ayda {quota} AI fotoğraf iyileştirme (yıllıkta {yearlyQuota})",
+        "feature4": "Geniş menülere uygun (200+ ürün)",
+        "cta": "Full ile başla"
       },
-      "yearly": {
-        "title": "Yıllık",
-        "perYear": "TL/yıl",
-        "setupNote": "~2 ay bedava · + {amount} TL kurulum",
-        "feature1": "Aylık planın tüm özellikleri",
-        "feature2": "Ayda {quota} AI fotoğraf iyileştirme",
-        "feature3": "Öncelikli destek",
-        "cta": "Yıllık başla"
+      "pro": {
+        "title": "Profesyonel",
+        "desc": "Çok fotoğraflı, sık güncellenen menüler için.",
+        "feature1": "Full planın tüm özellikleri",
+        "feature2": "Ayda {quota} AI fotoğraf iyileştirme (yıllıkta {yearlyQuota})",
+        "cta": "Profesyonel ile başla"
       },
-      "basicNote": "Sadece QR menü yeterliyse Temel plan: aylık {monthly} TL, yıllık {yearly} TL (WhatsApp ile güncelleme ve aylık AI görsel kotası dâhil değildir).",
-      "serviceNote": "Menüyü senin yerine kuralım: anahtar teslim kurulum {from} TL'den başlar (50 ürüne kadar), fiyat ürün sayısına ve elindeki içeriğe (hazır menü, fotoğraf iyileştirme, görsel üretimi, sıfırdan hazırlık) göre netleşir. Üretilen görseller menüde \"Görsel temsilidir\" etiketiyle gösterilir.",
+      "lifetime": {
+        "title": "Ömür Boyu Menü",
+        "price": "{amount} TL",
+        "priceNote": "tek seferlik, abonelik yok",
+        "feature1": "{items} ürüne kadar kalıcı düzenleme hakkı",
+        "feature2": "Her ek {block} ürün için {extra} TL",
+        "feature3": "WhatsApp ile güncelleme ve aylık AI kotası dâhil değildir",
+        "cta": "Panelden satın al"
+      },
+      "service": {
+        "title": "Anahtar teslim kurulum",
+        "price": "{from} TL'den",
+        "priceNote": "tek seferlik, aboneliğe ek",
+        "feature1": "Menünü biz hazırlarız: 50 ürüne kadar {t1} TL, 100'e kadar {t2} TL, 150'ye kadar {t3} TL",
+        "feature2": "150 ürünün üstünde her 50 ürün için {extra} TL",
+        "feature3": "Ürün başı ek: fotoğraf iyileştirme {enhance} TL, görsel üretimi {generate} TL, içerik yazımı {write} TL",
+        "feature4": "Üretilen görseller menüde \"Görsel temsilidir\" etiketiyle gösterilir",
+        "cta": "Sipariş için kayıt ol"
+      },
       "footnote": "Kota aşımı {overage} TL/görsel ya da {packCredits}'li paket {packAmount} TL. Toplu fotoğraf iyileştirme (50/100 foto {bulk50}/{bulk100} TL) kotadan bağımsızdır. Zincir işletmeler için özel plan mevcut."
     },
     "faq": {
@@ -411,7 +438,10 @@
       "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
       "buyLifetime": "Tek Seferlik satın al, {items} ürüne kadar ({amount}₺)",
       "tierBasic": "Temel",
-      "tierStarter": "Başlangıç",
+      "tierStarter": "Full",
+      "tierDesc_basic": "Temel: QR menü, tema, logo, anlık güncelleme, menü aktarma. WhatsApp ile güncelleme ve aylık AI görsel kotası yok.",
+      "tierDesc_starter": "Full: Temel'in hepsi + WhatsApp AI ile menü güncelleme + ayda {quota} AI fotoğraf iyileştirme.",
+      "tierDesc_pro": "Profesyonel: Full'ün hepsi + ayda {quota} AI fotoğraf iyileştirme.",
       "tierPro": "Profesyonel",
       "monthlyOption": "Aylık {amount}₺",
       "yearlyOption": "Yıllık {amount}₺",
@@ -474,7 +504,7 @@
       "enhancing": "İyileştiriliyor...",
       "enhance": "✨ İyileştir",
       "soldOut": "Tükendi",
-      "whatsappNotInPlan": "Temel planda WhatsApp ile güncelleme yok. Başlangıç veya Profesyonel plana geçince açılır.",
+      "whatsappNotInPlan": "Temel planda WhatsApp ile güncelleme yok. Full veya Profesyonel plana geçince açılır.",
       "aiImageNotice": "Görsel temsilidir (yapay zekâ)",
       "serviceTitle": "Anahtar teslim kurulum",
       "serviceDesc": "Menüyü senin yerine biz kuralım. Aboneliğe ek, tek seferlik hizmet.",

@@ -175,6 +175,9 @@
     "pricing": {
       "eyebrow": "Pricing",
       "title": "Simple and clear",
+      "perMonth": "TL/mo",
+      "orYearly": "or {amount} TL/yr (~2 months free)",
+      "setupNote": "One-time {amount} TL setup fee on your first subscription",
       "trial": {
         "title": "Trial",
         "price": "Free",
@@ -184,28 +187,52 @@
         "feature3": "Photos, WhatsApp, publishing",
         "cta": "Get started"
       },
-      "monthly": {
-        "badge": "BUSINESS",
-        "title": "Monthly",
-        "perMonth": "TL/mo",
-        "setupNote": "+ one-time {amount} TL setup",
-        "feature1": "Great for large menus (200+ items), all themes, logo",
+      "basic": {
+        "title": "Basic",
+        "desc": "If a QR menu is all you need.",
+        "feature1": "QR menu publishing, fixed QR address",
+        "feature2": "All themes, logo, instant updates",
+        "feature3": "Menu import from photos and files",
+        "missing1": "Updating your menu via WhatsApp",
+        "missing2": "Monthly AI photo quota (use extra packs)",
+        "cta": "Start with Basic"
+      },
+      "full": {
+        "badge": "MOST POPULAR",
+        "title": "Full",
+        "desc": "Message us on WhatsApp, the menu updates.",
+        "feature1": "Everything in Basic",
         "feature2": "Update your menu with WhatsApp AI",
-        "feature3": "{quota} AI photo enhancements per month",
-        "feature4": "Instant updates, QR stays fixed",
-        "cta": "Publish your menu"
+        "feature3": "{quota} AI photo enhancements per month ({yearlyQuota} on yearly)",
+        "feature4": "Great for large menus (200+ items)",
+        "cta": "Start with Full"
       },
-      "yearly": {
-        "title": "Yearly",
-        "perYear": "TL/yr",
-        "setupNote": "~2 months free · + {amount} TL setup",
-        "feature1": "Everything in the monthly plan",
-        "feature2": "{quota} AI photo enhancements per month",
-        "feature3": "Priority support",
-        "cta": "Start yearly"
+      "pro": {
+        "title": "Professional",
+        "desc": "For photo-heavy menus that change often.",
+        "feature1": "Everything in Full",
+        "feature2": "{quota} AI photo enhancements per month ({yearlyQuota} on yearly)",
+        "cta": "Start with Professional"
       },
-      "basicNote": "If you only need a QR menu, the Basic plan is {monthly} TL/month or {yearly} TL/year (WhatsApp updates and the monthly AI photo quota are not included).",
-      "serviceNote": "We can build the menu for you: done-for-you setup starts at {from} TL (up to 50 items), with the price set by item count and what you already have (ready menu, photo enhancement, image generation, from scratch). Generated images are shown with an \"Illustrative image\" label.",
+      "lifetime": {
+        "title": "Lifetime Menu",
+        "price": "{amount} TL",
+        "priceNote": "one-time, no subscription",
+        "feature1": "Permanent editing for up to {items} items",
+        "feature2": "{extra} TL for every additional {block} items",
+        "feature3": "WhatsApp updates and the monthly AI quota are not included",
+        "cta": "Buy in the panel"
+      },
+      "service": {
+        "title": "Done-for-you setup",
+        "price": "From {from} TL",
+        "priceNote": "one-time, on top of your plan",
+        "feature1": "We build your menu: up to 50 items {t1} TL, up to 100 {t2} TL, up to 150 {t3} TL",
+        "feature2": "{extra} TL for every additional 50 items above 150",
+        "feature3": "Per-item extras: photo enhancement {enhance} TL, image generation {generate} TL, content writing {write} TL",
+        "feature4": "Generated images are shown with an \"Illustrative image\" label",
+        "cta": "Sign up to order"
+      },
       "footnote": "Quota overage is {overage} TL/photo or a pack of {packCredits} for {packAmount} TL. Bulk photo enhancement (50/100 photos for {bulk50}/{bulk100} TL) is independent of the quota. Custom plans are available for chains."
     },
     "faq": {
@@ -411,7 +438,10 @@
       "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
       "buyLifetime": "Buy Lifetime, up to {items} items ({amount}₺)",
       "tierBasic": "Basic",
-      "tierStarter": "Starter",
+      "tierStarter": "Full",
+      "tierDesc_basic": "Basic: QR menu, themes, logo, instant updates, menu import. No WhatsApp updates and no monthly AI photo quota.",
+      "tierDesc_starter": "Full: everything in Basic + WhatsApp AI menu updates + {quota} AI photo enhancements per month.",
+      "tierDesc_pro": "Professional: everything in Full + {quota} AI photo enhancements per month.",
       "tierPro": "Professional",
       "monthlyOption": "Monthly {amount}₺",
       "yearlyOption": "Yearly {amount}₺",
@@ -474,7 +504,7 @@
       "enhancing": "Enhancing...",
       "enhance": "✨ Enhance",
       "soldOut": "Sold out",
-      "whatsappNotInPlan": "WhatsApp updates are not in the Basic plan. Upgrade to Starter or Professional to enable them.",
+      "whatsappNotInPlan": "WhatsApp updates are not in the Basic plan. Upgrade to Full or Professional to enable them.",
       "aiImageNotice": "Illustrative image (AI)",
       "serviceTitle": "Done-for-you setup",
       "serviceDesc": "We build the menu for you. One-time service on top of your subscription.",

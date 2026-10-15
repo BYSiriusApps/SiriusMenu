@@ -95,7 +95,7 @@ export async function POST(req: Request) {
 
   // Temel plan (yalnızca QR menü) WhatsApp ile güncellemeyi içermez.
   if (!tierHasWhatsapp(r.tier)) {
-    await reply("WhatsApp ile menü güncelleme Temel planda yok. Panelden Başlangıç veya Profesyonel plana geçersen bu özellik açılır.");
+    await reply("WhatsApp ile menü güncelleme Temel planda yok. Panelden Full veya Profesyonel plana geçersen bu özellik açılır.");
     return NextResponse.json({ ok: true });
   }
 
