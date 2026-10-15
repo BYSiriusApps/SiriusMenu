@@ -170,13 +170,22 @@ export const SERVICE_SCENARIOS: ServiceScenario[] = ["migrate", "enhance", "gene
 /** Üretilmiş (yapay zekâ) görsel içeren senaryolar: "görsel temsilidir" onayı ve etiketi gerekir. */
 export const SERVICE_NEEDS_AI_NOTICE: Record<ServiceScenario, boolean> = { migrate: false, enhance: false, generate: true, scratch: true };
 
-export function serviceBase(itemCount: number): number {
+/** Hangi sabit Stripe price'ı (taban kademe) + kaç adet "ek blok" kullanılacağını döndürür.
+ *  Checkout'ta sabit price ID'lere eşlenir; ürün başı senaryo ek ücreti (bkz. serviceQuote)
+ *  buna dahil değildir, o ayrı bir dinamik price_data satırı olarak eklenir. */
+export function serviceBaseLineItems(itemCount: number): { tier: 1 | 2 | 3; extraBlocks: number } {
   const n = Math.max(1, Math.floor(itemCount));
-  const { tiers, extraBlockAmount, extraBlockItems } = PRICING.service;
-  const tier = tiers.find((t) => n <= t.upTo);
-  if (tier) return tier.amount;
-  const last = tiers[tiers.length - 1];
-  return last.amount + Math.ceil((n - last.upTo) / extraBlockItems) * extraBlockAmount;
+  const { tiers, extraBlockItems } = PRICING.service;
+  if (n <= tiers[0].upTo) return { tier: 1, extraBlocks: 0 };
+  if (n <= tiers[1].upTo) return { tier: 2, extraBlocks: 0 };
+  const extraBlocks = n <= tiers[2].upTo ? 0 : Math.ceil((n - tiers[2].upTo) / extraBlockItems);
+  return { tier: 3, extraBlocks };
+}
+
+export function serviceBase(itemCount: number): number {
+  const { tier, extraBlocks } = serviceBaseLineItems(itemCount);
+  const { tiers, extraBlockAmount } = PRICING.service;
+  return tiers[tier - 1].amount + extraBlocks * extraBlockAmount;
 }
 
 /** Hizmet fiyatı (TL, tam sayı). Sunucu ve arayüz aynı fonksiyonu kullanır; ödeme tutarı sunucuda hesaplanır. */

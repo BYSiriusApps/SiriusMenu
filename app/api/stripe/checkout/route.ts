@@ -4,7 +4,7 @@ import { stripe } from "../../../lib/stripe";
 import { createClient, createServiceClient } from "../../../lib/supabase/server";
 import { LEGAL_DOC_VERSION } from "../../../lib/legal/versions";
 import { sendPurchaseConsentMail } from "../../../lib/mailer";
-import { PRICING, SERVICE_NEEDS_AI_NOTICE, SERVICE_SCENARIOS, normalizeTier, serviceQuote, type Category } from "../../../lib/menu";
+import { PRICING, SERVICE_NEEDS_AI_NOTICE, SERVICE_SCENARIOS, normalizeTier, serviceBase, serviceBaseLineItems, serviceQuote, type Category } from "../../../lib/menu";
 
 // Tek seferlik ürün -> Stripe price env eşlemesi
 const ONE_OFF: Record<string, string | undefined> = {
@@ -78,8 +78,11 @@ export async function POST(req: Request) {
     metadata: { restaurant_id: restaurant.id },
   } satisfies Partial<Stripe.Checkout.SessionCreateParams>;
 
-  // Anahtar teslim kurulum hizmeti. Tutar her zaman sunucuda serviceQuote() ile hesaplanır
-  // (istemciden gelen fiyat kullanılmaz); sabit Stripe price'ı gerekmez, price_data kullanılır.
+  // Anahtar teslim kurulum hizmeti. Taban kademe (50/100/150 ürün + 150 üzeri ek blok) sabit
+  // Stripe price'larına eşlenir (Stripe Dashboard'daki katalogla birebir eşleşsin diye); ürün
+  // başı senaryo ek ücreti (enhance/generate/scratch) sabit bir price'a sığmaz (sürekli
+  // değişken), o yüzden dinamik price_data satırı olarak eklenir. Toplam tutar her iki
+  // durumda da serviceQuote() ile birebir aynıdır — istemciden gelen fiyat asla kullanılmaz.
   if (product === "service") {
     const scenario = SERVICE_SCENARIOS.find((s) => s === body.scenario);
     const itemCount = Math.floor(Number(body.itemCount));
@@ -90,18 +93,39 @@ export async function POST(req: Request) {
     if (body.ack?.rights !== true || (SERVICE_NEEDS_AI_NOTICE[scenario] && body.ack?.ai !== true)) {
       return NextResponse.json({ error: "Hizmet onaylarını işaretlemelisin" }, { status: 400 });
     }
-    const amount = serviceQuote(scenario, itemCount);
-    const session = await stripe.checkout.sessions.create({
-      ...common,
-      mode: "payment",
-      line_items: [{
+
+    const { tier, extraBlocks } = serviceBaseLineItems(itemCount);
+    const TIER_PRICE: Record<1 | 2 | 3, string | undefined> = {
+      1: process.env.STRIPE_PRICE_ID_SERVICE_TIER1,
+      2: process.env.STRIPE_PRICE_ID_SERVICE_TIER2,
+      3: process.env.STRIPE_PRICE_ID_SERVICE_TIER3,
+    };
+    const basePrice = TIER_PRICE[tier];
+    if (!basePrice) return NextResponse.json({ error: "Hizmet fiyatı tanımlı değil" }, { status: 500 });
+
+    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [{ price: basePrice, quantity: 1 }];
+    if (extraBlocks > 0) {
+      const extraPrice = process.env.STRIPE_PRICE_ID_SERVICE_EXTRA_BLOCK;
+      if (!extraPrice) return NextResponse.json({ error: "Ek ürün blok fiyatı tanımlı değil" }, { status: 500 });
+      line_items.push({ price: extraPrice, quantity: extraBlocks });
+    }
+
+    const perItemExtra = serviceQuote(scenario, itemCount) - serviceBase(itemCount);
+    if (perItemExtra > 0) {
+      line_items.push({
         quantity: 1,
         price_data: {
           currency: "try",
-          unit_amount: amount * 100,
-          product_data: { name: `Anahtar teslim kurulum (${scenario}, ${itemCount} ürün)` },
+          unit_amount: perItemExtra * 100,
+          product_data: { name: `Anahtar teslim kurulum — ${scenario} iş yükü (${itemCount} ürün)` },
         },
-      }],
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      ...common,
+      mode: "payment",
+      line_items,
       metadata: { restaurant_id: restaurant.id, product: "service", scenario, item_count: String(itemCount), ack_ai: String(body.ack?.ai === true) },
       success_url: `${origin}/panel?purchase=success`,
       cancel_url: `${origin}/panel?purchase=cancel`,
