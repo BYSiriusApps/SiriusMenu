@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "../../../lib/supabase/server";
-import { parseMenuPhoto, isGeminiConfigured } from "../../../lib/gemini";
+import { parseMenuPhoto, isTextAiConfigured } from "../../../lib/gemini";
 
 export const maxDuration = 60;
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
 export async function POST(req: Request) {
-  if (!isGeminiConfigured()) return NextResponse.json({ error: "Fotoğraftan menü okuma şu an kapalı." }, { status: 503 });
+  if (!isTextAiConfigured()) return NextResponse.json({ error: "Fotoğraftan menü okuma şu an kapalı." }, { status: 503 });
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

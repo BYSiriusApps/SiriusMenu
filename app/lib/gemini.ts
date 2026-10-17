@@ -2,11 +2,19 @@
 // Ham REST (yeni bağımlılık yok), aciklama/route.ts ile aynı stil.
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const TEXT_MODEL = process.env.GEMINI_MODEL_TEXT || "gemini-2.5-flash";
-const IMAGE_MODEL = process.env.GEMINI_MODEL_IMAGE || "gemini-2.5-flash-image";
+const TEXT_MODEL = process.env.GEMINI_MODEL_TEXT || "gemini-3.5-flash-lite";
+const IMAGE_MODEL = process.env.GEMINI_MODEL_IMAGE || "gemini-3.1-flash-image";
+// Metin/görsel okuma için yedek: Gemini hata verirse (kota, model kapanışı, kesinti) Claude denenir.
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL_TEXT || "claude-haiku-4-5-20251001";
 
 export function isGeminiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY);
+}
+
+// Metin tabanlı AI özellikleri (komut ayrıştırma, açıklama, menü okuma) Gemini VEYA Anthropic anahtarıyla çalışır.
+// Görsel üretme/iyileştirme sadece Gemini'dir (isGeminiConfigured).
+export function isTextAiConfigured(): boolean {
+  return Boolean(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY);
 }
 
 function key(): string {
@@ -34,6 +42,46 @@ async function generateContent(model: string, parts: Part[], opts?: { json?: boo
     .filter((p) => p.inlineData?.data)
     .map((p) => ({ data: p.inlineData!.data, mimeType: p.inlineData!.mimeType || "image/png" }));
   return { text, images };
+}
+
+async function anthropicText(parts: Part[], json?: boolean): Promise<string> {
+  const k = process.env.ANTHROPIC_API_KEY;
+  if (!k) throw new Error("ANTHROPIC_API_KEY tanımlı değil");
+  const content = parts.map((p) =>
+    p.inlineData
+      ? { type: "image", source: { type: "base64", media_type: p.inlineData.mimeType, data: p.inlineData.data } }
+      : { type: "text", text: p.text ?? "" },
+  );
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-api-key": k, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: ANTHROPIC_MODEL, max_tokens: 8192, messages: [{ role: "user", content }] }),
+  });
+  if (!r.ok) throw new Error(`Anthropic ${ANTHROPIC_MODEL}: ${r.status} ${await r.text().catch(() => "")}`);
+  const d = await r.json();
+  const text = ((d?.content ?? []) as { type: string; text?: string }[])
+    .filter((b) => b.type === "text")
+    .map((b) => b.text ?? "")
+    .join("")
+    .trim();
+  // JSON modu yok: modelin sardığı ```json çitini sök.
+  return json ? text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim() : text;
+}
+
+// Metin çıktısı üreten çağrılar: önce Gemini, hata verirse (ya da anahtarı yoksa) Anthropic yedeği.
+async function generateText(parts: Part[], opts?: { json?: boolean }): Promise<string> {
+  let geminiErr: unknown;
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      return (await generateContent(TEXT_MODEL, parts, opts)).text;
+    } catch (e) {
+      geminiErr = e;
+      if (!process.env.ANTHROPIC_API_KEY) throw e;
+      console.error("Gemini metin çağrısı başarısız, Anthropic yedeği deneniyor:", e);
+    }
+  }
+  if (process.env.ANTHROPIC_API_KEY) return anthropicText(parts, opts?.json);
+  throw geminiErr ?? new Error("AI anahtarı tanımlı değil");
 }
 
 // === Menü komut ayrıştırma (WhatsApp) ===
@@ -72,7 +120,7 @@ Kurallar:
 - Menüyle ilgisiz mesaj: {"action":"none","reply":"<kısa yardımcı Türkçe yanıt>"}
 - item alanına menüdeki adı olabildiğince aynen yaz.
 SADECE JSON döndür.`;
-  const { text: out } = await generateContent(TEXT_MODEL, [{ text: prompt }], { json: true });
+  const out = await generateText([{ text: prompt }], { json: true });
   try {
     return JSON.parse(out) as MenuIntent;
   } catch {
@@ -81,7 +129,7 @@ SADECE JSON döndür.`;
 }
 
 export async function describeItem(name: string): Promise<string> {
-  const { text } = await generateContent(TEXT_MODEL, [{
+  const text = await generateText([{
     text: `"${name}" adlı menü ürünü için kısa, iştah açıcı bir Türkçe açıklama yaz (en fazla 8-10 kelime). SADECE açıklamayı döndür.`,
   }]);
   return text.replace(/^["“]|["”.]$/g, "").trim();
@@ -147,7 +195,7 @@ Kurallar:
 SADECE şu JSON formatında döndür: {"categories":[{"name":"...","items":[{"name":"...","desc":"...","price":"..."}]}]}`;
 
 export async function parseMenuPhoto(base64: string, mimeType: string): Promise<ParsedMenu> {
-  const { text } = await generateContent(TEXT_MODEL, [
+  const text = await generateText([
     { text: IMPORT_PROMPT },
     { inlineData: { mimeType, data: base64 } },
   ], { json: true });
@@ -184,7 +232,7 @@ Ham metin:
 export async function parseMenuText(rawText: string): Promise<ParsedMenu> {
   const clipped = rawText.slice(0, MAX_IMPORT_TEXT_LEN);
   const prompt = IMPORT_TEXT_PROMPT.replace("{{TEXT}}", clipped);
-  const { text } = await generateContent(TEXT_MODEL, [{ text: prompt }], { json: true });
+  const text = await generateText([{ text: prompt }], { json: true });
   try {
     const parsed = JSON.parse(text);
     if (!Array.isArray(parsed?.categories)) return { categories: [] };

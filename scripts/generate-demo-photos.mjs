@@ -13,7 +13,7 @@ const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!KEY || !SB_URL || !SB_KEY) { console.error("GEMINI_API_KEY, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY gerekli"); process.exit(1); }
 
-const MODEL = process.env.GEMINI_MODEL_IMAGE || "gemini-2.5-flash-image";
+const MODEL = process.env.GEMINI_MODEL_IMAGE || "gemini-3.1-flash-image";
 const sb = createClient(SB_URL, SB_KEY, { auth: { persistSession: false } });
 
 const DISHES = {
