@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { describeItem, isGeminiConfigured } from "../../lib/gemini";
+import { describeItem, isTextAiConfigured } from "../../lib/gemini";
 
 const DEMO: Record<string, string> = {
   latte: "Espresso ve buharda ısıtılmış kadifemsi süt",
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (rateLimited(ip)) return NextResponse.json({ demo: true, desc: demoFor(name) });
 
-  if (!isGeminiConfigured()) return NextResponse.json({ demo: true, desc: demoFor(name) });
+  if (!isTextAiConfigured()) return NextResponse.json({ demo: true, desc: demoFor(name) });
 
   try {
     const desc = await describeItem(name);

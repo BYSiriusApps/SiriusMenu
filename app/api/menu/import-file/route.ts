@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "../../../lib/supabase/server";
-import { parseMenuText, isGeminiConfigured } from "../../../lib/gemini";
+import { parseMenuText, isTextAiConfigured } from "../../../lib/gemini";
 import { detectImportExt, extractImportText, FileImportError, MAX_IMPORT_FILE_BYTES } from "../../../lib/file-extract";
 
 export const maxDuration = 60;
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  if (!isGeminiConfigured()) return NextResponse.json({ error: "Dosyadan menü okuma şu an kapalı." }, { status: 503 });
+  if (!isTextAiConfigured()) return NextResponse.json({ error: "Dosyadan menü okuma şu an kapalı." }, { status: 503 });
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

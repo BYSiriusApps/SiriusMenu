@@ -1,13 +1,25 @@
 # SiriusMenu — Yapılacaklar
 
-- [ ] **Stripe fiyat ID'lerini ekle** (12 adet, `.env.local.example` şablonuna bak; anahtar teslim kurulum için price gerekmez, `price_data` kullanır) — Stripe panelinden her ürün için ayrı price oluşturup ID'lerini `.env.local` (yerel) ve Vercel proje ayarlarına (production) ekle: `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_YEARLY`, `STRIPE_PRICE_ID_MONTHLY_BASIC` (499 TL), `STRIPE_PRICE_ID_YEARLY_BASIC` (4.990 TL), `STRIPE_PRICE_ID_MONTHLY_PRO`, `STRIPE_PRICE_ID_YEARLY_PRO`, `STRIPE_PRICE_ID_LIFETIME`, `STRIPE_PRICE_ID_LIFETIME_EXTRA_BLOCK`, `STRIPE_PRICE_ID_SETUP`, `STRIPE_PRICE_ID_IMAGE_PACK`, `STRIPE_PRICE_ID_BULK50`, `STRIPE_PRICE_ID_BULK100`. Eksik oldukları sürece ilgili panel butonları ("Plana geç", "+paket", "Toplu iyileştir") "Geçersiz ürün" hatası verir (bkz. `app/api/stripe/checkout/route.ts`).
+- [x] **Stripe fiyat ID'leri** (16 adet) — 2026-10-17: hepsi `.env.local`'da, Stripe API ile doğrulandı (hepsi LIVE, aktif, tutarlar `PRICING` ile birebir; anahtar teslim 4 fiyat dahil). Vercel Production'a girildiği ayrıca teyit edilecek (aşağıdaki "Canlıya alma").
 - [ ] **Avukat teyidi** — güncellenen mesafeli satış sözleşmesi, iade/iptal politikası ve yapay zekâ görseli/telif metinleri (`docs/yasal-uyumluluk.md` 6b) yayına almadan önce hukuki olarak kontrol ettirilmeli (`LEGAL_DOC_VERSION` 2026-10-13).
-- [ ] **Temel plan canlı testi** — Stripe test modunda Temel aylık/yıllık satın alma, panelde WhatsApp kartındaki uyarı ve WhatsApp mesajına verilen "Temel planda yok" yanıtı denenmeli.
-- [ ] **Anahtar teslim kurulum canlı testi** — Stripe test modunda sipariş, `service_orders` kaydı, teslimatta ürünlerde "Görsel temsilidir" kutusunun işaretlenmesi.
+- [ ] **Temel plan canlı testi** — Temel aylık/yıllık satın alma, panelde WhatsApp kartındaki uyarı ve WhatsApp mesajına verilen "Temel planda yok" yanıtı denenmeli. Not: `.env.local` artık canlı Stripe anahtarlı; test için test anahtarlarını `.env.development.local` dosyasına koy.
+- [ ] **Anahtar teslim kurulum canlı testi** — sipariş, `service_orders` kaydı, teslimatta ürünlerde "Görsel temsilidir" kutusunun işaretlenmesi (test anahtarlarıyla, yukarıdaki not).
+
+## Canlıya alma (2026-10-17)
+> **Sahibi sonra ekleyecek (bilinçli olarak bekletiliyor):** Stripe webhook secret, Anthropic API anahtarı, Resend API anahtarı. Bunlar girilene kadar: ödeme sonrası plan/kota otomatik aktifleşmez, Gemini yedeği yok, sözleşme onay e-postası gitmez.
+
+- [ ] **Stripe webhook endpoint'i oluştur** (Live mod, Developers > Webhooks): URL `https://siriusmenu.com/api/stripe/webhook`; olaylar `checkout.session.completed`, `invoice.paid`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Çıkan `whsec_...` değerini Vercel Production'da `STRIPE_WEBHOOK_SECRET` olarak gir. Şu an hesapta SiriusMenu endpoint'i YOK (sadece Siriplan/Astroviral). Ödeme sonrası plan/kota aktifleşmesi buna bağlı.
+- [ ] **Vercel Production env eksikleri**: `STRIPE_SECRET_KEY` (canlı; girildiği doğrulanacak, 2026-10-17'de sadece Development'ta görünüyordu), `STRIPE_WEBHOOK_SECRET`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` değerinin `pk_live` olduğunu panelden kontrol et. Hepsinden sonra redeploy (`NEXT_PUBLIC_*` build'e gömülür). `CRON_SECRET` girildi (doğrulandı).
+- [ ] **Eski `STRIPE_PRICE_ID` değişkenini sil** (Vercel Production + Development ve `.env.local`); Temmuz'dan kalma, kodda kullanılmıyor.
+- [ ] **Anthropic yedek anahtarı**: anahtar 2027-11-30'da sona erecek (takvime hatırlatma), Console'da aylık harcama limiti koy. Yedek yalnız metin çağrıları içindir; görsel iyileştirmenin yedeği yok.
+- [ ] **Görsel maliyeti**: `gemini-2.5-flash-image` deprecated/kapanış geçti; varsayılan `gemini-3.1-flash-image` oldu (görsel başı ~$0.067, eskisi ~$0.039). Görsel kotası fiyatları (`PRICING`) hâlâ kâr bırakıyor mu kontrol et; ucuz alternatif `gemini-3.1-flash-lite-image` (~$0.034).
+- [ ] **Siriplan webhook'u**: aynı Stripe hesabında olduğu için SiriusMenu ödemelerinin olaylarını da alacak; Siriplan işleyicisinin `restaurant_id` metadata'sı olan olayları yok saydığını kontrol et (SiriusMenu tarafı güvenli, ilgisiz olayları atlıyor).
+- [ ] **WhatsApp bağlama**: Railway Evolution hazır (`evo.siriusmenu.com`); instance aç (`siriusmenu`, numara +905102213630), pairing code/QR ile bağla, `connectionState` `open` doğrula, panelden test (bkz. `docs/evolution-api-kurulum.md`). Telefonu 14 günde bir internete bağla; ilk haftalarda düşük hacim.
+- [x] **Migration 0009 ve 0010 uygulandı** (2026-10-17, canlı veritabanında doğrulandı). Dosyalar yeniden numaralandı: `0013_menu_layout`, `0014_service_orders` (çift 0012 sorunu giderildi). Tüm migration'lar SQL Editor'dan uygulandığı için `supabase db push` kullanılacaksa önce `supabase migration repair` ile geçmiş işaretlenmeli.
+- [x] **Gemini modelleri güncellendi** (2026-10-17): `gemini-2.5-flash` bu hesapta 404 veriyordu; varsayılanlar `gemini-3.5-flash-lite` (metin) ve `gemini-3.1-flash-image` (görsel), metin çağrıları için Anthropic yedeği eklendi (`app/lib/gemini.ts`).
 
 ## Fiyat/Stripe kontrolü (2026-10-13)
-- [ ] **Stripe price ID'lerini `.env.local` ve Vercel'e gir** (12 adet, bkz. `.env.local.example`), Vercel'de redeploy et. Canlı mod ID'leri test mod ID'leriyle karışmasın; canlı mod `STRIPE_SECRET_KEY` ve `STRIPE_WEBHOOK_SECRET` de eşleşmeli.
-- [ ] **Stripe'ta kurulum hizmeti ürünleri** (3.500/5.500/7.500/2.000 TL) açıldı ama kod bunları kullanmıyor (tutarı sunucu `price_data` ile hesaplıyor). Elle fatura/ödeme linki için kullanılacaksa kalsın, değilse arşivle.
+- [x] **Stripe price ID'lerini `.env.local`'a gir** — 2026-10-17'de tamamlandı ve doğrulandı; Vercel Production için yukarıdaki "Canlıya alma" maddelerine bak.
 - [ ] **`STRIPE_PRICE_SMS_5.000` / `_10.000`** ürünleri Stripe'ta var ama SiriusMenu kodunda SMS özelliği yok (muhtemelen başka proje). Karışıklık olmaması için başka hesaba taşı veya arşivle.
 
 ## Topluluktan yardım istenecek konular (notlar)
