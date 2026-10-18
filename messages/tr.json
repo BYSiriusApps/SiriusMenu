@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "title": "SiriusMenu — QR ile dijital menü",
+    "title": "SiriusMenu: QR ile dijital menü",
     "description": "Kafe ve restoranlar için QR menü. Ürünleri gir, temayı seç, QR kodu masaya koy. Fiyat güncellemesi anında, baskı maliyeti yok.",
     "heroTitle": "SiriusMenu ile QR Menü",
     "heroSubtitle": "Hızlı, kolay ve masrafsız dijital menü deneyimi."
@@ -403,7 +403,7 @@
       "email": "E-posta",
       "business": "İşletme",
       "plan": "Plan",
-      "planActive": "Aktif — {interval} plan",
+      "planActive": "Aktif: {interval} plan",
       "intervalYear": "yıllık",
       "intervalMonth": "aylık",
       "planTrial": "Deneme sürümü",
@@ -430,11 +430,11 @@
     },
     "builder": {
       "subscription": "Abonelik",
-      "activePlan": "Aktif — {interval} plan",
-      "trialManage": "Deneme sürümü — yayınlamak için plana geç",
+      "activePlan": "Aktif: {interval} plan",
+      "trialManage": "Deneme sürümü: yayınlamak için plana geç",
       "inactive": "Abonelik pasif",
       "manageSubscription": "Aboneliği yönet",
-      "lifetimeActive": "Ömür Boyu Menü — kalıcı düzenleme hakkı, abonelik gerekmez",
+      "lifetimeActive": "Ömür Boyu Menü: kalıcı düzenleme hakkı, abonelik gerekmez",
       "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
       "buyLifetime": "Tek Seferlik satın al, {items} ürüne kadar ({amount}₺)",
       "tierBasic": "Temel",
@@ -558,7 +558,7 @@
     },
     "studio": {
       "title": "Kendi fotoğraflarınla çalış",
-      "desc": "Şablon görsel yerine kendi ürün fotoğraflarını yükle; dilersen yapay zeka ile ışık, arka plan ve netliği en yüksek detayda yeniden oluştursun. İstersen ek bir talimat da yaz (ör. \"ahşap masada\") — ürünün kendisi ve sunumu her zaman sabit tutulur, sadece istediğin detay eklenir. Bu, panelde ürün satırındaki hızlı İyileştir'in daha güçlü sürümüdür ve aynı görsel kotasını kullanır.",
+      "desc": "Şablon görsel yerine kendi ürün fotoğraflarını yükle; dilersen yapay zeka ile ışık, arka plan ve netliği en yüksek detayda yeniden oluştursun. İstersen ek bir talimat da yaz (ör. \"ahşap masada\"): ürünün kendisi ve sunumu her zaman sabit tutulur, sadece istediğin detay eklenir. Bu, panelde ürün satırındaki hızlı İyileştir'in daha güçlü sürümüdür ve aynı görsel kotasını kullanır.",
       "backToPanel": "← Panele dön",
       "quota": "Görsel kotası",
       "quotaUsed": "Bu dönem <b>{used}</b> / {quota} görsel işlemi kullanıldı",

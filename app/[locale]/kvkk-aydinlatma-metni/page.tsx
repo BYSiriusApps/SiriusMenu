@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "KVKK Aydınlatma Metni — SiriusMenu" };
+export const metadata: Metadata = { title: "KVKK Aydınlatma Metni, SiriusMenu" };
 
 export default function KvkkAydinlatmaMetni() {
   return (
@@ -15,7 +15,7 @@ export default function KvkkAydinlatmaMetni() {
 
       <h2>1. Veri Sorumlusu</h2>
       <p>
-        BY Sirius Group AI and Technology Co. Ltd. — <a href="mailto:info@bysirius.com">info@bysirius.com</a>
+        BY Sirius Group AI and Technology Co. Ltd., <a href="mailto:info@bysirius.com">info@bysirius.com</a>
       </p>
 
       <h2>2. İşlenen Kişisel Veri Kategorileri</h2>
