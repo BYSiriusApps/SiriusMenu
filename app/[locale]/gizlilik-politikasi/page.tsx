@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "Gizlilik Politikası — SiriusMenu" };
+export const metadata: Metadata = { title: "Gizlilik Politikası: SiriusMenu" };
 
 export default function GizlilikPolitikasi() {
   return (
@@ -42,12 +42,12 @@ export default function GizlilikPolitikasi() {
       <h2>4. Verileri Kimlerle Paylaşıyoruz</h2>
       <p>Verilerini pazarlama amacıyla satmıyor veya kiralamıyoruz. Hizmeti sunabilmek için aşağıdaki hizmet sağlayıcılarla (veri işleyen sıfatıyla) sınırlı ölçüde paylaşım yapılır:</p>
       <ul>
-        <li><strong>Supabase</strong> — veritabanı, kimlik doğrulama ve dosya depolama altyapısı,</li>
-        <li><strong>Stripe</strong> — abonelik ve ödeme işlemleri,</li>
-        <li><strong>Vercel</strong> — uygulama barındırma altyapısı,</li>
-        <li><strong>Resend</strong> — satın alma onayı ve hesap bildirimi e-postalarının gönderimi (e-posta adresin),</li>
-        <li><strong>Google (Gemini API)</strong> — &quot;AI açıklama&quot;, ürün fotoğrafı iyileştirme, fotoğraftan menü aktarma ve WhatsApp komut yorumlama özelliklerini kullanırsan,</li>
-        <li><strong>Evolution API</strong> — WhatsApp üzerinden AI menü düzenleme özelliğini bağlarsan, WhatsApp mesajlarının iletilmesi için.</li>
+        <li><strong>Supabase</strong>: veritabanı, kimlik doğrulama ve dosya depolama altyapısı,</li>
+        <li><strong>Stripe</strong>: abonelik ve ödeme işlemleri,</li>
+        <li><strong>Vercel</strong>: uygulama barındırma altyapısı,</li>
+        <li><strong>Resend</strong>: satın alma onayı ve hesap bildirimi e-postalarının gönderimi (e-posta adresin),</li>
+        <li><strong>Google (Gemini API)</strong>: &quot;AI açıklama&quot;, ürün fotoğrafı iyileştirme, fotoğraftan menü aktarma ve WhatsApp komut yorumlama özelliklerini kullanırsan,</li>
+        <li><strong>Evolution API</strong>: WhatsApp üzerinden AI menü düzenleme özelliğini bağlarsan, WhatsApp mesajlarının iletilmesi için.</li>
       </ul>
       <p>Bu sağlayıcılar verilerini yalnızca bizim adımıza, belirtilen amaçlarla işler; kendi pazarlama amaçları için kullanamaz.</p>
 

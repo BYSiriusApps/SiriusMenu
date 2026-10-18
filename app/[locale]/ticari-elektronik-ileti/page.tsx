@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "Ticari Elektronik İleti Onay Metni — SiriusMenu" };
+export const metadata: Metadata = { title: "Ticari Elektronik İleti Onay Metni, SiriusMenu" };
 
 export default function TicariElektronikIleti() {
   return (

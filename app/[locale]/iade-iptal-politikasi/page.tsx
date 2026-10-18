@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "İade & İptal Politikası — SiriusMenu" };
+export const metadata: Metadata = { title: "İade & İptal Politikası, SiriusMenu" };
 
 export default function IadeIptalPolitikasi() {
   return (
@@ -20,7 +20,7 @@ export default function IadeIptalPolitikasi() {
       <p>
         Abonelikler, Ömür Boyu Menü ve görsel paketleri elektronik ortamda anında ifa edilen dijital hizmetlerdir ve
         ödeme onaylandığı anda etkinleştirilir. Bu nedenle, <strong>kullanılmış olan mevcut abonelik dönemi için ücret iadesi yapılmaz</strong>{" "}
-        (bkz. Mesafeli Satış Sözleşmesi m.5 — cayma hakkı istisnası). Yanlışlıkla yapılan çift tahsilat veya teknik
+        (bkz. Mesafeli Satış Sözleşmesi m.5, cayma hakkı istisnası). Yanlışlıkla yapılan çift tahsilat veya teknik
         bir hata sonucu oluşan hatalı ödemeler, tarafımıza bildirilmesi hâlinde incelenir ve haklı bulunması durumunda
         iade edilir.
       </p>

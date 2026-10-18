@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "Çerez Politikası — SiriusMenu" };
+export const metadata: Metadata = { title: "Çerez Politikası, SiriusMenu" };
 
 export default function CerezPolitikasi() {
   return (

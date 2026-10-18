@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "Kullanım Şartları — SiriusMenu" };
+export const metadata: Metadata = { title: "Kullanım Şartları, SiriusMenu" };
 
 export default function KullanimSartlari() {
   return (
@@ -13,7 +13,7 @@ export default function KullanimSartlari() {
       </p>
 
       <h2>1. Hizmetin Tanımı</h2>
-      <p>SiriusMenu; kafe, restoran ve benzeri işletmelerin menülerini dijital ortamda oluşturup QR kod aracılığıyla müşterilerine sunmasını sağlayan bir SaaS (yazılım hizmeti) platformudur. Hizmet; ücretsiz Deneme planı, ücretli abonelik planları (Başlangıç, Profesyonel; aylık veya yıllık), tek seferlik Ömür Boyu Menü ve ek görsel paketleri olarak sunulur. Güncel kapsam ve fiyatlar panelde ve ödeme ekranında gösterilir.</p>
+      <p>SiriusMenu; kafe, restoran ve benzeri işletmelerin menülerini dijital ortamda oluşturup QR kod aracılığıyla müşterilerine sunmasını sağlayan bir SaaS (yazılım hizmeti) platformudur. Hizmet; ücretsiz Deneme planı, ücretli abonelik planları (Temel, Full ve Profesyonel; aylık veya yıllık), tek seferlik Ömür Boyu Menü ve ek görsel paketleri olarak sunulur. Güncel kapsam ve fiyatlar panelde ve ödeme ekranında gösterilir.</p>
 
       <h2>2. Hesap Oluşturma ve Güvenlik</h2>
       <ul>

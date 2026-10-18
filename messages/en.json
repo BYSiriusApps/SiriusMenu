@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "title": "SiriusMenu — Digital menu with QR",
+    "title": "SiriusMenu: Digital menu with QR",
     "description": "QR menu for cafes and restaurants. Enter products, choose a theme, put the QR code on the table. Instant price update, no printing costs.",
     "heroTitle": "QR Menu with SiriusMenu",
     "heroSubtitle": "Fast, easy and cost-free digital menu experience."
@@ -325,7 +325,7 @@
       "createAccount": "Create account",
       "errNotConfigured": "The panel isn't set up yet (missing Supabase connection).",
       "errInvalid": "Incorrect email or password.",
-      "expired": "Your session ended due to inactivity. Your work was saved — you can log back in.",
+      "expired": "Your session ended due to inactivity. Your work was saved: you can log back in.",
       "errUnconfirmed": "Your email isn't confirmed yet. Click the link in the confirmation email.",
       "errConfirmLink": "The confirmation link is invalid or expired. Try logging in or sign up again.",
       "forgot": "Forgot your password?"
@@ -403,7 +403,7 @@
       "email": "Email",
       "business": "Business",
       "plan": "Plan",
-      "planActive": "Active — {interval} plan",
+      "planActive": "Active: {interval} plan",
       "intervalYear": "yearly",
       "intervalMonth": "monthly",
       "planTrial": "Trial",
@@ -430,11 +430,11 @@
     },
     "builder": {
       "subscription": "Subscription",
-      "activePlan": "Active — {interval} plan",
-      "trialManage": "Trial — upgrade to a plan to publish",
+      "activePlan": "Active: {interval} plan",
+      "trialManage": "Trial: upgrade to a plan to publish",
       "inactive": "Subscription inactive",
       "manageSubscription": "Manage subscription",
-      "lifetimeActive": "Lifetime Menu — permanent editing access, no subscription needed",
+      "lifetimeActive": "Lifetime Menu: permanent editing access, no subscription needed",
       "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
       "buyLifetime": "Buy Lifetime, up to {items} items ({amount}₺)",
       "tierBasic": "Basic",
@@ -558,7 +558,7 @@
     },
     "studio": {
       "title": "Work with your own photos",
-      "desc": "Upload your own product photos instead of a template image; if you like, AI can recreate the lighting, background and sharpness in the highest detail. You can also add an extra instruction (e.g. \"on a wooden table\") — the product itself and its presentation are always kept fixed, only the detail you asked for is added. This is a more powerful version of the quick Enhance button on the product row in the panel and uses the same photo quota.",
+      "desc": "Upload your own product photos instead of a template image; if you like, AI can recreate the lighting, background and sharpness in the highest detail. You can also add an extra instruction (e.g. \"on a wooden table\"): the product itself and its presentation are always kept fixed, only the detail you asked for is added. This is a more powerful version of the quick Enhance button on the product row in the panel and uses the same photo quota.",
       "backToPanel": "← Back to panel",
       "quota": "Photo quota",
       "quotaUsed": "This period <b>{used}</b> / {quota} photo operations used",

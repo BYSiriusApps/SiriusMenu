@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/app/lib/legal/LegalLayout";
 
-export const metadata: Metadata = { title: "Mesafeli Satış Sözleşmesi — SiriusMenu" };
+export const metadata: Metadata = { title: "Mesafeli Satış Sözleşmesi, SiriusMenu" };
 
 export default function MesafeliSatisSozlesmesi() {
   return (
@@ -19,7 +19,7 @@ export default function MesafeliSatisSozlesmesi() {
       </ul>
 
       <h2>1. Taraflar</h2>
-      <p><strong>Satıcı:</strong> BY Sirius Group AI and Technology Co. Ltd. — Companies House No: 17142392, 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom — <a href="mailto:info@bysirius.com">info@bysirius.com</a></p>
+      <p><strong>Satıcı:</strong> BY Sirius Group AI and Technology Co. Ltd., Companies House No: 17142392, 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom, <a href="mailto:info@bysirius.com">info@bysirius.com</a></p>
       <p><strong>Alıcı:</strong> SiriusMenu platformunda hesap açarak abonelik veya hizmet satın alan gerçek veya tüzel kişi (&quot;Kullanıcı&quot;). Hizmet, işletmelerin ticari/mesleki faaliyetlerinde kullanılmak üzere sunulur.</p>
 
       <h2>2. Konu</h2>
