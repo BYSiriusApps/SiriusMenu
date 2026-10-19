@@ -92,6 +92,18 @@
         {
           "t": "Zero printing costs",
           "d": "No trip to the print shop every time the menu changes. Print the QR once, update the content from the screen forever."
+        },
+        {
+          "t": "Allergens, calories and portions",
+          "d": "Add allergen badges, calories, weight and small/large portion prices to each item. Guests see it without having to ask."
+        },
+        {
+          "t": "Import from a photo",
+          "d": "Upload a photo or file of your printed menu and the items appear in a list. Nothing is added to your menu until you approve it."
+        },
+        {
+          "t": "Renewable QR",
+          "d": "If a printed QR falls into the wrong hands, renew it from the panel in one click; old printed QR codes stop working."
         }
       ]
     },
@@ -172,11 +184,24 @@
         "Add a new product in seconds"
       ]
     },
+    "calculator": {
+      "eyebrow": "Calculate",
+      "title": "What do you pay for printed menus each year?",
+      "subtitle": "Enter your own numbers and compare with the Basic plan.",
+      "printsLabel": "How many times a year do you print?",
+      "costLabel": "Cost per print run (₺)",
+      "printedYear": "Printed menu, per year",
+      "firstYear": "First year (setup included)",
+      "nextYears": "Following years",
+      "saving": "Saving",
+      "extra": "Extra cost",
+      "note": "This is an estimate. It uses the Basic plan's yearly price and the setup fee; you can add your own design and delivery costs."
+    },
     "pricing": {
       "eyebrow": "Pricing",
       "title": "Simple and clear",
       "perMonth": "TL/mo",
-      "orYearly": "or {amount} TL/yr (~2 months free)",
+      "orYearly": "or {amount} TL/yr (save {saving} TL, 2 months free)",
       "setupNote": "One-time {amount} TL setup fee on your first subscription",
       "trial": {
         "title": "Trial",
@@ -193,6 +218,7 @@
         "feature1": "QR menu publishing, fixed QR address",
         "feature2": "All themes, logo, instant updates",
         "feature3": "Menu import from photos and files",
+        "feature4": "Allergen, calorie, weight and portion info",
         "missing1": "Updating your menu via WhatsApp",
         "missing2": "Monthly AI photo quota (use extra packs)",
         "cta": "Start with Basic"
@@ -233,6 +259,28 @@
         "feature4": "Generated images are shown with an \"Illustrative image\" label",
         "cta": "Sign up to order"
       },
+      "compare": {
+        "title": "Compare the plans side by side",
+        "feature": "Feature",
+        "monthly": "Monthly price",
+        "yearly": "Yearly price",
+        "setup": "Setup fee (one-time)",
+        "yes": "Included",
+        "no": "Not included",
+        "rows": {
+          "publish": "QR menu publishing, fixed QR address",
+          "themes": "All themes, logo, instant updates",
+          "details": "Allergen, calorie, weight and portion info",
+          "import": "Menu import from photos and files",
+          "bigMenu": "Large menus (200+ items)",
+          "qrRotate": "QR renewal (security)",
+          "whatsapp": "Menu updates via WhatsApp",
+          "quota": "Monthly AI photo enhancement",
+          "quotaBasic": "None (extra packs only)",
+          "quotaValue": "{monthly} (yearly: {yearly})"
+        },
+        "note": "Lifetime Menu and turnkey setup are independent of the subscription; details are on the cards above."
+      },
       "footnote": "Quota overage is {overage} TL/photo or a pack of {packCredits} for {packAmount} TL. Bulk photo enhancement (50/100 photos for {bulk50}/{bulk100} TL) is independent of the quota. Custom plans are available for chains."
     },
     "faq": {
@@ -258,6 +306,46 @@
         {
           "q": "Can I add my own logo and colors?",
           "a": "On paid plans you can add your logo and pick the look that fits your venue best from six ready-made themes."
+        },
+        {
+          "q": "What is the difference between the plans?",
+          "a": "Basic covers QR menu publishing, themes, logo, instant updates and menu import from photos. Full adds menu updates via WhatsApp and a monthly AI photo quota. Professional includes everything in Full plus a higher AI photo quota. See the side-by-side table in the pricing section."
+        },
+        {
+          "q": "Why is there a setup fee, and is it paid every month?",
+          "a": "The setup fee is charged once with the first subscription and does not repeat. In later periods you only pay the plan price."
+        },
+        {
+          "q": "How much do I save by paying yearly?",
+          "a": "With yearly billing you pay for 10 months instead of 12, so 2 months are free. Each plan's saving is shown on its price card."
+        },
+        {
+          "q": "Can I cancel my subscription at any time?",
+          "a": "Yes. You can cancel any time from the panel via \"Manage subscription\". No refund is given for a subscription period already used; after cancelling, your menu stays published and only editing from the panel is locked. Details are on the Refund and Cancellation Policy page."
+        },
+        {
+          "q": "Can I change my plan?",
+          "a": "To change plans, use the \"Manage subscription\" link in the panel or write to us on WhatsApp or by email."
+        },
+        {
+          "q": "Is there an extra charge for the QR code?",
+          "a": "No. Downloading the QR code and printing it as often as you like is free. Your QR address is fixed; price and product updates do not change it."
+        },
+        {
+          "q": "How do I show allergen and calorie information?",
+          "a": "In the panel, open the \"Details\" section of each product to mark allergens and add calories, weight and portion prices such as small/large. The business is responsible for the accuracy of this information."
+        },
+        {
+          "q": "How does updating via WhatsApp work?",
+          "a": "On the Full and Professional plans, you send a message like \"Make latte 120\" from your authorised number and the menu updates instantly. Messages from unregistered numbers are rejected, and you can write \"geri\" (Turkish for \"undo\") to revert the last change."
+        },
+        {
+          "q": "Can you build the menu for me?",
+          "a": "Yes. With the turnkey setup service we prepare your product list, descriptions and photos. The price depends on the number of products and what you need; details are in the panel and the pricing section."
+        },
+        {
+          "q": "Is my data mine?",
+          "a": "Yes. Your menu content and images belong to you. You can delete your account from the panel; how long data is kept and when it is deleted is described in the Privacy Policy and the KVKK Notice."
         }
       ]
     },
@@ -503,6 +591,16 @@
       "enhancing": "Enhancing...",
       "enhance": "✨ Enhance",
       "soldOut": "Sold out",
+      "itemDetails": "Details: allergens, calories, weight, portion",
+      "calories": "Calories (kcal)",
+      "portion": "Weight / portion (e.g. 250 g)",
+      "allergens": "Allergens it contains",
+      "allergenNote": "The accuracy and currency of allergen information is the business's responsibility.",
+      "variants": "Portion / size options",
+      "variantName": "Name (e.g. Large)",
+      "variantPrice": "Price",
+      "addVariant": "+ Add option",
+      "removeVariant": "Remove option",
       "whatsappNotInPlan": "WhatsApp updates are not in the Basic plan. Upgrade to Full or Professional to enable them.",
       "aiImageNotice": "Illustrative image (AI)",
       "serviceTitle": "Done-for-you setup",

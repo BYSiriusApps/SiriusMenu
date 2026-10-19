@@ -7,10 +7,81 @@ export const TAGS: { key: Tag; label: string; emoji: string }[] = [
   { key: "glutensiz", label: "Glutensiz", emoji: "🌾" },
 ];
 
+/** Yaygın alerjenler (AB 14 alerjen listesine uyumlu). Menüde ürün altında rozet olarak gösterilir. */
+export type Allergen = "gluten" | "sut" | "yumurta" | "fistik" | "kuruyemis" | "soya" | "balik" | "kabuklu" | "yumusakca" | "susam" | "kereviz" | "hardal" | "lupin" | "sulfit";
+export const ALLERGENS: { key: Allergen; label: string; emoji: string }[] = [
+  { key: "gluten", label: "Gluten", emoji: "🌾" },
+  { key: "sut", label: "Süt", emoji: "🥛" },
+  { key: "yumurta", label: "Yumurta", emoji: "🥚" },
+  { key: "fistik", label: "Yer fıstığı", emoji: "🥜" },
+  { key: "kuruyemis", label: "Sert kabuklu yemiş", emoji: "🌰" },
+  { key: "soya", label: "Soya", emoji: "🫘" },
+  { key: "balik", label: "Balık", emoji: "🐟" },
+  { key: "kabuklu", label: "Kabuklu deniz ürünü", emoji: "🦐" },
+  { key: "yumusakca", label: "Yumuşakça", emoji: "🐚" },
+  { key: "susam", label: "Susam", emoji: "⚪" },
+  { key: "kereviz", label: "Kereviz", emoji: "🥬" },
+  { key: "hardal", label: "Hardal", emoji: "🟡" },
+  { key: "lupin", label: "Acı bakla (lupin)", emoji: "🌼" },
+  { key: "sulfit", label: "Sülfit", emoji: "🍷" },
+];
+
+/** Porsiyon / boyut seçeneği (ör. Küçük 80, Büyük 110). Ürünün ana fiyatına ek olarak listelenir. */
+export type Variant = { name: string; price: string };
+
 export type Item = { id: number; name: string; desc: string; price: string; tags: Tag[]; image?: string; available?: boolean; code?: string;
   /** Görsel yapay zekâ ile üretildi / temsilidir: menüde "Görsel temsilidir" etiketi gösterilir. */
-  aiImage?: boolean };
+  aiImage?: boolean;
+  /** İsteğe bağlı: ürünün içerdiği alerjenler (ALLERGENS anahtarları). */
+  allergens?: Allergen[];
+  /** İsteğe bağlı: porsiyon başına kalori (kcal). */
+  calories?: number;
+  /** İsteğe bağlı: gramaj / porsiyon bilgisi, serbest metin (ör. "250 g", "33 cl"). */
+  portion?: string;
+  /** İsteğe bağlı: porsiyon / boyut seçenekleri ve fiyatları. */
+  variants?: Variant[] };
 export type Category = { id: number; name: string; items: Item[]; code?: string };
+
+const TAG_KEYS = new Set<string>(TAGS.map((t) => t.key));
+const ALLERGEN_KEYS = new Set<string>(ALLERGENS.map((a) => a.key));
+const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+
+/**
+ * Sunucuya gelen menü verisini doğrular ve temizler (istemciye güvenilmez): bilinmeyen alanlar atılır,
+ * metinler kısaltılır, etiket/alerjen anahtarları beyaz listeyle sınırlanır. Geçersiz yapıda `null` döner.
+ */
+export function sanitizeCategories(input: unknown): Category[] | null {
+  if (!Array.isArray(input) || input.length > 100) return null;
+  const out: Category[] = [];
+  for (const c of input) {
+    if (!c || typeof c !== "object" || !Array.isArray((c as Category).items) || (c as Category).items.length > 2000) return null;
+    const cat = c as Category;
+    const items: Item[] = [];
+    for (const raw of cat.items) {
+      if (!raw || typeof raw !== "object") return null;
+      const it = raw as Item;
+      const item: Item = {
+        id: Number.isFinite(it.id) ? it.id : 0,
+        name: str(it.name, 120), desc: str(it.desc, 600), price: str(it.price, 24),
+        tags: Array.isArray(it.tags) ? it.tags.filter((x) => TAG_KEYS.has(x)) : [],
+      };
+      if (typeof it.image === "string") item.image = it.image.slice(0, 2000);
+      if (typeof it.available === "boolean") item.available = it.available;
+      if (typeof it.code === "string") item.code = it.code.slice(0, 12);
+      if (typeof it.aiImage === "boolean") item.aiImage = it.aiImage;
+      if (Array.isArray(it.allergens)) item.allergens = it.allergens.filter((x) => ALLERGEN_KEYS.has(x));
+      if (typeof it.calories === "number" && Number.isFinite(it.calories) && it.calories >= 0) item.calories = Math.min(Math.round(it.calories), 20000);
+      if (typeof it.portion === "string" && it.portion.trim()) item.portion = it.portion.slice(0, 40);
+      if (Array.isArray(it.variants)) {
+        const vs = it.variants.slice(0, 12).filter((v) => v && typeof v === "object").map((v) => ({ name: str(v.name, 40), price: str(v.price, 24) }));
+        if (vs.length) item.variants = vs;
+      }
+      items.push(item);
+    }
+    out.push({ id: Number.isFinite(cat.id) ? cat.id : 0, name: str(cat.name, 120), items, ...(typeof cat.code === "string" ? { code: cat.code.slice(0, 12) } : {}) });
+  }
+  return out;
+}
 
 /** İşletmenin kendi sosyal medya / web sitesi bilgileri — hepsi isteğe bağlı. */
 export type SocialLinks = { instagram?: string; facebook?: string; tiktok?: string; website?: string };
