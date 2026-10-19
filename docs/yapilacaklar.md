@@ -9,6 +9,14 @@
 - [ ] Yıllık "öncelikli destek" vaadi landing'den kaldırıldı; geri istenirse destek süreci tanımlanmalı.
 - [ ] EU/US bölgesel fiyat tablosu onayı (Temel 19 USD/17 EUR, Full 49/45, Pro 79/75, ömür boyu 499/449, kurulum 149/139'dan); onaylanırsa Stripe `currency_options` + bölge seçimi kodlanır.
 
+**Rakip analizi sonrası (2026-10-19, dal `feat/paket-karsilastirma-alerjen`, commit edilmedi)**
+- [x] Faz 1: landing'e plan karşılaştırma tablosu, maliyet hesaplayıcı, genişletilmiş SSS (5'ten 15'e), yıllık tasarruf tutarı; yeni özellik kartları. Migration yok.
+- [x] Madde 9: ürüne alerjen, kalori, gramaj, porsiyon seçenekleri (panel "Detaylar" bölümü + menü görünümü). `menu` jsonb içinde, migration yok. `/api/menu/save` artık `sanitizeCategories` ile doğruluyor.
+- [ ] **Çok dilli menü** (Full ve Pro): Gemini ile ürün/kategori çevirisi, müşteri dil seçimi, telefon dilini algılama, alerjen/etiket adlarının çevirisi. Migration gerekir. Canlı testten sonra başlanacak.
+- [ ] Sırada: basit analitik (QR tarama/ürün görüntüleme, migration gerekir), yazdırılabilir QR şablonları. Karar: alerjen/porsiyon tüm planlarda; çok dil Full ve Pro; analitik tüm planlarda.
+- [ ] Elle test: panelde Detaylar bölümü, menüde alerjen/porsiyon görünümü (list ve coverflow), hesaplayıcı mobil görünümü, karşılaştırma tablosu mobil yatay kaydırma.
+- [ ] Alerjen sorumluluğu: panelde işletme sorumluluğu notu var; kullanım şartlarına da madde eklenecekse `LEGAL_DOC_VERSION` artırılmalı (avukat teyidiyle).
+
 **Migration (uygulandı mı kontrol et)**
 - [ ] `0011_purchase_consents` ve `0012_consent_retention` canlı Supabase'de uygulandı mı doğrula (SQL Editor). 0009/0010 doğrulandı; 0013/0014 için de kontrol et.
 

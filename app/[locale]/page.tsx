@@ -8,6 +8,23 @@ import { AutoScrollPhone } from "@/app/components/AutoScrollPhone";
 import { ScrollFx } from "@/app/components/ScrollFx";
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
 import { WhatsAppButton } from "@/app/components/WhatsAppButton";
+import { CostCalculator } from "@/app/components/CostCalculator";
+
+/** Plan karşılaştırma tablosu: sütunlar ve satırlar. Fiyatlar/kota `PRICING`'den okunur. */
+const compareTiers = [
+  { key: "basic", tier: "basic" },
+  { key: "full", tier: "starter" },
+  { key: "pro", tier: "pro" },
+] as const;
+const compareRows: { key: string; tiers: readonly string[] }[] = [
+  { key: "publish", tiers: ["basic", "starter", "pro"] },
+  { key: "themes", tiers: ["basic", "starter", "pro"] },
+  { key: "details", tiers: ["basic", "starter", "pro"] },
+  { key: "import", tiers: ["basic", "starter", "pro"] },
+  { key: "bigMenu", tiers: ["basic", "starter", "pro"] },
+  { key: "qrRotate", tiers: ["basic", "starter", "pro"] },
+  { key: "whatsapp", tiers: ["starter", "pro"] },
+];
 
 const ring =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]";
@@ -295,6 +312,23 @@ export default async function Landing() {
         </div>
       </section>
 
+      {/* MALİYET HESAPLAYICI */}
+      <section id="hesapla" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("calculator.eyebrow")}</p>
+          <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("calculator.title")}</h2>
+          <p className="mt-4 text-lg text-[var(--muted)]">{t("calculator.subtitle")}</p>
+        </div>
+        <CostCalculator
+          yearlyPrice={PRICING.yearlyBasic.amount}
+          setupPrice={PRICING.setup.amount}
+          labels={{
+            printsLabel: t("calculator.printsLabel"), costLabel: t("calculator.costLabel"), printedYear: t("calculator.printedYear"),
+            firstYear: t("calculator.firstYear"), nextYears: t("calculator.nextYears"), saving: t("calculator.saving"), extra: t("calculator.extra"), note: t("calculator.note"),
+          }}
+        />
+      </section>
+
       {/* FİYAT */}
       <section id="fiyat" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
@@ -314,7 +348,7 @@ export default async function Landing() {
             <Link href="/app" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.trial.cta")}</Link>
           </div>
           {([
-            { key: "basic", tier: "basic", highlight: false, features: ["feature1", "feature2", "feature3"], missing: ["missing1", "missing2"] },
+            { key: "basic", tier: "basic", highlight: false, features: ["feature1", "feature2", "feature3", "feature4"], missing: ["missing1", "missing2"] },
             { key: "full", tier: "starter", highlight: true, features: ["feature1", "feature2", "feature3", "feature4"], missing: [] },
             { key: "pro", tier: "pro", highlight: false, features: ["feature1", "feature2"], missing: [] },
           ] as const).map((plan) => (
@@ -324,7 +358,7 @@ export default async function Landing() {
               <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {tierPrice(plan.tier, "month").toLocaleString("tr-TR")}<span className="text-base font-normal text-[var(--muted)]"> {t("pricing.perMonth")}</span>
               </p>
-              <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.orYearly", { amount: tierPrice(plan.tier, "year").toLocaleString("tr-TR") })}</p>
+              <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.orYearly", { amount: tierPrice(plan.tier, "year").toLocaleString("tr-TR"), saving: (tierPrice(plan.tier, "month") * 12 - tierPrice(plan.tier, "year")).toLocaleString("tr-TR") })}</p>
               <p className="mt-2 text-sm text-[var(--muted)]">{t(`pricing.${plan.key}.desc`)}</p>
               <ul className="mt-5 space-y-2.5 text-sm text-[var(--ink)]">
                 {plan.features.map((f) => (
@@ -340,7 +374,59 @@ export default async function Landing() {
           ))}
         </div>
 
-        <div className="mx-auto mt-6 max-w-xl">
+        {/* PLAN KARŞILAŞTIRMA TABLOSU */}
+        <div className="mx-auto mt-14 max-w-4xl">
+          <h3 className="text-center font-display text-2xl font-bold">{t("pricing.compare.title")}</h3>
+          <div className="mt-6 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white/60">
+            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-[var(--line)]">
+                  <th scope="col" className="p-4 font-semibold text-[var(--muted)]">{t("pricing.compare.feature")}</th>
+                  {compareTiers.map((c) => (
+                    <th key={c.key} scope="col" className={`p-4 text-center font-display text-base font-bold ${c.key === "full" ? "text-[var(--accent)]" : ""}`}>{t(`pricing.${c.key}.title`)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="[&_td]:border-t [&_td]:border-[var(--line)] [&_th]:border-t [&_th]:border-[var(--line)]">
+                <tr>
+                  <th scope="row" className="p-4 font-normal text-[var(--muted)]">{t("pricing.compare.monthly")}</th>
+                  {compareTiers.map((c) => <td key={c.key} className="p-4 text-center font-semibold" style={{ fontVariantNumeric: "tabular-nums" }}>{tierPrice(c.tier, "month").toLocaleString("tr-TR")} TL</td>)}
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-normal text-[var(--muted)]">{t("pricing.compare.yearly")}</th>
+                  {compareTiers.map((c) => <td key={c.key} className="p-4 text-center font-semibold" style={{ fontVariantNumeric: "tabular-nums" }}>{tierPrice(c.tier, "year").toLocaleString("tr-TR")} TL</td>)}
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-normal text-[var(--muted)]">{t("pricing.compare.setup")}</th>
+                  {compareTiers.map((c) => <td key={c.key} className="p-4 text-center" style={{ fontVariantNumeric: "tabular-nums" }}>{PRICING.setup.amount.toLocaleString("tr-TR")} TL</td>)}
+                </tr>
+                {compareRows.map((r) => (
+                  <tr key={r.key}>
+                    <th scope="row" className="p-4 font-normal text-[var(--muted)]">{t(`pricing.compare.rows.${r.key}`)}</th>
+                    {compareTiers.map((c) => {
+                      const on = r.tiers.includes(c.tier);
+                      return (
+                        <td key={c.key} className="p-4 text-center">
+                          {on ? <span className="font-bold text-[var(--accent)]"><span aria-hidden="true">✓</span><span className="sr-only">{t("pricing.compare.yes")}</span></span>
+                            : <span className="text-[var(--muted)] opacity-60"><span aria-hidden="true">✗</span><span className="sr-only">{t("pricing.compare.no")}</span></span>}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+                <tr>
+                  <th scope="row" className="p-4 font-normal text-[var(--muted)]">{t("pricing.compare.rows.quota")}</th>
+                  <td className="p-4 text-center text-[var(--muted)]">{t("pricing.compare.rows.quotaBasic")}</td>
+                  <td className="p-4 text-center" style={{ fontVariantNumeric: "tabular-nums" }}>{t("pricing.compare.rows.quotaValue", { monthly: PRICING.monthly.imageQuota, yearly: PRICING.yearly.imageQuota })}</td>
+                  <td className="p-4 text-center" style={{ fontVariantNumeric: "tabular-nums" }}>{t("pricing.compare.rows.quotaValue", { monthly: PRICING.monthlyPro.imageQuota, yearly: PRICING.yearlyPro.imageQuota })}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-center text-sm text-[var(--muted)]">{t("pricing.compare.note")}</p>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-xl">
           <div className="card p-7">
             <h3 className="font-semibold">{t("pricing.service.title")}</h3>
             <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>

@@ -92,6 +92,18 @@
         {
           "t": "Baskı maliyeti sıfır",
           "d": "Menü her değiştiğinde matbaaya gitme. Bir kez QR bas, içeriği hep ekrandan güncelle."
+        },
+        {
+          "t": "Alerjen, kalori ve porsiyon",
+          "d": "Her ürüne alerjen rozetleri, kalori, gramaj ve küçük/büyük gibi porsiyon fiyatları ekle. Misafir sormadan görsün."
+        },
+        {
+          "t": "Fotoğraftan menü aktarma",
+          "d": "Basılı menünün fotoğrafını ya da dosyasını yükle, ürünler listeye gelsin. Onaylamadan menüye eklenmez."
+        },
+        {
+          "t": "Yenilenebilir QR",
+          "d": "Basılı QR'ın yanlış ellere geçerse panelden tek tıkla yenile; eski basılı QR'lar devre dışı kalır."
         }
       ]
     },
@@ -172,11 +184,24 @@
         "Yeni ürünü saniyeler içinde ekle"
       ]
     },
+    "calculator": {
+      "eyebrow": "Hesapla",
+      "title": "Basılı menüye yılda ne ödüyorsun?",
+      "subtitle": "Kendi rakamlarını gir; Temel plan ile karşılaştır.",
+      "printsLabel": "Yılda kaç kez basıyorsun?",
+      "costLabel": "Baskı başına maliyet (₺)",
+      "printedYear": "Basılı menü, yıllık",
+      "firstYear": "İlk yıl (kurulum dahil)",
+      "nextYears": "Sonraki yıllar",
+      "saving": "Tasarruf",
+      "extra": "Ek maliyet",
+      "note": "Tahmini hesaptır. Temel plan yıllık fiyatı ve kurulum bedeli esas alınır; menü tasarım ve dağıtım giderlerini sen ekleyebilirsin."
+    },
     "pricing": {
       "eyebrow": "Fiyat",
       "title": "Basit ve net",
       "perMonth": "TL/ay",
-      "orYearly": "veya {amount} TL/yıl (~2 ay bedava)",
+      "orYearly": "veya {amount} TL/yıl ({saving} TL tasarruf, 2 ay bedava)",
       "setupNote": "İlk abonelikte tek seferlik {amount} TL kurulum bedeli",
       "trial": {
         "title": "Deneme",
@@ -193,6 +218,7 @@
         "feature1": "QR menü yayını, sabit QR adresi",
         "feature2": "Tüm temalar, logo, anlık güncelleme",
         "feature3": "Fotoğraftan ve dosyadan menü aktarma",
+        "feature4": "Alerjen, kalori, gramaj ve porsiyon bilgisi",
         "missing1": "WhatsApp ile menü güncelleme",
         "missing2": "Aylık AI fotoğraf kotası (ek paketle kullanılır)",
         "cta": "Temel ile başla"
@@ -233,6 +259,28 @@
         "feature4": "Üretilen görseller menüde \"Görsel temsilidir\" etiketiyle gösterilir",
         "cta": "Sipariş için kayıt ol"
       },
+      "compare": {
+        "title": "Planları yan yana karşılaştır",
+        "feature": "Özellik",
+        "monthly": "Aylık fiyat",
+        "yearly": "Yıllık fiyat",
+        "setup": "Kurulum bedeli (tek seferlik)",
+        "yes": "Var",
+        "no": "Yok",
+        "rows": {
+          "publish": "QR menü yayını, sabit QR adresi",
+          "themes": "Tüm temalar, logo, anlık güncelleme",
+          "details": "Alerjen, kalori, gramaj, porsiyon bilgisi",
+          "import": "Fotoğraftan ve dosyadan menü aktarma",
+          "bigMenu": "Geniş menü (200+ ürün)",
+          "qrRotate": "QR yenileme (güvenlik)",
+          "whatsapp": "WhatsApp ile menü güncelleme",
+          "quota": "Aylık AI fotoğraf iyileştirme",
+          "quotaBasic": "Yok (ek paketle)",
+          "quotaValue": "{monthly} (yıllıkta {yearly})"
+        },
+        "note": "Ömür Boyu Menü ve Anahtar teslim kurulum abonelikten bağımsızdır; yukarıdaki kartlarda ayrıntılı."
+      },
       "footnote": "Kota aşımı {overage} TL/görsel ya da {packCredits}'li paket {packAmount} TL. Toplu fotoğraf iyileştirme (50/100 foto {bulk50}/{bulk100} TL) kotadan bağımsızdır. Zincir işletmeler için özel plan mevcut."
     },
     "faq": {
@@ -258,6 +306,46 @@
         {
           "q": "Kendi logomu ve renklerimi koyabilir miyim?",
           "a": "Ücretli planlarda logonu ekleyebilir, altı hazır temadan mekanının tarzına en uygun görünümü seçebilirsin."
+        },
+        {
+          "q": "Planlar arasındaki fark nedir?",
+          "a": "Temel plan QR menü yayınını, temaları, logoyu, anlık güncellemeyi ve fotoğraftan menü aktarmayı kapsar. Full plana WhatsApp ile menü güncelleme ve aylık AI fotoğraf kotası eklenir. Profesyonel planda Full'ün tüm özellikleri ve daha yüksek AI fotoğraf kotası bulunur. Yan yana tablo için fiyat bölümüne bak."
+        },
+        {
+          "q": "Kurulum bedeli neden var, her ay mı ödenir?",
+          "a": "Kurulum bedeli ilk abonelikte bir kez alınır, her ay tekrarlanmaz. Sonraki dönemlerde yalnızca plan ücretini ödersin."
+        },
+        {
+          "q": "Yıllık ödemede ne kadar tasarruf ederim?",
+          "a": "Yıllık ödemede 12 ay yerine 10 ayın ücretini ödersin, yani 2 ay bedava. Her planın tasarruf tutarı fiyat kartında yazar."
+        },
+        {
+          "q": "Aboneliği istediğim zaman iptal edebilir miyim?",
+          "a": "Evet. Panelden \"Aboneliği Yönet\" bağlantısıyla istediğin an iptal edebilirsin. Kullanılmış abonelik dönemi için ücret iadesi yapılmaz; iptalden sonra menün yayında kalmaya devam eder, yalnızca panelden düzenleme kilitlenir. Ayrıntılar İade ve İptal Politikası sayfasında."
+        },
+        {
+          "q": "Plan değiştirebilir miyim?",
+          "a": "Plan değişikliği için panelde \"Aboneliği Yönet\" bağlantısını kullanabilir ya da bize WhatsApp'tan veya e-postayla yazabilirsin."
+        },
+        {
+          "q": "QR kodu için ek ücret var mı?",
+          "a": "Hayır. QR kodunu indirmek ve istediğin kadar bastırmak ücretsizdir. QR adresin sabittir; fiyat ve ürün güncellemeleri QR'ı değiştirmez."
+        },
+        {
+          "q": "Alerjen ve kalori bilgisini nasıl gösteririm?",
+          "a": "Panelde her ürünün \"Detaylar\" bölümünden alerjenleri işaretleyebilir, kalori, gramaj ve küçük/büyük gibi porsiyon fiyatlarını ekleyebilirsin. Bilgilerin doğruluğundan işletme sorumludur."
+        },
+        {
+          "q": "WhatsApp ile güncelleme nasıl çalışıyor?",
+          "a": "Full ve Profesyonel planlarda, tanımladığın yetkili numaradan \"Latte fiyatını 120 yap\" gibi bir mesaj yazarsın; menü anında güncellenir. Tanımsız numaralardan gelen mesajlar reddedilir ve \"geri\" yazarak son değişikliği geri alabilirsin."
+        },
+        {
+          "q": "Menüyü benim yerime hazırlayabilir misiniz?",
+          "a": "Evet. Anahtar teslim kurulum hizmetiyle ürün listeni, açıklamalarını ve fotoğraflarını biz hazırlarız. Fiyat ürün sayısına ve ihtiyaca göre hesaplanır; panelde ve fiyat bölümünde ayrıntısı var."
+        },
+        {
+          "q": "Verilerim bana mı ait?",
+          "a": "Evet. Menü içeriğin ve görsellerin sana aittir. Hesabını panelden silebilirsin; verilerin saklanma ve silinme koşulları Gizlilik Politikası ve KVKK Aydınlatma Metni'nde yazar."
         }
       ]
     },
@@ -503,6 +591,16 @@
       "enhancing": "İyileştiriliyor...",
       "enhance": "✨ İyileştir",
       "soldOut": "Tükendi",
+      "itemDetails": "Detaylar: alerjen, kalori, gramaj, porsiyon",
+      "calories": "Kalori (kcal)",
+      "portion": "Gramaj / porsiyon (ör. 250 g)",
+      "allergens": "İçerdiği alerjenler",
+      "allergenNote": "Alerjen bilgisinin doğruluğu ve güncelliği işletmenin sorumluluğundadır.",
+      "variants": "Porsiyon / boyut seçenekleri",
+      "variantName": "Ad (ör. Büyük)",
+      "variantPrice": "Fiyat",
+      "addVariant": "+ Seçenek ekle",
+      "removeVariant": "Seçeneği sil",
       "whatsappNotInPlan": "Temel planda WhatsApp ile güncelleme yok. Full veya Profesyonel plana geçince açılır.",
       "aiImageNotice": "Görsel temsilidir (yapay zekâ)",
       "serviceTitle": "Anahtar teslim kurulum",

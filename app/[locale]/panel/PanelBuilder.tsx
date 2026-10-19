@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { useTranslations } from "next-intl";
 import {
-  THEMES, TAGS, CURRENCIES, PRICING, TIERS, normalizeTier, tierPrice, tierHasWhatsapp, type Tier, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
+  THEMES, TAGS, ALLERGENS, CURRENCIES, PRICING, TIERS, normalizeTier, tierPrice, tierHasWhatsapp, type Tier, SOCIAL_PLATFORMS, SOCIAL_POSITIONS, FONTS, MENU_LAYOUTS, backfillCodes, nextCategoryCode, nextItemCode,
   type MenuData, type Category, type Item, type Tag, type SocialLinks, type SocialPosition, type MenuLayout,
 } from "@/app/lib/menu";
 import { DEMOS, type Demo } from "@/app/lib/demos";
@@ -788,6 +788,53 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                       }}>{tg.emoji} {tg.label}</button>
                     ))}
                   </div>
+
+                  {/* Detaylar: alerjen, kalori, gramaj, porsiyon seçenekleri */}
+                  <details style={{ marginTop: 10 }}>
+                    <summary style={{ cursor: "pointer", fontSize: 12.5, color: "var(--accent)", fontWeight: 600 }}>{t("itemDetails")}</summary>
+                    <div style={{ marginTop: 10, display: "grid", gap: 10 }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                        <input className="field" type="number" min={0} max={20000} inputMode="numeric" placeholder={t("calories")} value={it.calories ?? ""}
+                          onChange={(e) => setItem(cat.id, it.id, "calories", e.target.value === "" ? undefined : Math.max(0, Math.round(Number(e.target.value))))} />
+                        <input className="field" maxLength={40} placeholder={t("portion")} value={it.portion ?? ""} onChange={(e) => setItem(cat.id, it.id, "portion", e.target.value)} />
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>{t("allergens")}</div>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                          {ALLERGENS.map((al) => {
+                            const on = it.allergens?.includes(al.key) ?? false;
+                            return (
+                              <button key={al.key} type="button" aria-pressed={on} onClick={() => setItem(cat.id, it.id, "allergens", on ? (it.allergens ?? []).filter((x) => x !== al.key) : [...(it.allergens ?? []), al.key])} style={{
+                                fontSize: 11.5, padding: "3px 9px", borderRadius: 999, cursor: "pointer",
+                                border: on ? "1.5px solid var(--accent)" : "1px solid var(--line)",
+                                background: on ? "var(--accent-soft)" : "transparent", color: on ? "var(--accent)" : "var(--muted)",
+                              }}>{al.emoji} {al.label}</button>
+                            );
+                          })}
+                        </div>
+                        <p style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 6 }}>{t("allergenNote")}</p>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>{t("variants")}</div>
+                        {(it.variants ?? []).map((v, vi) => (
+                          <div key={vi} style={{ display: "grid", gridTemplateColumns: "1fr 92px 30px", gap: 8, marginBottom: 6 }}>
+                            <input className="field" maxLength={40} placeholder={t("variantName")} value={v.name}
+                              onChange={(e) => setItem(cat.id, it.id, "variants", (it.variants ?? []).map((x, xi) => xi === vi ? { ...x, name: e.target.value } : x))} />
+                            <input className="field" maxLength={24} placeholder={t("variantPrice")} value={v.price}
+                              onChange={(e) => setItem(cat.id, it.id, "variants", (it.variants ?? []).map((x, xi) => xi === vi ? { ...x, price: e.target.value } : x))} />
+                            <button type="button" title={t("removeVariant")} aria-label={t("removeVariant")} onClick={() => setItem(cat.id, it.id, "variants", (it.variants ?? []).filter((_, xi) => xi !== vi))}
+                              style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 18 }}>×</button>
+                          </div>
+                        ))}
+                        {(it.variants?.length ?? 0) < 12 && (
+                          <button type="button" className="btn-ghost btn" style={{ padding: "6px 12px", fontSize: 12.5 }}
+                            onClick={() => setItem(cat.id, it.id, "variants", [...(it.variants ?? []), { name: "", price: "" }])}>{t("addVariant")}</button>
+                        )}
+                      </div>
+                    </div>
+                  </details>
                 </div>
                 );
               })}

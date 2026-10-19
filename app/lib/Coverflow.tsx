@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { TAGS, money, type Category, type Theme } from "./menu";
+import { ItemExtras } from "./ItemExtras";
 
 /**
  * 3D coverflow: ortadaki ürün öne çıkar, yanlardakiler döner ve küçülür.
@@ -93,6 +94,7 @@ export function Coverflow({ cat, th, headingFont, currency, autoplay }: { cat: C
         </div>
         <div style={{ fontFamily: headingFont, fontWeight: 600, fontSize: 18, color: th.accent, marginTop: 2 }}>{money(it.price, currency)}</div>
         {it.desc && <div style={{ color: th.sub, fontSize: 12.5, marginTop: 5, lineHeight: 1.45, maxWidth: 260, marginInline: "auto" }}>{it.desc}</div>}
+        <ItemExtras it={it} th={th} currency={currency ?? "₺"} center />
         {it.tags.length > 0 && (
           <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
             {it.tags.map((tg) => {

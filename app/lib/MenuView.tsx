@@ -1,6 +1,7 @@
 import React from "react";
 import { Coverflow } from "./Coverflow";
 import { CategoryNav } from "./CategoryNav";
+import { ItemExtras } from "./ItemExtras";
 import { FONTS, SOCIAL_PLATFORMS, TAGS, THEMES, money, socialHref, type MenuData, type SocialLinks } from "./menu";
 
 const SOCIAL_ICON_PATHS: Record<keyof SocialLinks, React.ReactNode> = {
@@ -100,6 +101,7 @@ export function MenuView({ menu, autoplay }: { menu: MenuData; autoplay?: boolea
                       <span style={{ fontFamily: headingFont, fontWeight: 600, fontSize: 15.5, color: th.accent, whiteSpace: "nowrap" }}>{money(it.price, menu.currency)}</span>
                     </div>
                     {it.desc && <div style={{ color: th.sub, fontSize: 12.5, marginTop: 3, lineHeight: 1.45 }}>{it.desc}</div>}
+                    <ItemExtras it={it} th={th} currency={menu.currency} />
                     {it.image && it.aiImage && <div style={{ color: th.sub, fontSize: 10.5, marginTop: 3, opacity: 0.85 }}>Görsel temsilidir</div>}
                     {it.tags.length > 0 && (
                       <div style={{ display: "flex", gap: 6, marginTop: 7, flexWrap: "wrap" }}>

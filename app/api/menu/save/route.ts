@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, getRequestUser } from "../../../lib/supabase/server";
-import type { Category, MenuLayout, SocialLinks, SocialPosition } from "../../../lib/menu";
+import { sanitizeCategories, type Category, type MenuLayout, type SocialLinks, type SocialPosition } from "../../../lib/menu";
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
 
@@ -49,7 +49,11 @@ export async function POST(req: Request) {
   if ("subtitle" in data) patch.subtitle = data.subtitle;
   if ("theme" in data) patch.theme = data.theme;
   if ("currency" in data) patch.currency = data.currency;
-  if ("categories" in data) patch.menu = data.categories;
+  if ("categories" in data) {
+    const clean = sanitizeCategories(data.categories);
+    if (!clean) return NextResponse.json({ error: "Geçersiz menü verisi" }, { status: 400 });
+    patch.menu = clean;
+  }
   if ("logo" in data) patch.logo_url = data.logo || null;
   if ("social" in data) patch.social = data.social || {};
   if ("socialPosition" in data) patch.social_position = data.socialPosition || "top";
