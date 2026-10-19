@@ -436,7 +436,6 @@
       "manageSubscription": "Manage subscription",
       "lifetimeActive": "Lifetime Menu: permanent editing access, no subscription needed",
       "editLocked": "Your subscription isn't active, so menu editing is off. Your menu stays live.",
-      "buyLifetime": "Buy Lifetime, up to {items} items ({amount}₺)",
       "tierBasic": "Basic",
       "tierStarter": "Full",
       "tierDesc_basic": "Basic: QR menu, themes, logo, instant updates, menu import. No WhatsApp updates and no monthly AI photo quota.",
@@ -572,7 +571,7 @@
       "errUploadFailed": "Upload failed.",
       "errQuotaFull": "Your photo quota is full.",
       "errRegenerateFailed": "Regeneration failed.",
-      "errEditLocked": "Your subscription isn't active, so menu editing is off. You can subscribe or buy the Lifetime Menu from the panel."
+      "errEditLocked": "Your subscription isn't active, so menu editing is off. You can subscribe again from the panel."
     }
   },
   "CookieConsent": {

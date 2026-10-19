@@ -390,16 +390,6 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
     if (d.url) window.location.href = d.url;
     else alert(d.error || t("errCheckoutFailed"));
   };
-  const buyLifetime = async () => {
-    if (!(await askConsent())) return;
-    setBillingLoading(true);
-    const r = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product: "lifetime", consent: true }) });
-    const d = await r.json();
-    setBillingLoading(false);
-    if (d.url) window.location.href = d.url;
-    else alert(d.error || t("errCheckoutFailed"));
-  };
-
   // === WhatsApp yetkili numaralar (whitelist) ===
   const refreshWa = async () => {
     const r = await fetch("/api/whatsapp/verify");
@@ -464,11 +454,6 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
                 <p style={{ maxWidth: 420, textAlign: "right", fontSize: 12, color: "var(--muted)" }}>
                   {t(`tierDesc_${tierChoice}`, { quota: tierChoice === "pro" ? (interval === "year" ? PRICING.yearlyPro.imageQuota : PRICING.monthlyPro.imageQuota) : (interval === "year" ? PRICING.yearly.imageQuota : PRICING.monthly.imageQuota) })}
                 </p>
-                {!isLifetime && (
-                  <button className="btn-ghost btn" style={{ padding: "6px 10px", fontSize: 12.5 }} disabled={billingLoading} onClick={buyLifetime}>
-                    {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
-                  </button>
-                )}
               </div>
             )}
           </div>
@@ -477,9 +462,6 @@ export function PanelBuilder({ restaurant, subscription, businessNumber }: {
             <div className="card" style={{ padding: 16, marginBottom: 16, background: "var(--accent-10, rgba(224,137,27,0.08))", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
               <div style={{ fontSize: 14 }}>{t("editLocked")}</div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button className="btn-ghost btn" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={buyLifetime}>
-                  {t("buyLifetime", { amount: PRICING.lifetime.amount, items: PRICING.lifetime.items })}
-                </button>
                 <button className="btn btn-accent" style={{ padding: "8px 14px", fontSize: 13.5 }} disabled={billingLoading} onClick={goCheckout}>
                   {t("upgrade")}
                 </button>

@@ -436,7 +436,6 @@
       "manageSubscription": "Aboneliği yönet",
       "lifetimeActive": "Ömür Boyu Menü: kalıcı düzenleme hakkı, abonelik gerekmez",
       "editLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Menün yayında kalmaya devam ediyor.",
-      "buyLifetime": "Tek Seferlik satın al, {items} ürüne kadar ({amount}₺)",
       "tierBasic": "Temel",
       "tierStarter": "Full",
       "tierDesc_basic": "Temel: QR menü, tema, logo, anlık güncelleme, menü aktarma. WhatsApp ile güncelleme ve aylık AI görsel kotası yok.",
@@ -572,7 +571,7 @@
       "errUploadFailed": "Yükleme başarısız oldu.",
       "errQuotaFull": "Görsel kotan doldu.",
       "errRegenerateFailed": "Yeniden oluşturma başarısız.",
-      "errEditLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Panelden abone olabilir ya da Tek Seferlik (Ömür Boyu Menü) satın alabilirsin."
+      "errEditLocked": "Aboneliğin aktif değil, bu yüzden menü düzenleme kapalı. Panelden tekrar abone olabilirsin."
     }
   },
   "CookieConsent": {

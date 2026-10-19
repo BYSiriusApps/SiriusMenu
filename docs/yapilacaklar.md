@@ -88,3 +88,5 @@ Avrupa/ABD'ye satış ve bölgesel fiyat öncesi netleştirilecekler (bkz. `docs
 - **Yapay zekâ:** AB AI Act şeffaflık yükümlülükleri (yapay zekâ ile üretilen görsellerin işaretlenmesi) ve "Görsel temsilidir" etiketinin yeterliliği.
 - **Fiyat:** Önerilen EU/US fiyat tablosu onay bekliyor (Temel 19 USD/17 EUR, Full 49/45, Profesyonel 79/75 ...); Stripe çoklu para birimi (`currency_options`) ve bölge seçimi kodlanacak.
 - Sorulacak: UK merkezli SaaS'ın AB'ye satışında minimum yasal kurulum (VAT kaydı eşiği, DPA şablonları), küçük işletmeler için pratik uyum kontrol listesi.
+
+- [2026-10-19] Tek Seferlik (Ömür Boyu Menü) paketi landing ve panelden kaldırıldı; API/webhook/sözleşme metni müşteri talebi için canlı bırakıldı. Talep gelirse /api/stripe/checkout product=lifetime ile satılabilir.

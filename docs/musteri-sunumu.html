@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiriusMenu Müşteri Sunumu</title>
+<style>
+:root{--accent:#e0891b;--ink:#1c1917;--muted:#78716c;--bg:#fffaf3;--card:#ffffff;--line:#eadfcf}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1c1917;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink)}
+.deck{height:100vh;display:flex;align-items:center;justify-content:center}
+.slide{display:none;width:min(96vw,calc(96vh*16/9));aspect-ratio:16/9;background:var(--bg);border-radius:14px;padding:5% 6%;position:relative;overflow:hidden;flex-direction:column;container-type:inline-size}
+.slide.on{display:flex}
+.slide::after{content:"SiriusMenu";position:absolute;left:6%;bottom:3.2%;font-size:1.3cqw;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.num{position:absolute;right:6%;bottom:3.2%;font-size:1.3cqw;color:var(--muted)}
+.eyebrow{font-size:1.5cqw;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.2cqw}
+h1{font-size:6.2cqw;line-height:1.05;font-weight:800}
+h2{font-size:3.6cqw;line-height:1.1;font-weight:800;margin-bottom:2cqw}
+p,li{font-size:1.9cqw;line-height:1.5}
+.muted{color:var(--muted)}
+.accent{color:var(--accent)}
+.grid{display:grid;gap:1.6cqw;flex:1;min-height:0}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:1.2cqw;padding:1.8cqw}
+.card.hl{border:.25cqw solid var(--accent)}
+.card h3{font-size:2.2cqw;margin-bottom:.6cqw}
+.card p,.card li{font-size:1.55cqw;line-height:1.45}
+.card ul{list-style:none;margin-top:1cqw}
+.card li{padding:.25cqw 0}
+.card li::before{content:"✓ ";color:var(--accent);font-weight:700}
+.card li.no{color:var(--muted);opacity:.7}.card li.no::before{content:"✗ ";color:var(--muted)}
+.price{font-size:3.4cqw;font-weight:800;margin:.4cqw 0}
+.price small{font-size:1.5cqw;font-weight:400;color:var(--muted)}
+.badge{position:absolute;top:-1cqw;right:1.4cqw;background:var(--accent);color:#fff;font-size:1.2cqw;font-weight:700;padding:.3cqw 1cqw;border-radius:99px}
+.card{position:relative}
+.big{font-size:2.8cqw;font-weight:800;color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:1.55cqw}
+th,td{padding:.9cqw 1cqw;border-bottom:1px solid var(--line);text-align:center}
+th:first-child,td:first-child{text-align:left}
+th{font-size:1.6cqw}
+.cover{justify-content:center}
+.cover p{font-size:2.3cqw;margin-top:2cqw;max-width:60cqw}
+.hint{position:fixed;bottom:8px;left:0;right:0;text-align:center;color:#a8a29e;font-size:12px}
+@media print{
+ html,body{background:#fff;height:auto}.deck{display:block;height:auto}.hint{display:none}
+ .slide{display:flex!important;width:100%;border-radius:0;page-break-after:always;break-after:page}
+ @page{size:297mm 167mm;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide cover on">
+  <div class="eyebrow">Müşteri Sunumu</div>
+  <h1>Menün her zaman güncel,<br><span class="accent">baskı derdi yok.</span></h1>
+  <p>SiriusMenu ile restoran ve kafe menünü QR koduyla sun. Fiyatı değiştir, ürünü ekle, WhatsApp'tan yaz; menü anında güncellensin.</p>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Neden SiriusMenu</div>
+  <h2>Basılı menünün üç dertine son</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Baskı maliyeti</h3><p>Her fiyat değişikliğinde yeniden basım, laminasyon, kayıp ve yıpranmış menüler.</p><p class="big" style="margin-top:1.5cqw">Baskı yok</p></div>
+    <div class="card"><h3>Gecikmiş güncelleme</h3><p>Biten ürün ya da zamlı fiyat menüde günlerce yanlış kalır, müşteriyle tartışma çıkar.</p><p class="big" style="margin-top:1.5cqw">Anlık güncelleme</p></div>
+    <div class="card"><h3>Teknik zorluk</h3><p>Web sitesi, yazılımcı ya da karmaşık panel gerekmez. Telefonundan yönetirsin.</p><p class="big" style="margin-top:1.5cqw">Kolay yönetim</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Nasıl çalışır</div>
+  <h2>4 adımda yayında</h2>
+  <div class="grid g4">
+    <div class="card"><div class="big">1</div><h3>Menünü oluştur</h3><p>Panelden kategori ve ürünleri ekle, ya da menü fotoğrafını yükle; yapay zekâ ürünleri okuyup listeye çevirsin.</p></div>
+    <div class="card"><div class="big">2</div><h3>Tema ve logo seç</h3><p>Hazır temalar, kendi logon ve renklerinle markana uygun görünüm.</p></div>
+    <div class="card"><div class="big">3</div><h3>QR'ı yazdır</h3><p>Masalara koyacağın sabit QR kodunu indir. Menü değişse de QR aynı kalır.</p></div>
+    <div class="card"><div class="big">4</div><h3>Güncel tut</h3><p>Panelden ya da (Full ve Profesyonel planda) WhatsApp'tan yaz, menü anında güncellensin.</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Özellikler</div>
+  <h2>Menünün içinde neler var</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Menü oluşturucu</h3><ul><li>Kategori ve ürün yönetimi</li><li>Etiketler ve para birimleri</li><li>6 hazır tema, logo yükleme</li><li>Her ürüne kalıcı ürün kodu</li></ul></div>
+    <div class="card"><h3>Fotoğraf ve yapay zekâ</h3><ul><li>Ürün fotoğrafı ekleme</li><li>AI ile fotoğraf iyileştirme</li><li>Fotoğraftan ve dosyadan menü aktarma</li><li>Onay listesiyle kontrollü içe aktarma</li></ul></div>
+    <div class="card"><h3>WhatsApp ile güncelleme</h3><ul><li>"Latte fiyatı 140 olsun" yaz, menü değişsin</li><li>Yalnızca yetkili numaralar işlem yapar</li><li>Full ve Profesyonel planlarda</li><li>Telefonundan, panele girmeden</li></ul></div>
+    <div class="card"><h3>QR ve güvenlik</h3><ul><li>Sabit QR adresi</li><li>"QR'ı yenile" ile eski basılı QR'ları geçersiz kıl</li><li>Paylaşım linki her zaman çalışır</li></ul></div>
+    <div class="card"><h3>Müşteri deneyimi</h3><ul><li>Mobilde hızlı, uygulama gerekmez</li><li>Ürün fotoğraflı, okunaklı menü</li><li>Geniş menülere uygun (200+ ürün)</li></ul></div>
+    <div class="card"><h3>Hesap ve ödeme</h3><ul><li>Aylık ya da yıllık abonelik</li><li>Kart ile güvenli ödeme (Stripe)</li><li>Fatura ve abonelik yönetimi panelde</li></ul></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Paketler</div>
+  <h2>Üç plan, net fiyat</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Temel</h3><p class="muted">Sadece QR menü yeterliyse.</p>
+      <div class="price">499 TL<small> /ay</small></div><p class="muted">veya 4.990 TL/yıl (~2 ay bedava)</p>
+      <ul><li>QR menü yayını, sabit QR adresi</li><li>Tüm temalar, logo, anlık güncelleme</li><li>Fotoğraftan ve dosyadan menü aktarma</li><li class="no">WhatsApp ile menü güncelleme</li><li class="no">Aylık AI fotoğraf kotası (ek paketle kullanılır)</li></ul></div>
+    <div class="card hl"><span class="badge">EN ÇOK TERCİH</span><h3>Full</h3><p class="muted">WhatsApp'tan yaz, menü güncellensin.</p>
+      <div class="price">999 TL<small> /ay</small></div><p class="muted">veya 9.990 TL/yıl (~2 ay bedava)</p>
+      <ul><li>Temel planın tüm özellikleri</li><li>WhatsApp AI ile menü güncelleme</li><li>Ayda 30 AI fotoğraf iyileştirme (yıllıkta 40)</li><li>Geniş menülere uygun (200+ ürün)</li></ul></div>
+    <div class="card"><h3>Profesyonel</h3><p class="muted">Çok fotoğraflı, sık güncellenen menüler için.</p>
+      <div class="price">1.499 TL<small> /ay</small></div><p class="muted">veya 14.990 TL/yıl (~2 ay bedava)</p>
+      <ul><li>Full planın tüm özellikleri</li><li>Ayda 60 AI fotoğraf iyileştirme (yıllıkta 80)</li></ul></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Karşılaştırma</div>
+  <h2>Hangi plan sana uygun</h2>
+  <div class="card">
+  <table>
+    <tr><th></th><th>Temel</th><th class="accent">Full</th><th>Profesyonel</th></tr>
+    <tr><td>Aylık fiyat</td><td>499 TL</td><td>999 TL</td><td>1.499 TL</td></tr>
+    <tr><td>Yıllık fiyat</td><td>4.990 TL</td><td>9.990 TL</td><td>14.990 TL</td></tr>
+    <tr><td>QR menü, temalar, logo</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><td>Anlık panel güncellemesi</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><td>Fotoğraf / dosyadan menü aktarma</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><td>WhatsApp ile menü güncelleme</td><td>-</td><td>✓</td><td>✓</td></tr>
+    <tr><td>Aylık AI fotoğraf kotası</td><td>Yok (ek paket)</td><td>30</td><td>60</td></tr>
+    <tr><td>Yıllıkta aylık AI fotoğraf kotası</td><td>Yok (ek paket)</td><td>40</td><td>80</td></tr>
+  </table>
+  </div>
+  <p class="muted" style="margin-top:1.4cqw;font-size:1.5cqw">İlk abonelikte tek seferlik 2.500 TL kurulum bedeli uygulanır. Zincir işletmeler için özel plan mevcuttur.</p>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Hizmet</div>
+  <h2>Anahtar teslim kurulum: menünü biz hazırlarız</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Kurulum bedeli (tek seferlik)</h3>
+      <ul><li>50 ürüne kadar: <strong>3.500 TL</strong></li><li>100 ürüne kadar: <strong>5.500 TL</strong></li><li>150 ürüne kadar: <strong>7.500 TL</strong></li><li>150 ürünün üstünde her 50 ürün için 2.000 TL</li></ul>
+      <p class="muted" style="margin-top:1cqw">Aboneliğe ek, tek seferlik hizmettir.</p></div>
+    <div class="card"><h3>İstersen ürün başı ek hizmetler</h3>
+      <ul><li>Fotoğraf iyileştirme: <strong>20 TL</strong> / ürün</li><li>Görsel üretimi: <strong>45 TL</strong> / ürün</li><li>İçerik yazımı: <strong>35 TL</strong> / ürün</li><li>Üretilen görseller menüde "Görsel temsilidir" etiketiyle gösterilir</li></ul>
+      <p class="muted" style="margin-top:1cqw">Tüm ürünlerin bilgisini ve fotoğraflarını bize ver, menün hazır teslim edilsin.</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Ek paketler</div>
+  <h2>Fotoğraf ihtiyacın kotayı aşarsa</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Kota aşımı</h3><div class="price">25 TL<small> /görsel</small></div><p>Aylık kotan bittiğinde istediğin kadar tek tek devam et.</p></div>
+    <div class="card"><h3>20'li görsel paketi</h3><div class="price">400 TL</div><p>20 AI fotoğraf iyileştirme hakkı. Temel planda da kullanılabilir.</p></div>
+    <div class="card"><h3>Toplu iyileştirme</h3><p><strong>50 fotoğraf: 999 TL</strong></p><p><strong>100 fotoğraf: 1.999 TL</strong></p><p class="muted" style="margin-top:.8cqw">Aylık kotadan bağımsızdır; mevcut menünü topluca yenilemek için.</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="eyebrow">Sık sorulanlar</div>
+  <h2>Aklındaki sorular</h2>
+  <div class="grid g2">
+    <div class="card"><h3>QR'ı bir kez basıp unutabilir miyim?</h3><p>Evet. QR adresi sabittir; menüyü istediğin kadar güncelle, yeniden baskı gerekmez.</p></div>
+    <div class="card"><h3>Başkası QR'ımı kullanırsa?</h3><p>Panelden "QR'ı yenile" dersin; eski basılı QR'lar geçersiz olur.</p></div>
+    <div class="card"><h3>Teknik bilgi gerekir mi?</h3><p>Hayır. Panel sade, WhatsApp ile yazarak da güncelleyebilirsin. Dilersen menüyü biz kurarız.</p></div>
+    <div class="card"><h3>Önce deneyebilir miyim?</h3><p>Evet. Ücretsiz denemede menünü oluşturur, önizler ve QR'ını indirirsin.</p></div>
+  </div>
+</section>
+
+<section class="slide cover">
+  <div class="eyebrow">Başlayalım</div>
+  <h1>Menünü bugün<br><span class="accent">yayına alalım.</span></h1>
+  <p>Ücretsiz denemeyle menünü oluştur, planını sonra seç. İstersen kurulumu bizim ekip yapsın.</p>
+</section>
+
+</div>
+<div class="hint">← → ile ilerle · F tam ekran · Yazdır / PDF için Ctrl+P</div>
+<script>
+const s=[...document.querySelectorAll('.slide')];let i=0;
+s.forEach((e,k)=>{const n=document.createElement('span');n.className='num';n.textContent=(k+1)+' / '+s.length;e.appendChild(n)});
+const show=k=>{i=Math.max(0,Math.min(s.length-1,k));s.forEach((e,j)=>e.classList.toggle('on',j===i));location.hash=i+1};
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))show(i+1);else if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);else if(e.key==='f')document.documentElement.requestFullscreen?.()});
+addEventListener('click',e=>show(e.clientX>innerWidth/2?i+1:i-1));
+if(location.hash)show(parseInt(location.hash.slice(1))-1||0);
+</script>
+</body>
+</html>

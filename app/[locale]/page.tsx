@@ -340,20 +340,7 @@ export default async function Landing() {
           ))}
         </div>
 
-        <div className="mx-auto mt-6 grid gap-6 md:grid-cols-2">
-          <div className="card p-7">
-            <h3 className="font-semibold">{t("pricing.lifetime.title")}</h3>
-            <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
-              {t("pricing.lifetime.price", { amount: PRICING.lifetime.amount.toLocaleString("tr-TR") })}
-            </p>
-            <p className="mt-1 text-sm text-[var(--muted)]">{t("pricing.lifetime.priceNote")}</p>
-            <ul className="mt-5 space-y-2.5 text-sm text-[var(--ink)]">
-              <li>✓ {t("pricing.lifetime.feature1", { items: PRICING.lifetime.items })}</li>
-              <li>✓ {t("pricing.lifetime.feature2", { block: PRICING.lifetime.extraBlockItems, extra: PRICING.lifetime.extraBlockAmount.toLocaleString("tr-TR") })}</li>
-              <li className="text-[var(--muted)] opacity-60">✗ {t("pricing.lifetime.feature3")}</li>
-            </ul>
-            <Link href="/kayit" className={`btn btn-ghost mt-6 w-full ${ring}`}>{t("pricing.lifetime.cta")}</Link>
-          </div>
+        <div className="mx-auto mt-6 max-w-xl">
           <div className="card p-7">
             <h3 className="font-semibold">{t("pricing.service.title")}</h3>
             <p className="mt-2 font-display text-3xl font-extrabold" style={{ fontVariantNumeric: "tabular-nums" }}>
