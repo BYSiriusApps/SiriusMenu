@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 /** Landing: WhatsApp konuşması mesaj mesaj belirir, bitince başa sarar. prefers-reduced-motion'da hepsi sabit görünür. */
@@ -33,7 +34,7 @@ export function WhatsAppChat({ messages, title, typingLabel, onlineLabel }: { me
   return (
     <div className="wa-card relative mx-auto w-full max-w-[440px] overflow-hidden rounded-[28px] border border-white/10 bg-[#0e1512] shadow-[0_40px_90px_-30px_rgba(31,138,82,.55)]">
       <div className="flex items-center gap-3 bg-[#1f8a52] px-5 py-4 text-white">
-        <span aria-hidden="true" className="grid h-10 w-10 place-items-center rounded-full bg-white/20 font-display text-lg font-extrabold">S</span>
+        <Image src="/icon.png" alt="" aria-hidden="true" width={40} height={40} className="h-10 w-10 rounded-full" />
         <div>
           <p className="text-base font-bold leading-tight">{title}</p>
           <p className="text-xs text-white/80">{typing ? typingLabel : onlineLabel}</p>
