@@ -1,3 +1,4 @@
+import { Logo } from "@/app/components/Logo";
 import Link from "next/link";
 
 export const LEGAL_PAGES = [
@@ -23,10 +24,7 @@ export function LegalLayout({
     <main>
       <nav className="border-b border-[var(--line)] bg-[var(--bg)]/85 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 font-display text-xl font-extrabold">
-            <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-sm font-extrabold text-white">S</span>
-            SiriusMenu
-          </Link>
+          <Link href="/" aria-label="SiriusMenu" className="flex items-center"><Logo height={30} /></Link>
           <Link href="/" className="text-sm text-[var(--muted)] transition hover:text-[var(--ink)]">← Ana sayfa</Link>
         </div>
       </nav>

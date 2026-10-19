@@ -1,4 +1,5 @@
 "use client";
+import { Logo } from "@/app/components/Logo";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
@@ -108,7 +109,7 @@ export default function Kayit() {
   return (
     <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
       <form onSubmit={submit} className="card" style={{ padding: 28, width: 380, maxWidth: "100%", display: "grid", gap: 14 }}>
-        <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
+        <Link href="/" aria-label="SiriusMenu"><Logo height={30} /></Link>
         <h1 className="font-display" style={{ fontSize: 22, fontWeight: 700 }}>{t("title")}</h1>
         <label><span>{t("email")}</span>
           <input className="field" style={{ marginTop: 5 }} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -1,4 +1,5 @@
 "use client";
+import { Logo } from "@/app/components/Logo";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import QRCode from "qrcode";
@@ -71,7 +72,7 @@ export default function Builder() {
   return (
     <main style={{ minHeight: "100vh" }}>
       <header style={{ borderBottom: "1px solid var(--line)", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--paper)" }}>
-        <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
+        <Link href="/" aria-label="SiriusMenu"><Logo height={30} /></Link>
         <Link href="/" style={{ fontSize: 14, color: "var(--muted)" }}>← Ana sayfa</Link>
       </header>
 

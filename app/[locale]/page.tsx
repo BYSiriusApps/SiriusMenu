@@ -1,3 +1,4 @@
+import { Logo } from "@/app/components/Logo";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MenuView, Phone } from "@/app/lib/MenuView";
@@ -57,10 +58,7 @@ export default async function Landing() {
       {/* NAV */}
       <nav className="nav-solid sticky top-0 z-30 border-b border-[var(--line)] backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="flex items-center gap-2 font-display text-2xl font-extrabold">
-            <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-sm font-extrabold text-white">S</span>
-            SiriusMenu
-          </span>
+          <span className="flex items-center"><Logo height={36} priority /></span>
           <div className="hidden items-center gap-7 text-[15px] font-semibold text-[var(--ink)]/75 md:flex">
             <a href="#whatsapp" className={`flex items-center gap-1.5 rounded-full bg-[#25d366]/15 px-3 py-1 font-bold text-[#128c4a] transition hover:bg-[#25d366]/25 ${ring}`}><span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-[#25d366]" />{t("nav.whatsapp")}</a>
             <a href="#ornek" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>{t("nav.example")}</a>
@@ -487,10 +485,7 @@ export default async function Landing() {
 
       <footer className="border-t border-[var(--line)] py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 text-sm text-[var(--muted)] md:flex-row">
-          <span className="flex items-center gap-2 font-display text-lg font-extrabold text-[var(--ink)]">
-            <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-md bg-[var(--accent)] text-xs font-extrabold text-white">S</span>
-            SiriusMenu
-          </span>
+          <span className="flex items-center"><Logo height={30} /></span>
           <span>{t("footer.tagline")}</span>
         </div>
         <div className="mx-auto mt-6 flex max-w-6xl flex-wrap justify-center gap-x-5 gap-y-2 px-6 text-xs text-[var(--muted)] md:justify-start">

@@ -1,4 +1,5 @@
 "use client";
+import { Logo } from "@/app/components/Logo";
 import { Suspense, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
@@ -31,7 +32,7 @@ function GirisForm() {
 
   return (
     <form onSubmit={submit} className="card" style={{ padding: 28, width: 380, maxWidth: "100%", display: "grid", gap: 14 }}>
-      <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
+      <Link href="/" aria-label="SiriusMenu"><Logo height={30} /></Link>
       <h1 className="font-display" style={{ fontSize: 22, fontWeight: 700 }}>{t("title")}</h1>
       {params.get("error") === "confirm" && <p role="alert" style={{ fontSize: 13.5, color: "#b3261e" }}>{t("errConfirmLink")}</p>}
       {params.get("expired") && <p style={{ fontSize: 13.5, color: "var(--muted)" }}>{t("expired")}</p>}

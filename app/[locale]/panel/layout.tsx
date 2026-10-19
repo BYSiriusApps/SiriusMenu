@@ -1,3 +1,4 @@
+import { Logo } from "@/app/components/Logo";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { getAuthUser } from "@/app/lib/supabase/server";
@@ -13,7 +14,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   return (
     <div style={{ minHeight: "100vh" }}>
       <header style={{ borderBottom: "1px solid var(--line)", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--paper)" }}>
-        <Link href="/" className="font-display" style={{ fontSize: 20, fontWeight: 800 }}>SiriusMenu</Link>
+        <Link href="/" aria-label="SiriusMenu"><Logo height={30} /></Link>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <Link href="/" style={{ fontSize: 13.5, color: "var(--muted)" }}>{t("home")}</Link>
           <Link href="/panel" style={{ fontSize: 13.5, color: "var(--muted)" }}>{t("panel")}</Link>
