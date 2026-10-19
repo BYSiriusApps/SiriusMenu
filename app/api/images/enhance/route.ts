@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient, createServiceClient, getRequestUser } from "../../../lib/supabase/server";
 import { enhanceFoodPhoto, isGeminiConfigured } from "../../../lib/gemini";
+import { isOwnedPhotoPath } from "../../../lib/storage-path";
 
 export const maxDuration = 60;
 
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
     .single();
   if (!restaurant) return NextResponse.json({ error: "Restoran bulunamadı" }, { status: 404 });
 
-  if (!String(originalPath).startsWith(`${restaurant.id}/`)) {
+  if (!isOwnedPhotoPath(originalPath, restaurant.id)) {
     return NextResponse.json({ error: "Geçersiz dosya yolu" }, { status: 403 });
   }
 

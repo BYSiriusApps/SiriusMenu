@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "../../../lib/supabase/server";
+import { createClient, createServiceClient } from "../../../lib/supabase/server";
 
 function toE164(raw: string): string | null {
   const digits = String(raw || "").replace(/[^\d]/g, "");
@@ -43,7 +43,9 @@ export async function POST(req: Request) {
 
   const code = String(Math.floor(100000 + Math.random() * 900000));
 
-  const { data, error } = await supabase
+  // Yazma service role ile yapılır (RLS sahibe ekleme/güncelleme vermez, bkz. migration 0015);
+  // rid yukarıda oturumdan türetildi, istemciden gelmez.
+  const { data, error } = await createServiceClient()
     .from("whatsapp_authorized_numbers")
     .upsert(
       { restaurant_id: rid, phone: e164, role: role || "yetkili", verified: false, verify_code: code },

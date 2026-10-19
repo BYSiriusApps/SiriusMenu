@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { createServiceClient } from "../../../lib/supabase/server";
 import { parseMenuCommand, enhanceFoodPhoto, isGeminiConfigured, type MenuIntent } from "../../../lib/gemini";
@@ -17,8 +18,17 @@ function authed(req: Request): boolean {
   // güncelleyebilen sahte WhatsApp webhook olaylarına (kimlik sahteciliği) tamamen açık kalır.
   // Yerel geliştirmede (NODE_ENV !== "production") secret'sız test için izin verilir.
   if (!secret) return process.env.NODE_ENV !== "production";
-  const url = new URL(req.url);
-  return url.searchParams.get("secret") === secret || req.headers.get("x-webhook-secret") === secret;
+  // Tercih edilen yol x-webhook-secret başlığıdır (URL'ler erişim günlüklerine düşer). Mevcut Evolution
+  // kurulumu secret'ı WEBHOOK_GLOBAL_URL'deki ?secret= ile gönderdiği için geriye dönük uyumluluk
+  // amacıyla query parametresi de kabul edilir.
+  const provided = req.headers.get("x-webhook-secret") ?? new URL(req.url).searchParams.get("secret") ?? "";
+  return safeEqual(provided, secret);
+}
+
+function safeEqual(a: string, b: string): boolean {
+  const ha = createHash("sha256").update(a).digest();
+  const hb = createHash("sha256").update(b).digest();
+  return timingSafeEqual(ha, hb);
 }
 
 export async function POST(req: Request) {

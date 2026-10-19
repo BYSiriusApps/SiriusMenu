@@ -1,6 +1,7 @@
 import { createServiceClient } from "./supabase/server";
 import { enhanceFoodPhoto, isGeminiConfigured } from "./gemini";
 import type { Category } from "./menu";
+import { isOwnedPhotoPath } from "./storage-path";
 
 const BUCKET = "menu-photos";
 const BATCH = 4;
@@ -31,7 +32,9 @@ export async function processImageQueue() {
 
     for (const job of jobs) {
       try {
-        const dl = await svc.storage.from(BUCKET).download(job.original_path);
+        // Savunma derinliği: satır başka bir yoldan eklenmiş olsa bile işletme klasörü dışına çıkma.
+        if (!isOwnedPhotoPath(job.original_path, job.restaurant_id)) throw new Error("geçersiz dosya yolu");
+        const dl =await svc.storage.from(BUCKET).download(job.original_path);
         if (dl.error || !dl.data) throw new Error("orijinal okunamadı");
         const enh = await enhanceFoodPhoto(Buffer.from(await dl.data.arrayBuffer()).toString("base64"), dl.data.type || "image/jpeg");
         const enhPath = job.original_path.replace(/\/[^/]+$/, "/enhanced.png");
