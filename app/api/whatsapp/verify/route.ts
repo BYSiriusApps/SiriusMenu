@@ -6,6 +6,9 @@ function toE164(raw: string): string | null {
   if (digits.length < 10) return null;
   if (digits.startsWith("90")) return `+${digits}`;
   if (digits.startsWith("0")) return `+90${digits.slice(1)}`;
+  // Ülke kodsuz 10 haneli Türkiye cep numarası (5XXXXXXXXX): WhatsApp'tan gelen numara +90'lı olduğundan
+  // burada da +90 eklenmezse doğrulama kodu eşleşmez.
+  if (digits.length === 10 && digits.startsWith("5")) return `+90${digits}`;
   return `+${digits}`;
 }
 
