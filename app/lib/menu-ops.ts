@@ -90,7 +90,7 @@ export function applyMenuIntent(categories: Category[], intent: MenuIntent): App
       }
       if (intent.action === "update_desc") {
         item.desc = intent.value;
-        return { ok: true, categories: next, summary: `${item.name} açıklaması güncellendi` };
+        return { ok: true, categories: next, summary: `${item.name} açıklaması "${String(intent.value).slice(0, 120)}" olarak güncellendi` };
       }
       if (intent.action === "rename") {
         const old = item.name;

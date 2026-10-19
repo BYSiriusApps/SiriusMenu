@@ -90,3 +90,8 @@ Avrupa/ABD'ye satış ve bölgesel fiyat öncesi netleştirilecekler (bkz. `docs
 - Sorulacak: UK merkezli SaaS'ın AB'ye satışında minimum yasal kurulum (VAT kaydı eşiği, DPA şablonları), küçük işletmeler için pratik uyum kontrol listesi.
 
 - [2026-10-19] Tek Seferlik (Ömür Boyu Menü) paketi landing ve panelden kaldırıldı; API/webhook/sözleşme metni müşteri talebi için canlı bırakıldı. Talep gelirse /api/stripe/checkout product=lifetime ile satılabilir.
+
+## Güvenlik denetimi düzeltmeleri (2026-10-19)
+- [ ] **Migration `0015_rls_protect_billing_columns.sql` Supabase'e uygulanmalı** (SQL Editor veya `supabase db push`). Uygulanana kadar giriş yapmış kullanıcı doğrudan REST ile tier/plan/is_lifetime/image_quota/qr_token alanlarını değiştirebilir (ödeme duvarı atlatılır). Uyguladıktan sonra panelde menü kaydetme, yayınla/gizle, QR yenile, WhatsApp numara ekle/kaldır ve görsel iyileştirme akışlarını bir kez dene.
+- [ ] **Stripe Dashboard > Webhooks**: endpoint'e `checkout.session.async_payment_succeeded` olayını ekle (gecikmeli ödeme yöntemleri için; mevcut olaylar korunur).
+- [ ] **WhatsApp webhook secret**: kod artık `x-webhook-secret` başlığını tercih eder; `?secret=` query parametresi geriye dönük uyumluluk için hâlâ kabul edilir (Evolution global webhook'u özel başlık göndermiyorsa query ile devam et).

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "../../../lib/stripe";
 import { createClient, createServiceClient } from "../../../lib/supabase/server";
+import { isOwnedPhotoPath } from "../../../lib/storage-path";
 
 const PACK_PRICE: Record<string, string | undefined> = {
   bulk50: process.env.STRIPE_PRICE_ID_BULK50,
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
 
   const svc = createServiceClient();
   const rows = items
-    .filter((it: { itemKey?: string; originalPath?: string }) => it.itemKey && it.originalPath?.startsWith(`${restaurant.id}/`))
+    .filter((it: { itemKey?: string; originalPath?: string }) => typeof it?.itemKey === "string" && it.itemKey.length <= 40 && isOwnedPhotoPath(it.originalPath, restaurant.id))
     .map((it: { itemKey: string; originalPath: string }) => ({
       restaurant_id: restaurant.id, item_key: it.itemKey, original_path: it.originalPath,
       status: "uploaded", kind: "bulk",

@@ -67,10 +67,14 @@ export async function POST(req: Request) {
   };
 
   switch (event.type) {
-    case "checkout.session.completed": {
+    case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded": {
       const session = event.data.object as Stripe.Checkout.Session;
       const rid = session.metadata?.restaurant_id ?? session.client_reference_id ?? undefined;
       if (!rid) break;
+      // Ödeme henüz tahsil edilmediyse (gecikmeli yöntemler) hiçbir şey verme; tahsil olunca
+      // async_payment_succeeded olayı aynı akışı tekrar çalıştırır.
+      if (session.payment_status === "unpaid") break;
 
       if (session.mode === "subscription" && session.subscription) {
         const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
@@ -79,11 +83,13 @@ export async function POST(req: Request) {
       } else if (session.mode === "payment") {
         const product = session.metadata?.product ?? "";
         const credits = CREDITS_BY_PRODUCT[product] ?? 0;
-        await supabase.from("usage_charges").insert({
+        const charge = await supabase.from("usage_charges").insert({
           restaurant_id: rid, type: product || "overage", stripe_session_id: session.id,
           credits, amount: session.amount_total ?? null, status: "paid",
         });
-        if (product === "image_pack" && credits) {
+        // stripe_session_id unique: 23505 = bu oturum zaten işlendi (Stripe yeniden gönderdi); kredi tekrar eklenmesin.
+        const alreadyProcessed = charge.error?.code === "23505";
+        if (product === "image_pack" && credits && !alreadyProcessed) {
           const { data: r } = await supabase.from("restaurants").select("image_quota").eq("id", rid).single();
           await supabase.from("restaurants").update({ image_quota: (r?.image_quota ?? 0) + credits }).eq("id", rid);
         }
