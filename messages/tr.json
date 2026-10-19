@@ -108,6 +108,8 @@
       ]
     },
     "whatsapp": {
+      "typing": "yazıyor...",
+      "online": "çevrimiçi",
       "eyebrow": "WhatsApp AI",
       "title": "Panelsiz güncelleme. Sadece yaz.",
       "subtitle": "Tanımlı, yetkili numaradan \"Latte 120 olsun\" yaz, menü anında değişsin. Tanımsız numaralardan gelen mesajlar otomatik reddedilir; her değişiklik kayıt altında, \"geri\" ile geri alınır.",

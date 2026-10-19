@@ -8,6 +8,8 @@ import { AutoScrollPhone } from "@/app/components/AutoScrollPhone";
 import { ScrollFx } from "@/app/components/ScrollFx";
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
 import { WhatsAppButton } from "@/app/components/WhatsAppButton";
+import { WhatsAppChat } from "@/app/components/WhatsAppChat";
+import { FeatureSlider } from "@/app/components/FeatureSlider";
 import { CostCalculator } from "@/app/components/CostCalculator";
 
 /** Plan karşılaştırma tablosu: sütunlar ve satırlar. Fiyatlar/kota `PRICING`'den okunur. */
@@ -53,13 +55,14 @@ export default async function Landing() {
       <ScrollFx />
       <WhatsAppButton message={t("whatsappButton.message")} label={t("whatsappButton.label")} />
       {/* NAV */}
-      <nav className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--bg)]/85 backdrop-blur">
+      <nav className="nav-solid sticky top-0 z-30 border-b border-[var(--line)] backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <span className="flex items-center gap-2 font-display text-2xl font-extrabold">
             <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-sm font-extrabold text-white">S</span>
             SiriusMenu
           </span>
-          <div className="hidden items-center gap-7 text-sm text-[var(--muted)] md:flex">
+          <div className="hidden items-center gap-7 text-[15px] font-semibold text-[var(--ink)]/75 md:flex">
+            <a href="#whatsapp" className={`flex items-center gap-1.5 rounded-full bg-[#25d366]/15 px-3 py-1 font-bold text-[#128c4a] transition hover:bg-[#25d366]/25 ${ring}`}><span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-[#25d366]" />{t("nav.whatsapp")}</a>
             <a href="#ornek" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>{t("nav.example")}</a>
             <a href="#temalar" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>{t("nav.themes")}</a>
             <a href="#nasil" className={`transition hover:text-[var(--ink)] focus-visible:text-[var(--ink)] ${ring}`}>{t("nav.howItWorks")}</a>
@@ -74,13 +77,17 @@ export default async function Landing() {
       </nav>
 
       {/* HERO */}
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-[1fr_340px] md:py-24">
+      <div className="hero-bg">
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-10 md:min-h-[calc(100svh-66px)] md:grid-cols-[1fr_340px] md:py-8">
         <div>
-          <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("hero.eyebrow")}</p>
-          <h1 className="font-display text-[2.5rem] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance md:text-6xl">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-white/80 px-3.5 py-1.5 text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)] shadow-sm">
+            <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
+            {t("hero.eyebrow")}
+          </p>
+          <h1 className="hero-title font-display text-[2.75rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-balance md:text-7xl">
             {t("hero.title")}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--muted)]">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--ink)]/75 md:text-xl">
             {t.rich("hero.subtitle", { b: (chunks) => <b className="text-[var(--ink)]">{chunks}</b> })}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -92,7 +99,34 @@ export default async function Landing() {
           </p>
         </div>
         <div className="flex justify-center">
-          <AutoScrollPhone menu={DEFAULT_MENU} loop />
+          <div className="hero-phone">
+            <AutoScrollPhone menu={DEFAULT_MENU} loop />
+          </div>
+        </div>
+      </section>
+      </div>
+
+      {/* WHATSAPP AI (fark yaratan özellik: hero'nun hemen altında) */}
+      <section id="whatsapp" className="wa-hero py-20 md:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 md:grid-cols-[1.1fr_440px]">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/10 px-4 py-1.5 text-sm font-bold uppercase tracking-[0.14em] text-[#5ee08f]">
+              <span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-[#25d366]" />
+              {t("whatsapp.eyebrow")}
+            </p>
+            <h2 className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.03em] text-balance md:text-7xl">{t("whatsapp.title")}</h2>
+            <p className="mt-6 max-w-xl text-xl leading-relaxed text-white/80">{t("whatsapp.subtitle")}</p>
+            <ul className="mt-8 space-y-4 text-xl">
+              {whatsappBullets.map((x) => (
+                <li key={x} className="flex items-start gap-3.5">
+                  <span aria-hidden="true" className="mt-1 grid h-7 w-7 flex-shrink-0 place-items-center rounded-full bg-[#25d366] text-sm font-bold text-[#0d100e]">✓</span>
+                  {x}
+                </li>
+              ))}
+            </ul>
+            <Link href="/app" className={`btn btn-accent mt-9 !px-8 !py-4 text-lg ${ring}`}>{t("hero.ctaPrimary")}</Link>
+          </div>
+          <WhatsAppChat messages={whatsappChat} title="SiriusMenu" typingLabel={t("whatsapp.typing")} onlineLabel={t("whatsapp.online")} />
         </div>
       </section>
 
@@ -120,11 +154,11 @@ export default async function Landing() {
       {/* ÖRNEK / SHOWCASE */}
       <section id="ornek" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("showcase.eyebrow")}</p>
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("showcase.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold leading-tight tracking-[-0.02em] text-balance md:text-5xl">
             {t("showcase.title")}
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-[var(--muted)]">
+          <p className="mt-5 text-xl leading-relaxed text-[var(--muted)]">
             {t("showcase.subtitle")}
           </p>
         </div>
@@ -159,7 +193,7 @@ export default async function Landing() {
       <section id="temalar" className="border-y border-[var(--line)] bg-white/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("themes.eyebrow")}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("themes.eyebrow")}</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("themes.title")}</h2>
             <p className="mt-4 text-lg text-[var(--muted)]">{t("themes.subtitle")}</p>
           </div>
@@ -196,58 +230,19 @@ export default async function Landing() {
       </section>
 
       {/* ÖZELLİKLER */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("features.eyebrow")}</p>
+      <section className="mx-auto max-w-[100vw] overflow-hidden py-20">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("features.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("features.title")}</h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
-            <div key={f.t} className="card p-7">
-              <span className="font-display text-2xl font-extrabold text-[var(--accent)]" style={{ fontVariantNumeric: "tabular-nums" }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-3 font-display text-xl font-bold">{f.t}</h3>
-              <p className="mt-2 leading-relaxed text-[var(--muted)]">{f.d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* WHATSAPP AI */}
-      <section className="bg-[#151310] py-20 text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-[1fr_420px]">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("whatsapp.eyebrow")}</p>
-            <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("whatsapp.title")}</h2>
-            <p className="mt-5 text-lg leading-relaxed text-[#bfae94]">
-              {t("whatsapp.subtitle")}
-            </p>
-            <ul className="mt-6 space-y-3">
-              {whatsappBullets.map((x) => (
-                <li key={x} className="flex items-start gap-3">
-                  <span aria-hidden="true" className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-[var(--accent)] text-[11px] font-bold text-white">✓</span>
-                  {x}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-[#1b1712] p-6">
-            <div className="flex flex-col gap-3">
-              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1f8a52] px-4 py-3 text-sm">{whatsappChat[0]}</div>
-              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#2a241b] px-4 py-3 text-sm text-[#e8dfd0]">{whatsappChat[1]}</div>
-              <div className="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1f8a52] px-4 py-3 text-sm">{whatsappChat[2]}</div>
-              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#2a241b] px-4 py-3 text-sm text-[#e8dfd0]">{whatsappChat[3]}</div>
-            </div>
-          </div>
-        </div>
+        <div className="mt-12"><FeatureSlider items={features} /></div>
       </section>
 
       {/* NASIL ÇALIŞIR */}
       <section id="nasil" className="border-y border-[var(--line)] bg-white/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("howItWorks.eyebrow")}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("howItWorks.eyebrow")}</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("howItWorks.title")}</h2>
           </div>
           <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
@@ -255,7 +250,7 @@ export default async function Landing() {
               <div key={s.n} className="card p-7">
                 <span className="grid h-11 w-11 place-items-center rounded-full bg-[var(--accent)] font-display text-lg font-bold text-white" style={{ fontVariantNumeric: "tabular-nums" }}>{s.n}</span>
                 <h3 className="mt-4 font-display text-xl font-bold">{s.t}</h3>
-                <p className="mt-2 leading-relaxed text-[var(--muted)]">{s.d}</p>
+                <p className="mt-2 text-lg leading-relaxed text-[var(--muted)]">{s.d}</p>
               </div>
             ))}
           </div>
@@ -265,14 +260,14 @@ export default async function Landing() {
       {/* KULLANIM ALANLARI */}
       <section className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("uses.eyebrow")}</p>
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("uses.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("uses.title")}</h2>
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {uses.map((u) => (
             <div key={u.t} className="card p-7">
               <h3 className="font-display text-xl font-bold">{u.t}</h3>
-              <p className="mt-2 leading-relaxed text-[var(--muted)]">{u.d}</p>
+              <p className="mt-2 text-lg leading-relaxed text-[var(--muted)]">{u.d}</p>
             </div>
           ))}
         </div>
@@ -282,7 +277,7 @@ export default async function Landing() {
       <section className="border-y border-[var(--line)] bg-white/60">
         <div className="mx-auto max-w-4xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("comparison.eyebrow")}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("comparison.eyebrow")}</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("comparison.title")}</h2>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -315,7 +310,7 @@ export default async function Landing() {
       {/* MALİYET HESAPLAYICI */}
       <section id="hesapla" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("calculator.eyebrow")}</p>
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("calculator.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("calculator.title")}</h2>
           <p className="mt-4 text-lg text-[var(--muted)]">{t("calculator.subtitle")}</p>
         </div>
@@ -332,7 +327,7 @@ export default async function Landing() {
       {/* FİYAT */}
       <section id="fiyat" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("pricing.eyebrow")}</p>
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("pricing.eyebrow")}</p>
           <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("pricing.title")}</h2>
         </div>
         <div className="mx-auto mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -462,7 +457,7 @@ export default async function Landing() {
       <section className="border-t border-[var(--line)] bg-white/60">
         <div className="mx-auto max-w-3xl px-6 py-20">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("faq.eyebrow")}</p>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("faq.eyebrow")}</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.02em] text-balance md:text-5xl">{t("faq.title")}</h2>
           </div>
           <div className="mt-10 divide-y divide-[var(--line)]">
@@ -508,7 +503,7 @@ export default async function Landing() {
           <Link href="/ticari-elektronik-ileti" className="transition hover:text-[var(--ink)]">{t("footer.links.commercial")}</Link>
         </div>
         <div className="mx-auto mt-6 flex max-w-6xl flex-col items-center gap-2 border-t border-[var(--line)] px-6 pt-6 text-sm text-[var(--muted)] md:flex-row md:justify-center md:gap-6">
-          <span className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("footer.contact.title")}</span>
+          <span className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{t("footer.contact.title")}</span>
           <a href="https://wa.me/905355032634" target="_blank" rel="noopener noreferrer" className="transition hover:text-[var(--ink)]">{t("footer.contact.whatsapp")}</a>
           <a href="mailto:info@bysirius.com" className="transition hover:text-[var(--ink)]">{t("footer.contact.email")}</a>
           <a href="tel:+905355032634" className="transition hover:text-[var(--ink)]">{t("footer.contact.phone")}</a>

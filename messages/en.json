@@ -108,6 +108,8 @@
       ]
     },
     "whatsapp": {
+      "typing": "typing...",
+      "online": "online",
       "eyebrow": "WhatsApp AI",
       "title": "No panel needed. Just type.",
       "subtitle": "Text \"Latte is now 120\" from the registered, authorized number and the menu changes instantly. Messages from unregistered numbers are rejected automatically; every change is logged and can be undone with \"undo\".",

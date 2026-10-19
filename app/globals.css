@@ -4,12 +4,13 @@
   --bg: #f6f4ef;
   --paper: #ffffff;
   --ink: #1c1a17;
-  --muted: #736e64;
+  --muted: #5c564b;
   --accent: #e0891b;      /* amber */
   --accent-soft: #fbeed6;
   --line: #e6e0d5;
 }
 * { -webkit-font-smoothing: antialiased; }
+html { font-size: 106.25%; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -67,6 +68,51 @@ label > span { font-size: 12px; font-weight: 600; color: var(--muted); }
 .showcase-arrow { position: absolute; top: 46%; z-index: 30; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 6px 20px -8px rgba(20,15,5,.35); transition: transform .2s; }
 .showcase-arrow:hover { transform: scale(1.08); }
 
+
+/* Hero: canlı arka plan (ışık lekeleri + nokta ızgara), ekrana sığan telefon */
+.hero-bg {
+  position: relative; isolation: isolate; overflow: hidden;
+  background:
+    radial-gradient(60% 55% at 85% 20%, rgba(224,137,27,.28), transparent 70%),
+    radial-gradient(45% 45% at 8% 85%, rgba(251,190,100,.30), transparent 70%),
+    radial-gradient(40% 40% at 50% 0%, rgba(255,255,255,.9), transparent 70%);
+}
+.hero-bg::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5;
+  background-image: radial-gradient(rgba(28,26,23,.14) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent);
+}
+.hero-title {
+  background: linear-gradient(120deg, #1c1a17 0%, #1c1a17 52%, #e0891b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero-phone { position: relative; animation: floaty 7s ease-in-out infinite; }
+.hero-phone::before {
+  content: ""; position: absolute; inset: -12% -22%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(224,137,27,.45), transparent 72%); filter: blur(24px);
+}
+@media (max-height: 820px) { .hero-phone { zoom: .9; } }
+@media (max-height: 740px) { .hero-phone { zoom: .8; } }
+@keyframes floaty { 50% { transform: translateY(-10px); } }
+.nav-solid { background: rgba(255,255,255,.88); box-shadow: 0 6px 24px -16px rgba(20,15,5,.35); }
+@media (prefers-reduced-motion: reduce) { .hero-phone { animation: none; } }
+
+/* WhatsApp vitrin bölümü */
+.wa-hero {
+  position: relative; isolation: isolate; overflow: hidden; color: #fff;
+  background:
+    radial-gradient(55% 60% at 80% 30%, rgba(31,138,82,.40), transparent 70%),
+    radial-gradient(45% 50% at 5% 90%, rgba(224,137,27,.28), transparent 70%),
+    #0d100e;
+}
+.wa-msg { animation: wa-in .35s cubic-bezier(.2,.8,.2,1); }
+@keyframes wa-in { from { opacity: 0; transform: translateY(10px) scale(.96); } }
+.wa-dot { width: 7px; height: 7px; border-radius: 50%; background: #9db3a8; animation: wa-bounce 1s infinite ease-in-out; }
+@keyframes wa-bounce { 0%, 60%, 100% { transform: none; opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+.feature-marquee .marquee-track { animation-duration: 40s; }
+@media (prefers-reduced-motion: reduce) { .wa-msg { animation: none; } .feature-marquee { overflow-x: auto; } }
 
 /* Kayan yazı şeridi (landing "Nerede kullanılır") */
 .marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
