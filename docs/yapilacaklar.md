@@ -18,7 +18,7 @@
 - [ ] Alerjen sorumluluğu: panelde işletme sorumluluğu notu var; kullanım şartlarına da madde eklenecekse `LEGAL_DOC_VERSION` artırılmalı (avukat teyidiyle).
 
 **Migration (uygulandı mı kontrol et)**
-- [ ] `0011_purchase_consents` ve `0012_consent_retention` canlı Supabase'de uygulandı mı doğrula (SQL Editor). 0009/0010 doğrulandı; 0013/0014 için de kontrol et.
+- [x] `0011_purchase_consents` ve `0012_consent_retention` canlı Supabase'de uygulandı mı doğrula (SQL Editor). 0009/0010 doğrulandı; 0013/0014 için de kontrol et.
 
 **Kod boşlukları (bilinen)**
 - [ ] Kurulum hizmeti teslimatı: `service_orders` durumunu (paid, in_progress, delivered) ve "Görsel temsilidir" kutusunu değiştirecek admin ekranı/prosedür yok (şimdilik elle SQL).
@@ -52,19 +52,19 @@
 > **Durum 2026-10-18:** Vercel Production env'leri tamam, tek eksik `STRIPE_WEBHOOK_SECRET`. Evolution WhatsApp `siriusmenu` instance'ı `open` (+905102213630 bağlı). ImproMX e-posta yönlendirmesi ve Resend DNS çalışıyor. Aşağıdaki iki **kritik** madde (webhook secret + www URL) bitmeden ödeme sonrası plan/kota aktifleşmez.
 
 - [x] **KRİTİK: Stripe webhook URL'sini `www` yap.** `https://siriusmenu.com` her yola 308 ile `https://www.siriusmenu.com`'a yönleniyor; Stripe yönlendirme takip etmez, teslimatlar başarısız olur. Stripe Dashboard > Developers > Webhooks > SiriusMenu endpoint'inde URL'yi `https://www.siriusmenu.com/api/stripe/webhook` olarak düzenle (olaylar zaten doğru: `checkout.session.completed`, `invoice.paid`, `customer.subscription.created/updated/deleted`; endpoint LIVE ve aktif). `www` adresi imzasız isteğe 400 ile doğru yanıt veriyor (rota canlı).
-- [ ] **KRİTİK: `STRIPE_WEBHOOK_SECRET` Vercel Production'da yok.** Sadece Development'ta (81 gün önceki eski kayıt) görünüyor. Stripe'taki SiriusMenu endpoint'inin `whsec_...` değerini Vercel'de **Production** kutusu işaretli olarak gir (kaydı düzenlerken ortam kutusunu işaretlemeyi unutma), sonra redeploy.
-- [x] **Vercel `RESEND_FROM` değeri** `SiriusMenu <info@siriusmenu.com>` olmalı (Resend'de doğrulanan alan adı `siriusmenu.com`; `bysirius.com` olursa gönderim reddedilir). Yerel `.env.local`'da hâlâ `info@bysirius.com`. İstenirse `app/lib/mailer.ts` içindeki sabit `reply_to` (`info@bysirius.com`) de `info@siriusmenu.com` yapılabilir.
-- [ ] **Vercel Preview ortamından canlı `STRIPE_SECRET_KEY`'i kaldır** (Preview'da canlı anahtar açık; preview denemeleri gerçek tahsilat yapar).
+- [x] **KRİTİK: `STRIPE_WEBHOOK_SECRET` Vercel Production'da yok.** Sadece Development'ta (81 gün önceki eski kayıt) görünüyor. Stripe'taki SiriusMenu endpoint'inin `whsec_...` değerini Vercel'de **Production** kutusu işaretli olarak gir (kaydı düzenlerken ortam kutusunu işaretlemeyi unutma), sonra redeploy.
+- [ ] **Vercel `RESEND_FROM` değeri** `SiriusMenu <info@siriusmenu.com>` olmalı (Resend'de doğrulanan alan adı `siriusmenu.com`; `bysirius.com` olursa gönderim reddedilir). Yerel `.env.local`'da hâlâ `info@bysirius.com`. İstenirse `app/lib/mailer.ts` içindeki sabit `reply_to` (`info@bysirius.com`) de `info@siriusmenu.com` yapılabilir.
+- [x] **Vercel Preview ortamından canlı `STRIPE_SECRET_KEY`'i kaldır** (Preview'da canlı anahtar açık; preview denemeleri gerçek tahsilat yapar).
 - [x] **Env'ler** (2026-10-18 doğrulandı, Production): Stripe secret + 16 fiyat, Supabase, Gemini (+model adları), Anthropic, Resend, CRON_SECRET, Evolution/WhatsApp. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` kodda kullanılmıyor.
 - [x] **Eski `STRIPE_PRICE_ID` silindi** (2026-10-18 doğrulandı).
 - [ ] **Anthropic yedek anahtarı**: anahtar 2027-11-30'da sona erecek (takvime hatırlatma), Console'da aylık harcama limiti koy. Yedek yalnız metin çağrıları içindir; görsel iyileştirmenin yedeği yok.
 - [ ] **Görsel maliyeti**: `gemini-2.5-flash-image` deprecated/kapanış geçti; varsayılan `gemini-3.1-flash-image` oldu (görsel başı ~$0.067, eskisi ~$0.039). Görsel kotası fiyatları (`PRICING`) hâlâ kâr bırakıyor mu kontrol et; ucuz alternatif `gemini-3.1-flash-lite-image` (~$0.034).
 - [ ] **Siriplan webhook'u**: aynı Stripe hesabında olduğu için SiriusMenu ödemelerinin olaylarını da alacak; Siriplan işleyicisinin `restaurant_id` metadata'sı olan olayları yok saydığını kontrol et (SiriusMenu tarafı güvenli, ilgisiz olayları atlıyor).
 - [x] **WhatsApp bağlandı** (2026-10-18): `siriusmenu` instance'ı `open`, numara +905102213630 (pairing code ile).
-- [ ] **Railway `WEBHOOK_GLOBAL_URL`** `https://www.siriusmenu.com/api/whatsapp/webhook?secret=...` olmalı (apex `siriusmenu.com` 308 ile yönleniyor, `www` kullan) ve `secret=` değeri Vercel'deki `WHATSAPP_WEBHOOK_SECRET` ile birebir aynı olmalı; değişirse Railway servisini redeploy et.
+- [x] **Railway `WEBHOOK_GLOBAL_URL`** `https://www.siriusmenu.com/api/whatsapp/webhook?secret=...` olmalı (apex `siriusmenu.com` 308 ile yönleniyor, `www` kullan) ve `secret=` değeri Vercel'deki `WHATSAPP_WEBHOOK_SECRET` ile birebir aynı olmalı; değişirse Railway servisini redeploy et.
 - [ ] **WhatsApp uçtan uca test**: panelde "WhatsApp bağla" (numara + 6 haneli kod) > SiriusMenu numarasına kodu yaz > "✅ WhatsApp bağlandı" > "Latte fiyatını 120 yap" > "geri". Telefonu 14 günde bir internete bağla; ilk haftalarda düşük hacim, toplu mesaj yok. Evolution panelinde 173 kişi / 500 sohbet / 278 mesaj senkronize görünüyor; webhook'un eski mesajlara cevap vermediğini ilk testte izle.
-- [x] **ImproMX alias**: `info@siriusmenu.com` vb. alias'ları gerçek gelen kutusuna yönlendir (DNS tamam, "forwarding active" e-postası geldi). Premium gerekmez.
-- [ ] **Supabase Auth**: Authentication > URL Configuration'da Site URL ve redirect URL'ler canlı alan adını (`https://www.siriusmenu.com`) içermeli; Resend SMTP'sini Supabase'e bağla (bkz. `docs/e-posta-marka-kurulum.md`).
+- [ ] **ImproMX alias**: `info@siriusmenu.com` vb. alias'ları gerçek gelen kutusuna yönlendir (DNS tamam, "forwarding active" e-postası geldi). Premium gerekmez.
+- [x] **Supabase Auth**: Authentication > URL Configuration'da Site URL ve redirect URL'ler canlı alan adını (`https://www.siriusmenu.com`) içermeli; Resend SMTP'sini Supabase'e bağla (bkz. `docs/e-posta-marka-kurulum.md`).
 - [ ] **Canlı ödeme testi**: küçük bir gerçek ödeme (örn. 400 TL görsel paketi), plan/kotanın değiştiğini ve Stripe'ta endpoint olayının "Succeeded" olduğunu doğrula, sonra iade et. Stripe Billing > Customer portal'ı canlı modda etkinleştir.
 - [x] **Migration 0009 ve 0010 uygulandı** (2026-10-17, canlı veritabanında doğrulandı). Dosyalar yeniden numaralandı: `0013_menu_layout`, `0014_service_orders` (çift 0012 sorunu giderildi). Tüm migration'lar SQL Editor'dan uygulandığı için `supabase db push` kullanılacaksa önce `supabase migration repair` ile geçmiş işaretlenmeli.
 - [x] **Gemini modelleri güncellendi** (2026-10-17): `gemini-2.5-flash` bu hesapta 404 veriyordu; varsayılanlar `gemini-3.5-flash-lite` (metin) ve `gemini-3.1-flash-image` (görsel), metin çağrıları için Anthropic yedeği eklendi (`app/lib/gemini.ts`).
@@ -101,5 +101,5 @@ Avrupa/ABD'ye satış ve bölgesel fiyat öncesi netleştirilecekler (bkz. `docs
 
 ## Güvenlik denetimi düzeltmeleri (2026-10-19)
 - [x] **Migration `0015_rls_protect_billing_columns.sql` Supabase'e uygulanmalı** (SQL Editor veya `supabase db push`). Uygulanana kadar giriş yapmış kullanıcı doğrudan REST ile tier/plan/is_lifetime/image_quota/qr_token alanlarını değiştirebilir (ödeme duvarı atlatılır). Uyguladıktan sonra panelde menü kaydetme, yayınla/gizle, QR yenile, WhatsApp numara ekle/kaldır ve görsel iyileştirme akışlarını bir kez dene. (2026-10-19: async_payment_succeeded + async_payment_failed eklendi; failed olayı kodda işlenmeden 200 döner, zararsız.)
-- [ ] **Stripe Dashboard > Webhooks**: endpoint'e `checkout.session.async_payment_succeeded` olayını ekle (gecikmeli ödeme yöntemleri için; mevcut olaylar korunur).
+- [x] **Stripe Dashboard > Webhooks**: endpoint'e `checkout.session.async_payment_succeeded` olayını ekle (gecikmeli ödeme yöntemleri için; mevcut olaylar korunur).
 - [ ] **WhatsApp webhook secret**: kod artık `x-webhook-secret` başlığını tercih eder; `?secret=` query parametresi geriye dönük uyumluluk için hâlâ kabul edilir (Evolution global webhook'u özel başlık göndermiyorsa query ile devam et).
